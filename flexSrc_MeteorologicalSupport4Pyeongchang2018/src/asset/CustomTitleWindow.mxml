@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2007/08/20/creating-custom-dialog-boxes-using-the-popupmanager-and-titlewindow-classes/ -->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="vertical" 
+				titleStyleName="titleText"
+				backgroundColor="white"
+				backgroundAlpha="1.0"
+				borderColor="white"
+				borderAlpha="1.0"
+				cornerRadius="0"
+				dropShadowEnabled="true"
+				showCloseButton="true"
+				creationComplete="creationCompleteHandler()"
+				close="titleWindow_close(event)"
+				>
+	<!--
+				height="490"
+	-->	
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.containers.Canvas;
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var stationEnvInfo:XML;
+			
+			private function creationCompleteHandler():void{
+//				drawBorder();
+				var watcher:ChangeWatcher = BindingUtils.bindSetter(stationChanged, this, "stationEnvInfo"); 
+			}
+			
+			public function setStationEnv(someInfo:XML):void{
+				setENVInfo(someInfo);
+			}
+			
+			private function setENVInfo(stnNode:XML):void{
+				stationEnvInfo = stnNode;
+			}
+			
+			private function stationChanged(o:Object):void{
+				refreshInfoWindow();
+			}
+			
+			
+			private function titleWindow_close(evt:CloseEvent):void {
+				PopUpManager.removePopUp(this)
+			}
+			
+			private function titleWindow_continue():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function drawBorder():void{
+				//				var pt:Point = new Point(0, -13);
+				var pt:Point = new Point(-50, -460); //왼쪽 뾰족이 스타트 포인트
+				var global:Point = Application.application.localToGlobal(pt);
+				var origin:Point =global;
+				//				var destination:Point = new Point(150,0);
+				var destination:Point = new Point(-15,-470);
+				//				var destination1:Point = new Point(350,0); doesnt need anymore haha
+				var lineThickness:Number = 1;
+				var lineColor:Number = 0xdddddd;
+				var lineAlpha:Number = 1;
+				//Alert.show(global.toString());
+				
+				var tip:Canvas = new Canvas();
+				
+				tip.graphics.clear();
+				tip.graphics.beginFill(0xffffff,1);
+				
+				tip.graphics.lineStyle(lineThickness,lineColor,lineAlpha);
+				tip.graphics.moveTo(origin.x,origin.y);
+				tip.graphics.lineTo(destination.x,destination.y);
+				tip.graphics.lineStyle(1,0xffffff,lineAlpha);
+				//				tip.graphics.lineTo(50,0);
+				tip.graphics.lineTo(-15,-450);
+				tip.graphics.lineStyle(1,0xdddddd,1);
+				tip.graphics.lineTo(origin.x,origin.y);
+				tip.graphics.endFill();
+				//				wrapperCanvas.addChild(tip);
+				addChild(tip);
+				Alert.show('drawBorder')
+			}	
+			
+			
+			private function refreshInfoWindow():void{
+				var windowTitle:String = stationEnvInfo.@stnName.toString().replace("-", " ") + "(" + stationEnvInfo.@stnCode + ")";
+				this.title = windowTitle ; // stationEnvInfo.@stnName + "(" + stationEnvInfo.@stnCode + ")"
+				map_stn.source = "maps/"+stationEnvInfo.@stnCode+".png";
+				textarea.text = "위경도 : " + stationEnvInfo.@lat + ", " + stationEnvInfo.@lon 
+							  + "\n고도 : " + stationEnvInfo.@alti+'m'
+							  + "\n동네예보 격자점 : " + stationEnvInfo.@gx + ", " + stationEnvInfo.@gy
+							  + "\n편집관서 : 47" + stationEnvInfo.@stn_edit;
+				
+//				Alert.show(stationEnvInfo.toXMLString());
+			}
+			
+		]]>
+	</mx:Script>
+	
+		<mx:Style>
+		.titleText {
+			fontSize: 14px;
+			font-weight:bold;
+		}
+		.headingText {
+			paddingTop: 10px;
+			paddingBottom: 10px;
+			fontSize: 10px;
+		}
+	</mx:Style>
+	<!--
+	<mx:Canvas id="wrapperCanvas"  backgroundAlpha="1.0" backgroundColor="#FFFFFF" borderColor="#1B86D1" 
+	borderStyle="solid" >
+	-->
+	<mx:VBox>
+		<!--
+		<mx:Text text="You must accept the software license terms in order to continue the installation."
+		width="100%"
+		styleName="headingText" />
+		-->
+		<mx:Image  id="map_stn" source="testEI.png" width="350" height="350"/>
+		<mx:TextArea id="textarea"  selectable="false" editable="false" verticalScrollPolicy="off" horizontalScrollPolicy="off"
+		width="100%" fontSize="12"
+		height="75" />
+		<!--
+		<mx:HBox width="100%">
+		<mx:CheckBox id="checkBox"
+		label="Click here to accept the software license terms."
+		width="100%" />
+		
+		<mx:Button label="Continue"
+		enabled="{checkBox.selected}"
+		click="titleWindow_continue()" />
+		</mx:HBox>
+		-->
+	</mx:VBox>	
+	<!--
+	</mx:Canvas>	
+	-->	
+</mx:TitleWindow>

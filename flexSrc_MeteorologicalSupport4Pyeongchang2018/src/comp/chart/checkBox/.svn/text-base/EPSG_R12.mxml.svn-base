@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+		xmlns:doe="com.doe.flex.ui.form.util.*" verticalAlign="middle" horizontalAlign="right" horizontalGap="2" paddingRight="-5">
+	<doe:ImageCheckBox id="cb_all" label="모두 선택" labelPlacement="right" paddingLeft="2" horizontalGap="1" visible="false"/>
+	<doe:ImageCheckBox id="cb_r12" label="12시간 강수량" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/dfs_R12.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1"/>
+</mx:HBox>

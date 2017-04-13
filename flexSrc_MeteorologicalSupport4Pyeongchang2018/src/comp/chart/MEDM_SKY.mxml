@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+		width="100%" height="180" 
+		gutterLeft="135" gutterRight="135"
+		creationComplete="moveAxisLabel()" >
+	<!--
+	-->
+	
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import mx.charts.CategoryAxis;
+			import mx.charts.LinearAxis;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.controls.Image;
+			import mx.graphics.SolidColor;
+
+			
+			
+		
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_odd/utc00_odd_100.png")] 
+			public var UTC00_bg:Class; //ecmwwf 00utc ODD (dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_even/utc00_even_100.png")] 
+			public var UTC00_bg_even:Class; //ecmwf 00utc EVEN(dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg/utc12_100.png")] 
+			public var UTC12_bg_ecmwf:Class; //ecmwf 12UTC dashedLine only
+
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_100.png")] 
+			public var UTC12_bg_dashed:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_100.png")] 
+			public var UTC00_bg_279hrs:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_100.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc1.png')] private var clearSkies:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc2.png')] private var scatteredClouds:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc3.png')] private var brokenClouds:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc4.png')] private var overcast:Class;
+			
+			
+			private function creationComplete():void{
+//				callLater(setCloudAmount);
+			}
+			
+			/**
+			 * series 배열에서 뽑아 쓰자 그냥ㅋㅋㅋㅋㅋ
+			 * 
+			 * */
+			[Bindable] public var stationNames:Array;
+			public function setCloudAmount():void{
+			   	if(this.dataProvider != null){
+					var stepper:int = 0;
+					stationNames = new Array();
+			   		for each(var ls:LineSeries in this.series){ //
+						stationNames.push(ls.displayName);
+						stepper++;
+						for each(var item:XML in ls.dataProvider){
+							var n:Number = item.@val;
+							var s:String = item.@lst;
+							var ca:Image = new Image();
+							ca.width = 30;
+	                  		ca.height = 30;
+							switch(n){
+								case 1 : ca.source = clearSkies; break;
+								case 2 : ca.source = scatteredClouds; break;
+								case 3 : ca.source = brokenClouds; break;
+								case 4 : ca.source = overcast; break;
+							}
+//							canvas.addDataChild(ca,  new CartesianCanvasValue(s,-(ca.width / 2)), new CartesianCanvasValue(getModelSequence(ls.id)+0.6,0))
+							canvas.addDataChild(ca,  new CartesianCanvasValue(s,-(ca.width / 2)-1), new CartesianCanvasValue(stepper+0.5,0));
+						}
+			   		}
+				}
+//				moveAxisRenderer(true);
+        	}
+			
+//			private function getModelSequence(seriesID:String):uint{
+//				var seq:uint;
+//				switch(seriesID){
+//					case "series_best" : seq = 4; break;
+//					case "series_epsg" : seq = 3; break;
+//					case "series_gdps" : seq = 2; break;
+//					case "series_ecmw" : seq = 1; break;
+//				}
+//				return seq;
+//			}
+			
+			
+  			public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h);
+      			
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+  				var bgImg:Object = (is279hrs)? new UTC12_bg_dashed() : new UTC12_bg_ecmwf();
+				this.backgroundElements=[gridLine,bgImg];
+			}
+  					
+			
+			
+			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:XML = this.dataProvider[this.dataProvider.length-1];
+				if(cat.toString().length > 4){
+					if(itm.@lst==cat){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			    }else{
+			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+						return '';
+					}
+			    }
+			    return cat+"";
+			}
+			
+			
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:XML = this.dataProvider[this.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여
+					if(itm.@lst==cat){
+						return null;
+					}else if(cat.toString().substring(4)=="00"){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			}
+					
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				var str:String;
+				if(cat == "1.0")str = stationNames[0];
+				else if(cat == "2.0") str = stationNames[1];
+				else if(cat == "3.0") str = stationNames[2];
+				else if(cat == "4.0") str = stationNames[3];
+				else if(cat == "5.0") str = stationNames[4];
+				else if(cat == "6.0") str = stationNames[5];
+				else if(cat == "7.0") str = stationNames[6];
+				else if(cat == "8.0") str = stationNames[7];
+				else if(cat == "9.0") str = stationNames[8];
+				else if(cat == "10.0") str = stationNames[9];
+				return str;
+			}
+  			
+  			
+  			public function moveAxisRenderer(isMEDM:Boolean):void{
+				if(isMEDM){
+					moveAxisLabel();
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}else{
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}
+			} 
+			
+			
+  			public function moveAxisLabel():void{
+				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-7,topAxisRenderer.y);
+				topAxisRenderer.setStyle("labelAlign","right");
+				bottomAxisRenderer.move(bottomAxisRenderer.x-7,bottomAxisRenderer.y);
+				bottomAxisRenderer.setStyle("labelAlign","right");
+			}
+		]]>
+	</mx:Script>
+		
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true" />
+		</mx:annotationElements>
+		
+        <mx:backgroundElements>
+            <mx:GridLines  id="gridLine"/>
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer
+				placement="left"  canDropLabels="false"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}" 
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer 
+				placement="right" canDropLabels="false"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+           	<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+           		/>	
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="@lst"  labelFunction="defineLabel"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" 
+				interval="1" minimum="0.1"  
+				labelFunction="defineVerticalLabel"/> <!--maximum="4.9"-->
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:LineSeries id="series_best" 
+				xField="@lst" yField="@val" visible="false" />
+			<mx:LineSeries id="series_epsg" 
+				xField="@lst" yField="@val" visible="false" />
+			<mx:LineSeries id="series_gdps" 
+				xField="@lst" yField="@val" visible="false" />
+			<mx:LineSeries id="series_ecmw"  
+				xField="@lst" yField="@val" visible="false" />
+		</mx:series>
+		
+</mx:ColumnChart>

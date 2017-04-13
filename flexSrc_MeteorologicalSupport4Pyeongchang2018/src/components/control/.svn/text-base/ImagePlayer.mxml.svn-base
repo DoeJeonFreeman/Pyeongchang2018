@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+	verticalAlign="top" horizontalAlign="center" paddingTop="0"
+	creationComplete="init();">
+	<!--backgroundSize="100%" backgroundImage="image/imgPlayer/bg_all.jpg">-->
+	<mx:Metadata>
+		[Event(name="currentItemChange", type="components.events.CustEvent")]
+		[Event(name="imageListChange", type="components.events.CustEvent")]
+	</mx:Metadata>
+	<mx:Script><![CDATA[
+		import components.events.CustEvent;		
+		import mx.collections.ArrayCollection;
+		import mx.controls.NumericStepper;
+		import mx.controls.HSlider;
+		import mx.controls.ComboBox;
+		import mx.controls.Alert;
+		import mx.controls.Image;
+		import mx.core.Application;
+		import mx.events.ListEvent;
+		import mx.managers.CursorManager;
+		
+		[Bindable]public var currIndex:int;
+		
+//		[Bindable]public var currDDJJ:Number = (currIndex)? Number(_imageList[currIndex].@display) : 0;
+		
+		[Bindable]public var isPlaying:Boolean;
+		
+		/**
+		 * 	컨트롤로만 보여줄 것인가
+		 * */	
+		[Bindable]public var onlyViewContorol:Boolean = false;
+		
+		/**
+		 * 	Auto Size
+		 * */	
+		[Bindable]public var autoSize:Boolean = false;
+				
+		/**
+		 * 	이미지 크기 : 넓이
+		 * */		 
+		[Bindable]public var imageWidth:Number=300;
+		
+		/**
+		 * 	이미지 크기 : 높이
+		 * */
+		[Bindable]public var imageHeight:Number=200;
+		
+		/**
+		 * 	이미지 변환 시간 텀(1초 = 1000)
+		 * */
+		public var changeDelay:Number=500;
+		
+		/**
+		 * 	자동으로 플레이 시킬지 여부
+		 * */
+		public var autoPlay:Boolean=false;
+		
+		/**
+		 * 	자동으로 플레이 시킬지 여부
+		 * */
+		public var isEndImage:Boolean=false;
+		
+		/**
+		 * 	두번째 이미지 attribute 명(없을 시 하나(@source)만 표시)
+		 * */
+		[Bindable]public var secondImageTag:String;
+		
+		/**
+		 * 	뒤에 숨은 이미지 갯수
+		 * 	번쩍이는 현상(이미지가 크거나 changeDelay가 작을수록)이 있으면 카운트를 올려준다.
+		 *  보통 2 면 괜찮음.
+		 * */
+		public var imageStackCount:uint=2;
+		
+		/**
+		 * 	플레이어 컨트롤 보여줄지 여부
+		 * */
+		public var viewPlayer:Boolean=true;
+		
+		/**
+		 * 	버튼 labels
+		 * 	순서대로 prev, next, play, stop
+		 * */
+		[Bindable]public var labelsOfPrevNextPlayStopFullNormal:Array=["prev","next","play","stop","full","normal"];
+		
+		/**
+		 * 	이미지 사이간 간격
+		 * */
+		public var viewImageGap:Boolean=true;
+		
+		/**
+		 * 	새 창 띄우기 버튼 visible
+		 * */
+		public var viewFullButton:Boolean=false;
+		
+		private var fstWidth:Number=0;
+		private var secWidth:Number=0;
+		private var jump:int=1;
+		
+		private function init():void{
+			
+		}
+		
+		public function getCurrentItem():XML{
+			return this._imageList[currIndex];
+		}
+		
+		/**
+		 * 	이미지 위치 정보(@source)를 가진 xmllist
+		 * */
+		[Bindable]public var _imageList:XMLList;
+		public function set imageList(imageList:XMLList):void{
+			var event:CustEvent = new CustEvent("imageListChange",null);
+			this.dispatchEvent(event);
+			
+			this._imageList = imageList;
+			
+			if(timer){
+				if(timer.running){
+					stop();	
+				}
+				timer = null;
+			}
+			
+			if(isEndImage){
+				currIndex = imageList.length()-1;
+			}else{
+				currIndex = 0;
+			}
+			combo.selectedIndex = currIndex;
+			
+			fstImgContainer.removeAllChildren();
+			secImgContainer.removeAllChildren();
+			
+			fstWidth=0;
+			secWidth=0;
+			
+			buttonInit();
+			
+			if(autoSize){
+				
+			}else{
+				this.percentHeight = 100;
+				fstImgContainer.percentHeight = 100;
+				fstImgContainer.percentWidth = 100;
+				secImgContainer.percentHeight = 100;
+				secImgContainer.percentWidth = 100;
+				imgContainer.percentHeight = 100;
+				imgContainer.percentWidth = 100;
+			}
+			
+			if(autoPlay){
+				play();
+			}else{
+				imgChange();
+			}
+		}
+		[Bindable]public function get imageList():XMLList{
+			return this._imageList;
+		}
+		
+		private var timer:Timer;
+		public function play(e:Event=null):void{
+			if(timer && timer.running)
+				stop();
+			timer = new Timer(changeDelay,1);
+			timer.addEventListener("timer", cycle);
+			timer.start();
+			
+			isPlaying = true;
+		}
+		
+		public function jumpPlay():void{
+			this.jump = currIndex+1;
+			play();
+		}
+		
+		/* private var cvSizeCheck:Boolean = false;
+		private function init():void{
+			if(!autoSize)
+			{
+				imgContainer.width= imageWidth; 
+				imgContainer.height=imageHeight;
+				cvSizeCheck = true;
+			}
+			buttonInit();
+		} */
+		
+		public function prev(e:Event=null):void{
+			if(!prevButton.enabled)
+				return;
+			
+			if(timer && timer.running)
+				stop();
+			downIndex();
+			buttonInit();
+		}
+		public function next(e:Event=null):void{
+			if(!nextButton.enabled)
+				return;
+			
+			if(timer && timer.running)
+				stop();
+			upIndex();
+			buttonInit();
+		}
+		
+		private function cycle(e:Event):void{
+			if(currIndex >= _imageList.length()-1){
+				currIndex = -1;
+			}
+			upIndex();
+			timer.repeatCount++;
+		}
+		public function stop(e:Event = null):void{
+			if(timer && timer.running)
+				timer.stop();
+			
+			this.jump=1;	
+			
+			buttonInit();
+			
+			isPlaying = false;
+		}
+		private function buttonInit():void{
+			if(currIndex > 0){
+				prevButton.enabled = true;
+			}else{
+				prevButton.enabled = false;
+			}
+			
+			if(currIndex < _imageList.length()-1){
+				nextButton.enabled = true;
+			}else{
+				nextButton.enabled = false;
+			}
+		}
+		
+		private function upIndex():void{
+			currIndex+=this.jump;
+			if(currIndex >= _imageList.length()){
+				currIndex = this.jump-1;
+			}
+			imgChange();
+		}
+		private function downIndex():void{
+			currIndex--;
+			imgChange();
+		}
+		
+		/**
+		 * 		이미지 바꿈
+		 * 		끊기는 현상때문에 이전 이미지는 지우지 않는다.
+		 * */
+		private function imgChange():void{
+			if(_imageList.length()==0 || _imageList.length() <= currIndex){
+				return;
+			}
+			
+			var obj:Object = new Object();
+			obj.currentItem = _imageList[currIndex];
+			
+			var event:CustEvent = new CustEvent("currentItemChange",obj);
+			this.dispatchEvent(event);
+			
+			var image:Image = new Image();
+			var image2:Image;
+			
+			image.addEventListener(IOErrorEvent.IO_ERROR, errorImage);
+			image.source = _imageList[currIndex].@source;			
+									
+			if(autoSize){				
+				/* image.width = image.contentWidth;
+				image.height = image.contentHeight;
+				
+				fstImgContainer.width = 200;
+				fstImgContainer.height = 200;  */
+			}else{
+				image.percentHeight = 100;
+				image.percentWidth = 100;
+			}
+			
+			image.setStyle("horizontalAlign","center");
+			
+			fstImgContainer.addChild(image);
+			if(timer && timer.running){
+				fstImgContainer.contextMenu = new ContextMenu();
+			}else{
+//				new SaveImageContextMenu(fstImgContainer, -1, image);
+			}
+			
+			while(fstImgContainer.getChildren().length > imageStackCount){
+				fstImgContainer.removeChildAt(0);
+			}
+			
+			if(secondImageTag){
+				image2 = new Image();
+				image2.addEventListener(IOErrorEvent.IO_ERROR, errorImage);
+				if(autoSize){
+				
+				}else{
+					image2.percentHeight = 100;
+					image2.percentWidth = 100;
+				}
+				image2.setStyle("horizontalAlign","center");
+				image2.source = _imageList[currIndex][secondImageTag];
+				
+				secImgContainer.addChild(image2);
+				if(timer && timer.running){
+					secImgContainer.contextMenu = new ContextMenu();
+				}else{
+//					new SaveImageContextMenu(secImgContainer, -1, image2);
+				}
+					
+				while(secImgContainer.getChildren().length > imageStackCount){
+					secImgContainer.removeChildAt(0);
+				}
+			}
+			
+			/* if(fstWidth==0){
+				fstImgContainer.width = image.width;
+				fstWidth = image.width; 
+			}
+			if(secondImageTag && secWidth==0){
+				secImgContainer.width = image2.width;
+				secWidth = image2.width; 
+			} */
+		}
+		
+		/**
+         * 이미지 없을 시 처리 > 투명
+         */ 
+        public function errorImage(e:IOErrorEvent):void{
+        	Image(e.target).alpha=0;
+        }
+		
+		public function sliderChange(e:Event):void{
+			stop();
+			currIndex = HSlider(e.target).value;
+			buttonInit();
+			imgChange();
+		}
+		
+		public function comboChange(e:Event):void{
+			stop();
+			currIndex = ComboBox(e.target).selectedIndex;
+			buttonInit();
+			imgChange();
+		}
+		public function changeDelayChange(e:Event):void{
+			stop();
+			changeDelay = NumericStepper(e.target).value * 100;
+			play();
+		}
+        
+		[Embed(source="image/imgPlayer/left.png")]private var leftDisableCursorSymbol:Class;
+		[Embed(source="image/imgPlayer/left_disable.png")]private var leftCursorSymbol:Class;
+		[Embed(source="image/imgPlayer/right.png")]private var rightDisableCursorSymbol:Class;
+		[Embed(source="image/imgPlayer/right_disable.png")]private var rightCursorSymbol:Class;
+		[Embed(source="image/imgPlayer/play.png")]private var playCursorSymbol:Class;
+		[Embed(source="image/imgPlayer/stop.png")]private var stopCursorSymbol:Class;
+		
+		private var currentAreaInImage:String = "out";
+        private function cursorControlInImage(e:MouseEvent):void{
+        	var imgWidth:Number = imgContainer.width;
+        	var leftArea:Number = imgWidth * 1/4;
+        	var rightArea:Number = imgWidth * 3/4;
+        	var mouseX:Number = imgContainer.mouseX;
+        	
+        	if(mouseX < leftArea && currentAreaInImage != "left"){	//왼쪽
+        		currentAreaInImage = "left";
+        		setCursor();
+        	}else if(mouseX > rightArea && currentAreaInImage != "right"){	//오른쪽
+        		currentAreaInImage = "right";
+        		setCursor();
+        	}else if(mouseX >= leftArea && mouseX <= rightArea && currentAreaInImage != "center"){	//가운데
+    			currentAreaInImage = "center";
+    			setCursor();
+        	}
+        }
+        private function mouseControlOutImage(e:MouseEvent):void{
+        	currentAreaInImage = "out";
+        	CursorManager.removeAllCursors();
+        }
+        private function mouseClickInImage(e:MouseEvent):void{
+        	if(currentAreaInImage == "left" && prevButton.enabled){
+        		prev();
+        	}else if(currentAreaInImage == "right" && nextButton.enabled){
+        		next();
+        	}else if(currentAreaInImage == "center"){
+        		if(timer && timer.running){
+        			stop();
+        		}else{
+        			play();
+        		}
+        	}
+        	setCursor();
+        }
+        
+        
+        private function setCursor():void{
+        	var imgWidth:Number = imgContainer.width;
+        	var leftArea:Number = imgWidth * 1/4;
+        	var rightArea:Number = imgWidth * 3/4;
+        	var mouseX:Number = imgContainer.mouseX;
+        	
+        	if(mouseX < leftArea){
+        		CursorManager.removeAllCursors();
+        		if(!prevButton.enabled){
+	        		CursorManager.setCursor(leftCursorSymbol);
+        		}else{
+	        		CursorManager.setCursor(leftDisableCursorSymbol);
+        		}
+        	}else if(mouseX > rightArea){
+        		CursorManager.removeAllCursors();
+        		if(!nextButton.enabled){
+	        		CursorManager.setCursor(rightCursorSymbol);
+	        	}else{
+	        		CursorManager.setCursor(rightDisableCursorSymbol);
+	        	}
+        	}else{// if(mouseX >= leftArea && mouseX <= rightArea){
+    			CursorManager.removeAllCursors();
+        		if(timer && timer.running){
+        			CursorManager.setCursor(stopCursorSymbol);
+        		}else{
+        			CursorManager.setCursor(playCursorSymbol);
+        		}
+        	}
+        }
+        
+        public function displayFileNameChange(e:Event):void{
+        	if(showFile.selected){
+        		combo.labelField="@source";
+        	}else{
+        		combo.labelField="@display";
+        	}
+        }
+        
+        private function full(e:Event = null):void{
+			if(timer && timer.running)
+				stop();			
+			
+			var xml:XML = new XML(<image/>);
+			if(timer){
+				xml.@autoPlay = timer.running.toString();
+			}else{
+				xml.@autoPlay = "false";
+			}
+			xml.@autoSize = autoSize.toString();
+			xml.@changeDelay = changeDelay;
+			xml.@imageStackCount = imageStackCount;
+			
+			if(secondImageTag){
+				xml.@secondImageTag = secondImageTag;
+			}
+			
+			if(!autoSize){
+				xml.@imageWidth = imageWidth;
+				xml.@imageHeight = imageHeight;
+			}
+			
+			xml.appendChild(_imageList);
+			
+			//Alert.show(xml.toXMLString());
+			
+			ExternalInterface.call("fullscreen_player", xml.toXMLString());
+		}
+		
+		private function fullScreen(e:MouseEvent):void{
+			toggleFullScreen();
+		}
+		public function toggleFullScreen():void {
+            try {
+                switch (Application.application.stage.displayState) {
+                    case StageDisplayState.FULL_SCREEN:
+                        Application.application.stage.displayState = StageDisplayState.NORMAL;
+                        break;
+                    default:
+                        Application.application.stage.displayState = StageDisplayState.FULL_SCREEN;
+                        break;
+                }
+            } catch (err:SecurityError) {
+                // ignore
+            }
+        }
+		
+		public function imageListDataChange(e:Event):void{
+			ComboBox(e.target).selectedIndex = currIndex;
+		}
+	]]></mx:Script>
+	<mx:HBox verticalAlign="top" horizontalAlign="center" visible="{viewPlayer}" includeInLayout="{viewPlayer}">
+		<mx:Spacer width="100%"/>
+		<mx:VBox verticalAlign="top" verticalGap="0" horizontalAlign="center" >
+			<mx:HBox id="controlContainer" verticalAlign="middle" horizontalAlign="center" horizontalGap="5" backgroundImage="image/imgPlayer/bg.png">				
+				<mx:Image id="prevButton" toolTip="Prev" source="image/imgPlayer/before.png" click="prev(event)"
+					buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+				<mx:Image id="nextButton" toolTip="Next" source="image/imgPlayer/next.png" click="next(event)"
+					buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+				<mx:Canvas height="20" >
+					<mx:HSlider width="300"  y="-5" minimum="0" maximum="{_imageList.length()-1}" snapInterval="1"
+						value="{currIndex}" change="sliderChange(event)"
+						liveDragging="true" 
+					 	trackSkin="@Embed(source='image/imgPlayer/bar.png')"
+					 	thumbSkin="@Embed(source='image/imgPlayer/ball.png')"/>
+				</mx:Canvas>
+				<mx:Image id="playButton" toolTip="Play" source="image/imgPlayer/b_play2.png" click="play(event)"
+					buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+				<mx:Image id="stopButton" toolTip="Stop" source="image/imgPlayer/b_play2_s.png" click="stop(event)"
+					buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+				<mx:CheckBox id="showFile" selected="false" alpha="0.01" change="displayFileNameChange(event)"/>
+				<mx:ComboBox height="20"
+					id="combo"  closeDuration="0"
+					dataProvider="{_imageList}" labelField="@display"
+					dataChange="imageListDataChange(event)"
+					selectedIndex="{currIndex}" change="comboChange(event)"/>
+				<mx:NumericStepper height="20" width="40" minimum="1" maximum="10" change="changeDelayChange(event)" value="{changeDelay/100}"
+					includeInLayout="false" visible="false"/>
+				<mx:Image id="fullButton" toolTip="Full Screen Mode" source="image/imgPlayer/full.png" click="fullScreen(event)"
+					buttonMode="true" useHandCursor="true" mouseChildren="false"
+					visible="{viewFullButton}" includeInLayout="{viewFullButton}"/>
+			</mx:HBox>
+		</mx:VBox>
+	</mx:HBox>
+	<mx:HBox id="imgContainer" horizontalGap="0" visible="{!onlyViewContorol}" includeInLayout="{!onlyViewContorol}"
+			mouseMove="cursorControlInImage(event)" rollOut="mouseControlOutImage(event)"
+			click="mouseClickInImage(event)" 
+			width="{secondImageTag?this.width:NaN}">
+		<mx:Spacer width="100%" visible="{secondImageTag?viewImageGap:false}" includeInLayout="{secondImageTag?viewImageGap:false}"/>
+		<mx:Canvas id="fstImgContainer">
+		</mx:Canvas>
+		<mx:Spacer width="100%" visible="{secondImageTag?viewImageGap:false}" includeInLayout="{secondImageTag?viewImageGap:false}"/>
+		<mx:Canvas id="secImgContainer"
+			visible="{secondImageTag}" includeInLayout="{secondImageTag}">
+		</mx:Canvas>
+		<mx:Spacer width="100%" visible="{secondImageTag?viewImageGap:false}" includeInLayout="{secondImageTag?viewImageGap:false}"/>
+	</mx:HBox>
+</mx:VBox>

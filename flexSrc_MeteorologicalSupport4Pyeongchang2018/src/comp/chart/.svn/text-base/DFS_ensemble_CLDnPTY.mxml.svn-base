@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="70" 
+	gutterLeft="35" gutterRight="35"
+	creationComplete="moveAxisLabel()"
+	initialize="drawHorLine()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.GridLines;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.Label;
+			import mx.core.UIComponent;
+			import mx.graphics.SolidColor;
+			
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.graphic.CloudAmount_ensemble;
+			import comp.chart.graphic.PrecipitationType_ensemble;
+			
+			import components.util.SmoothImage;
+
+					
+			[Bindable]private var listData_cld:ArrayCollection;		
+			[Bindable]private var listData_pty:ArrayCollection;		
+							
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/prcp.png')] private var rain:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/snow_invert.png')] private var snow:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/sleet.png')] private var sleet:Class;
+
+     		//day
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc_clear.png')] private var cCover0:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc1_sunSizeUp2.png')] private var cCover1:Class;
+     		//night
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc_clear_moon2_small.png')] private var cCover0_night:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc1_moon2_2.png')] private var cCover1_night:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc2.png')] private var cCover2:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi_nontransparency/cc3_thin4.png')] private var cCover3:Class;
+
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						return new bg_00UTC_odd();						
+					}else{
+						return new bg_12UTC_odd();						
+					}
+				}else{
+					if(is00UTC){
+						return new bg_00UTC_even();						
+					}else{
+						return new bg_12UTC_even();						
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isKWARF);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalTickAligned",false);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_v);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+			
+
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_70.png")] 
+			public var UTC12_bg_dashed:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_70.png")] 
+			public var UTC00_bg_279hrs:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_70.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			//default
+			public function setCLD_n_PTYGraphics(arr_cld:Array, arr_pty:Array, is12UTC:Boolean=true):void{
+				listData_cld = new ArrayCollection(arr_cld);
+				skySeries.dataProvider = listData_cld;
+				listData_pty =  new ArrayCollection(arr_pty);
+				ptySeries.dataProvider = listData_pty;
+				
+				if(listData_cld) drawCloudAmount();
+				if(listData_pty) drawPrecipitationType();
+			}
+			
+			
+			public function replaceGraphicsWithAlternatives(isSky:Boolean, isVisible:Boolean):void{
+				(isSky)? replaceSkyGraphicWithImage(isVisible) : replacePTYGraphicWithImage(isVisible); 
+			}
+			
+			private function replaceSkyGraphicWithImage(isVisible:Boolean):void{
+				canvas_sky.removeAllChildren();
+				drawCloudAmount(isVisible);
+			}
+			
+			private function replacePTYGraphicWithImage(isVisible:Boolean):void{
+				canvas_pty.removeAllChildren();
+				drawPrecipitationType(isVisible);
+			}
+			
+			
+			private function drawHorLine():void{
+				this.canvas_varSeperator.lineStyle(1,  0xAAAAAA, .6,   true, 
+		            LineScaleMode.NORMAL, 
+		            CapsStyle.ROUND, 
+		            JointStyle.MITER, 
+		            2
+		        );
+		        canvas_varSeperator.moveTo(new CartesianCanvasValue(0,-22),11);
+		        canvas_varSeperator.lineTo(new CartesianCanvasValue(22,22),11);
+			}
+			
+			//CLD default graphics  최빈값에서 중간값으로 변경요청 (20140718)
+			private function drawCloudAmount(isAlternitive:Boolean=false,isMedian=true,isMode=false):void{
+			   	if(skySeries.dataProvider != null){
+					for each(var item:Object in this.skySeries.dataProvider){
+						var str_kst:String = item.lst;
+						if(isAlternitive){
+							var symbolImg:SmoothImage = new SmoothImage();
+	                  		symbolImg.width = 30;
+	                  		symbolImg.height = 30;
+	                  		var lbl:Label = new Label();
+	                  		lbl.width = 50;
+	                  		lbl.setStyle("textAlign", "center");
+	                  		lbl.setStyle("fontSize", 11);
+	                  		if(isMode){
+		                  		if(getHighestOne_sky(item)=="noData"){continue;}
+		                  		switch(getHighestOne_sky(item)){
+									case  "clear" : 	 symbolImg.source = cCover0; lbl.text="맑음"; break;
+									case  "scattered"  : symbolImg.source = cCover1; lbl.text="구름조금"; break;
+									case  "broken" :     symbolImg.source = cCover2; lbl.text="구름많음"; break;
+									case  "overcast" :   symbolImg.source = cCover3; lbl.text="흐림"; break;
+								}
+	                  		}else if(isMedian){
+	                  			var val:Number = Number(item.median);
+	                  			if(0 <= val && val< 2.5){
+	                  				symbolImg.source = cCover0; lbl.text="맑음"; 
+	                  			}else if(2.5 <= val && val < 5){
+                  					symbolImg.source = cCover1; lbl.text="구름조금";
+	                  			}else if(5 <= val && val < 7.5){
+	                  				symbolImg.source = cCover2; lbl.text="구름많음";
+	                  			}else if(7.5 <= val && val <= 10){
+	                  				symbolImg.source = cCover3; lbl.text="흐림";
+	                  			}
+	                  		}
+	                  		canvas_sky.addDataChild(symbolImg, new CartesianCanvasValue(str_kst,-(symbolImg.width / 2)), 29);
+							canvas_sky.addDataChild(lbl, new CartesianCanvasValue(str_kst,-(lbl.width / 2)), 17.7);
+						}else{
+							var ca:CloudAmount_ensemble = new CloudAmount_ensemble(item);
+							var uic:UIComponent = new UIComponent();
+							uic.addChild(ca);
+							canvas_sky.addDataChild(uic, str_kst, new CartesianCanvasValue(20,0))
+						}
+					}
+				}
+        	}
+        	
+			
+			private function getPTYGraphicTooltip(ptyObj:Object):String{
+				var tooltipStr:String = '';
+				if(ptyObj.clear){
+					
+				}
+				return tooltipStr;
+			}
+			
+    		//PTY default graphics
+        	private function drawPrecipitationType(isAlternitive:Boolean=false):void{
+			   	if(ptySeries.dataProvider != null){
+					for each(var item:Object in ptySeries.dataProvider){
+						var str_kst:String = item.lst;
+						if(isAlternitive){//legend checkbox checked
+							var symbolImg:SmoothImage = new SmoothImage();
+	                  		symbolImg.width = 30;
+	                  		symbolImg.height = 30;
+	                  		if(getHighestOne_pty(item)=="noData" || getHighestOne_pty(item)=="clear"){continue;}
+	                  		var isRain:Boolean = false;
+							switch(getHighestOne_pty(item)){
+								case  "rain"  : symbolImg.source = rain ; isRain=true; break;
+								case  "sleet" : symbolImg.source = sleet; break;
+								case  "snow": 	symbolImg.source = snow; break;
+							}
+							canvas_pty.addDataChild(symbolImg, new CartesianCanvasValue(str_kst,-(symbolImg.width / 2)), new CartesianCanvasValue((isRain)?12.5 : 13, 0));
+						}else{//lenged cb unchecked (default)
+							var ptyRenderer:PrecipitationType_ensemble = new PrecipitationType_ensemble(item);
+							var uic:UIComponent = new UIComponent();
+							//2014.12.15. 
+							//uic.toolTip = getPTYGraphicTooltip(item);
+							uic.addChild(ptyRenderer);
+							canvas_pty.addDataChild(uic, str_kst, new CartesianCanvasValue(5,0))
+						}
+					}
+				}
+        	}
+			
+			private function drawLine(is12UTC:Boolean):void{
+				var n:uint = (is12UTC)? 2 : 1;
+				this.canvas_sky.lineStyle(1,  0x000000, 0.5,   true, 
+		            LineScaleMode.NORMAL, 
+		            CapsStyle.ROUND, 
+		            JointStyle.MITER, 
+		            2
+		        );
+			}
+				
+			
+			private function getHighestOne_sky(skyObj:Object):String{
+				if(!skyObj.hasOwnProperty("clear")){
+					return "noData";
+				}
+				var arr:ArrayCollection = new ArrayCollection([
+					{type:"clear", percentage: skyObj.clear},
+					{type:"scattered", percentage: skyObj.scattered},
+					{type:"broken", percentage: skyObj.broken},
+					{type:"overcast", percentage: skyObj.overcast}
+					]);
+				var sortField:SortField = new SortField();
+				sortField.name = "percentage";
+				sortField.numeric = true;
+				sortField.descending = true;
+				var numericDataSort:Sort = new Sort();
+				numericDataSort.fields = [sortField];
+				arr.sort = numericDataSort;
+				arr.refresh();
+							
+				return arr[0].type.toString();
+			}
+			
+			
+			private function getClaerPercentage(ptyObj:Object):Number{
+				return (100 - (ptyObj.rain + ptyObj.sleet + ptyObj.snow));
+			}
+			
+			/**
+			 * 
+			 * 2014.12.15 
+			 * 최빈값이 복수일 경우도 있기 때문에..
+			 * prioritySequnce 값 추가해서 소트필드에 추가함. 
+			 * 시퀀스 값 높은 애들이 우선적으로 표출
+			 * 
+			 * */
+			private function getHighestOne_pty(ptyObj:Object):String{
+				if(!ptyObj.hasOwnProperty("rain")){
+					return "noData";
+				}
+				var arr:ArrayCollection = new ArrayCollection([
+					{type:"clear", percentage: getClaerPercentage(ptyObj), prioritySequence: 4},
+					{type:"rain", percentage: ptyObj.rain, prioritySequence: 3},
+					{type:"sleet", percentage: ptyObj.sleet, prioritySequence: 2},
+					{type:"snow", percentage: ptyObj.snow, prioritySequence: 1}
+					]);
+				
+				var numericDataSort:Sort = new Sort();
+				
+				var sortField:SortField = new SortField();
+				sortField.name = "percentage";
+				sortField.numeric = true;
+				sortField.descending = true;
+				
+				var sortField_prioritySeq = new SortField("prioritySequence",false,false,true); //name, caseInsenstive, descending, numric
+				
+				numericDataSort.fields = [sortField, sortField_prioritySeq]; //prioritySequence added, 20141215  
+				
+				arr.sort = numericDataSort;
+				arr.refresh();
+							
+				return (Number(arr[0].percentage)!=0)? arr[0].type.toString() : "clear";
+			}
+			
+			
+	  		public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = new UTC00_bg_279hrs_even()
+				}else{
+					var bgImg:Object = new UTC00_bg_279hrs()
+				}
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean = false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h);
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+				
+				var bgImg:Object = new UTC12_bg_dashed();
+				
+				this.backgroundElements=[gridLine,bgImg];
+			}
+			
+			
+			
+			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:Object = this.dataProvider[this.dataProvider.length-1];
+				if(cat.toString().length > 4){
+					if(itm.lst==cat){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			    }else{
+			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+						return '';
+					}
+			    }
+			    // Return the customized categoryField value:
+			    return cat+"";
+			}
+			
+			
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:Object = this.dataProvider[this.dataProvider.length-1]; 
+					if(itm.lst==cat){
+						return null;
+					}else if(cat.toString().substring(4)=="00"){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			}
+				
+					
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				trace('defineVerticalLabel: '+cat+' haha')
+				if(Number(cat)==axis_ver.minimum)return "mm";
+	 	 		else return "";
+  			}
+  			
+  			
+  			public function moveAxisRenderer(isMEDM:Boolean):void{
+				if(isMEDM){
+					callLater(moveAxisLabel);
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}else{
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}
+			} 
+			
+			
+  			public function moveAxisLabel():void{
+				topAxisRenderer.move(topAxisRenderer.x-7,topAxisRenderer.y);
+			}
+			
+			
+		]]>
+	</mx:Script>
+		
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas_sky" includeInRanges="true" />
+			<mx:CartesianDataCanvas id="canvas_pty" includeInRanges="true" />
+			<mx:CartesianDataCanvas id="canvas_varSeperator" includeInRanges="true" />
+		</mx:annotationElements>
+		
+		
+		<!--
+		<mx:Array id="bgArr">
+			<mx:Image id="utc12" source="/asset/DFS/timeSeries/meteogram/style/12UTC_SKY.gif" width="100%" height="100%" /> 
+		</mx:Array>
+        -->    	
+		
+         <mx:backgroundElements>
+            <mx:GridLines  id="gridLine" 
+            	/>
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer
+				placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  showLabels="true"
+				axisStroke="{ChartStyleAssets.axisStroke}" 
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer 
+				placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+           	<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+           		/>	
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="defineLabel"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" 
+				interval="30" minimum="0"  maximum="29"
+				labelFunction="defineVerticalLabel"/>    <!--interval="31" minimum="20"  maximum="49"-->
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:ColumnSeries id="skySeries" 
+				xField="lst"  visible="false" dataProvider="{listData_cld}"/>
+			<mx:ColumnSeries id="ptySeries" 
+				xField="lst" visible="false"  dataProvider="{listData_pty}" />
+		</mx:series>
+		
+</mx:ColumnChart>

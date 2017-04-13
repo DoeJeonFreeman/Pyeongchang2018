@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="150" 
+	gutterLeft="30" gutterRight="30"
+	columnWidthRatio="1.0"
+	visible="true" 
+	showDataTips="true" dataTipFunction="dataTipFunc"  dataTipMode="multiple" 
+	initialize="init()"
+	creationComplete="creationCompleteHandler()"
+	>
+<!--	
+	initialize="init()"
+-->	
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.HitData;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.Series;
+			import mx.controls.Label;
+			import mx.formatters.NumberFormatter;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+			
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.util.common.CommonUtil;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/rn3/SHRT_00UTC_odd.png')] private var bg_00UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/rn3/SHRT_00UTC_even.png')] private var bg_00UTC_even_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/rn3/SHRT_12UTC_odd.png')] private var bg_12UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/rn3/SHRT_12UTC_even.png')] private var bg_12UTC_even_KWRF:Class;
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_odd_KWRF();						
+						}else{
+							return new bg_00UTC_odd();						
+						}
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_odd_KWRF();						
+						}else{
+							return new bg_12UTC_odd();						
+						}	
+					}
+				}else{
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_even_KWRF();						
+						}else{
+							return new bg_00UTC_even();						
+						}	
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_even_KWRF();						
+						}else{
+							return new bg_12UTC_even();						
+						}
+					}
+				}	
+			}
+			
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isKWARF);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_v);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+			
+			
+			private function dataTipFunc(e:HitData):String {
+		        var s:String;
+		        var dateTime:String = Object(e.item).@lst;
+		        s  = "<B>" + Object(e.element).displayName+'</B>\n'; 
+		        s +=  dateTime.substr(0,2) + '일 ' + dateTime.substr(2,4) + '시\n'; 
+		        s += "------------\n";
+		        s += Object(e.item).@val + ' mm';
+//		        s += "SEA:   <FONT COLOR='#3281DB'> " + e.item.sea + "</FONT>\n";
+//				s += '\n'+e.item.val;
+		        return s;
+		     }   
+			
+			private function init():void{
+//				fractionFormatter = new NumberFormatter();
+//				fractionFormatter.precision = 1;
+			}
+			
+			private function creationCompleteHandler():void{
+//				resetLinearAxisData();
+				this.validateNow();
+				moveAxisRenderer(parentApplication.isExistOnlyKWRF)
+			}
+			
+			
+			private function resetLinearAxisData():void{
+				trace('======================================================================')
+				trace('resetLinearAxisData')
+				trace('======================================================================')
+				axis_ver.maximum += Math.ceil(axis_ver.computedMaximum * 0.2);
+				if(axis_ver.maximum > 6){
+					axis_ver.interval =Math.ceil((axis_ver.maximum )/6);
+				}else{
+					axis_ver.interval = axis_ver.maximum / 6;
+				}
+				//얘는 axis move랑 관련없나보네
+//				addAnnotationElements();
+			}
+			
+			private var fractionFormatter:NumberFormatter;
+			
+			/**
+			public function setDefaultStroke():void{
+				for each(var cs:ColumnSeries in this.series){
+					cs.setStyle("stroke", new Stroke(0x000000, 0, 0))
+				}
+			}
+			*/
+			
+			public function setDefaultStroke(val:Number=0.9):void{
+				for each(var cs:ColumnSeries in this.series){
+					var colour:int = CommonUtil.getInstance().getStrokeColourByModelName(cs.id,true,false);
+					cs.setStyle("fill", new SolidColor(colour));
+					cs.setStyle("alpha",val);
+					cs.setStyle("stroke", new Stroke(0x000000, 0, 0));
+				}
+			}
+			
+			
+			public function addAnnotationElements(currSeries:Series,isVisible:Boolean):void{
+				trace('DFS_RN3_MergedModel.addAnnotationElement()')
+				canvas.removeAllChildren();
+				if(!isVisible){
+					setDefaultStroke();
+					return;
+				}
+				if(! CommonUtil.getInstance().isFileExist(parentApplication.mDictionary,currSeries.displayName)){
+					setDefaultStroke();
+					return;
+				}
+				if(currSeries.dataProvider != null){
+					setDefaultStroke(0.3);
+					fractionFormatter = new NumberFormatter();
+					fractionFormatter.precision = 1;
+					fractionFormatter.rounding = "nearest";
+					
+					var colour:int = CommonUtil.getInstance().getStrokeColourByModelName(currSeries.id,true,true);
+					currSeries.setStyle("fill", new SolidColor(colour));
+					currSeries.setStyle("alpha", 1);
+					currSeries.setStyle("stroke", new Stroke(0x000000,1,1));
+					
+					//2016-03-21 
+					//SHRT 강수, 강수확률, 신적설 @val은 현재 XMLOutputter에서 미싱처리함.
+					//근데 체크박스 BEST 선택시 레이블이 0으로 초기화됨. 
+					//안나오는게 정상이여ㅠ
+					
+					//					if(currSeries.id.indexOf("best")!=-1)return;
+					
+					for each(var item:XML in currSeries.dataProvider){
+						if(item.hasOwnProperty("@val")){ // 2016-03-21
+							addLabelsToColumn(item["@lst"], item["@val"]);
+						}
+					}
+					
+				}
+				
+//				callLater(moveAxisRenderer,[parentApplication.isExistOnlyKWRF]);
+			}
+		
+		
+			//ㄴㄴ
+			private function addLabelsToColumn(lst:String, val:Number):void{
+					var lbl:Label = new Label();
+					lbl.text =fractionFormatter.format(val);
+					lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+					lbl.width = 40; lbl.height = 20;
+					lbl.setStyle("fontSize","12");
+					lbl.setStyle("fontWeight","normal");
+					lbl.setStyle("textAlign","center");
+					lbl.setStyle("paddingTop",-20);
+					
+//					canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), new CartesianCanvasValue(val + Math.ceil(axis_ver.interval*0.6),0));
+					canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+			}
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				if(axis_ver.computedMaximum==cat ){ //|| cat > axis_ver.computedMaximum-axis_ver.interval
+					return "mm";
+				}
+				return cat+"";
+//				return fractionFormatter.format(cat);
+			}
+  			
+  			
+  			private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				// Return the customized categoryField value:
+				var itm:XML = this.dataProvider[this.dataProvider.length-1];
+				var lbl_LST:String = cat.toString();
+				if(cat.toString().length == 4){
+					if(Number(cat.toString().substring(2,4))%6 !=0){
+						lbl_LST= '';
+					}else if(itm.@lst==cat){
+						return '';
+					}
+				} 
+				return lbl_LST;
+			}
+			
+			
+			public function moveAxisRenderer(isKWRF:Boolean):void{
+//				callLater(resetLinearAxisData);
+//				addAnnotationElements();
+				if(!isKWRF){
+//					callLater(moveAxisLabel);
+					moveAxisLabel();
+				}else{
+					trace('chart is KWARF_SHRT:: '+isKWRF.toString())
+				}
+			}
+
+			
+			public function moveAxisLabel():void{
+				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-8,topAxisRenderer.y);
+				bottomAxisRenderer.move(bottomAxisRenderer.x-8,bottomAxisRenderer.y);
+			}
+		]]>
+	</mx:Script>
+		
+
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines 
+            	direction="both" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            	
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}"
+				labelAlign="right" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="@lst"  labelFunction="horLabelFunc" />
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" baseAtZero="true" minimum="0" labelFunction="defineVerAxisLabel"
+			/><!--labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop the columnSeries shadow..-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>
+		
+		<mx:series>
+			
+				<mx:ColumnSeries id="series_best" fill="{ChartStyleAssets.SC_SHRT_PMOS}"  displayName="BEST" 
+					itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+					xField="@lst" yField="@val" >
+				</mx:ColumnSeries>	  
+			
+				<mx:ColumnSeries id="series_rdps" fill="{ChartStyleAssets.SC_SHRT_RDPS}"  displayName="RDPS" 
+					itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+					xField="@lst" yField="@val" >
+					<!--stroke="{new Stroke(0x000000,1,.3)}"
+						0xadc900
+					-->
+				</mx:ColumnSeries>	  
+				
+			<!--
+				<mx:ColumnSeries id="series_kwrf" fill="{ChartStyleAssets.SC_SHRT_KWRF}" displayName="KWRF"
+					itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+					xField="@lst" yField="@val" >
+				</mx:ColumnSeries>	  
+			-->	
+				
+				<mx:ColumnSeries id="series_ecmw" fill="{ChartStyleAssets.SC_SHRT_ECMW}" displayName="ECMWF" 
+					itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+					xField="@lst" yField="@val" >
+				</mx:ColumnSeries>	  
+					<!--itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.RainBar_noLabel"-->
+				
+		</mx:series>
+	</mx:ColumnChart>

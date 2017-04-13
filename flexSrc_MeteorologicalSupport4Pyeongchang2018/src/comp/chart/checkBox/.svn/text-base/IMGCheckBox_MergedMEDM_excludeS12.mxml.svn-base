@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+		xmlns:doe="com.doe.flex.ui.form.util.*" verticalAlign="middle" horizontalAlign="right" horizontalGap="2" paddingRight="-5">
+		
+	<doe:ImageCheckBox id="cb_all" label="모두 선택" labelPlacement="right" paddingLeft="2" horizontalGap="1" visible="false"/>
+	
+
+	<doe:ImageCheckBox id="cb_best" label="BEST" 
+		imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_PMOS.png')" 
+		labelPlacement="right" paddingLeft="0" horizontalGap="1"  />
+		
+	<doe:ImageCheckBox id="cb_gdps" label="GDPS" 
+		imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_GDPS.png')" 
+		labelPlacement="right" paddingLeft="0" horizontalGap="1"  />
+		
+	<doe:ImageCheckBox id="cb_ecmw" label="ECMWF" 
+		imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_ECMW.png')" 
+		labelPlacement="right" paddingLeft="0" horizontalGap="1"/>	
+</mx:HBox>

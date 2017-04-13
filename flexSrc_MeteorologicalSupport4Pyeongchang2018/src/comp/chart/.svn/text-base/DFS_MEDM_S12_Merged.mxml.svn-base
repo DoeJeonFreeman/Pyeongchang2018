@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="150" 
+	gutterLeft="35" gutterRight="35"
+	columnWidthRatio="1.0"
+	visible="true"
+	showDataTips="true" dataTipFunction="dataTipFunc"  dataTipMode="multiple" 
+	creationComplete="creationCompleteHandler()"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import comp.util.common.CommonUtil;
+			import mx.formatters.NumberFormatter;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.HitData;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+
+
+		
+					//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_odd/utc00_odd_150.png")] 
+			public var UTC00_bg:Class; //ecmwwf 00utc ODD (dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_even/utc00_even_150.png")] 
+			public var UTC00_bg_even:Class; //ecmwf 00utc EVEN(dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg/utc12_150.png")] 
+			public var UTC12_bg_ecmwf:Class; //ecmwf 12UTC dashedLine only
+
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_150.png")] 
+			public var UTC12_bg_dashed:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_145.png")] 
+			public var UTC00_bg_279hrs:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_145.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			private function creationCompleteHandler():void{
+//				resetLinearAxisData();
+				this.validateNow();
+				moveAxisLabel();
+			}
+			
+			private function resetLinearAxisData():void{
+				axis_ver.maximum += Math.ceil(axis_ver.computedMaximum * 0.2);
+				if(axis_ver.maximum > 6){
+					axis_ver.interval =Math.ceil((axis_ver.maximum )/6);
+				}else{
+					axis_ver.interval = axis_ver.maximum / 6;
+				}
+//				addAnnotationElements();
+			}
+			
+			
+			private function dataTipFunc(e:HitData):String {
+		        var s:String;
+		        var dateTime:String = Object(e.item).@lst;
+		        s = "<B>" + Object(e.element).displayName+'</B>\n'; 
+		        s +=  dateTime.substring(0,2) + '월 ' + dateTime.substring(2,4)+'일 '+dateTime.substring(4,6)+'시\n'; 
+		        s += "------------------\n";
+		        s += Object(e.item).@val + 'cm';
+		        return s;
+		     }   
+			
+			public function setDefaultStroke(val:Number=0.9):void{
+				for each(var cs:ColumnSeries in this.series){
+					var colour:int = CommonUtil.getInstance().getStrokeColourByModelName(cs.id,true,true,true);
+					cs.setStyle("fill", new SolidColor(colour,val));
+					cs.setStyle("alpha",val);
+					cs.setStyle("stroke", new Stroke(0x000000, 0, 0))
+//					cs.selectedIndices = [];
+				}
+			}
+			
+			
+			private var fractionFormatter:NumberFormatter;
+
+			
+			public function addAnnotationElements(currSeries:Series,isVisible:Boolean):void{
+				canvas.removeAllChildren();
+				if(!isVisible){
+					setDefaultStroke();
+					return;
+				}
+				if(! CommonUtil.getInstance().isFileExist(parentApplication.mDictionary,currSeries.displayName)){
+					setDefaultStroke();
+					return;
+				}
+				if(currSeries.dataProvider != null){
+					setDefaultStroke(0.7);
+					fractionFormatter = new NumberFormatter();
+					fractionFormatter.precision = 1;
+					fractionFormatter.rounding = "nearest";
+					var colour:int = CommonUtil.getInstance().getStrokeColourByModelName(currSeries.id,true,true,true);
+					currSeries.setStyle("fill", new SolidColor(colour));
+					currSeries.setStyle("alpha", 0.9);
+					currSeries.setStyle("stroke", new Stroke(0x000000,1,1));
+					for each(var item:XML in currSeries.dataProvider){
+						addLabelsToColumn(item["@lst"], item["@val"]);
+					}
+				}
+//				callLater(moveAxisLabel);
+			}
+		
+			//ㄴㄴ
+			private function addLabelsToColumn(lst:String, val:Number):void{
+					var lbl:Label = new Label();
+//					lbl.text =val + "";
+					lbl.text =fractionFormatter.format(val);
+					lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+					lbl.width = 40; lbl.height = 20;
+					lbl.setStyle("fontSize","12");
+					lbl.setStyle("fontWeight","normal");
+					lbl.setStyle("paddingTop",-20);
+					lbl.setStyle("textAlign","center");
+//					canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), new CartesianCanvasValue(val + Math.ceil(axis_ver.interval*0.6),0));
+					canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+			}
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				if(axis_ver.computedMaximum==cat ){ //|| cat > axis_ver.computedMaximum-axis_ver.interval
+					trace("  axisLabelMaxVal == computedMaximum  " + cat)
+					return "cm";
+				}
+				trace("[linearAxis::compoutedMaximum]  " + axis_ver.computedMaximum)
+				trace("[linearAxis::labelItem]  " + cat)
+				return cat+"";
+			}
+  			
+  			public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+				
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h);
+      			
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+  				var bgImg:Object = (is279hrs)? new UTC12_bg_dashed() : new UTC12_bg_ecmwf();
+				this.backgroundElements=[gridLine,bgImg];
+			}
+  			
+  			
+//			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+//				if(cat.toString().length > 4){
+//					return cat.toString().substring(0,2)+"/"+cat.toString().substring(2,4);
+//			    }else{
+//			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+//						return '';
+//					}
+//			    }
+//			    // Return the customized categoryField value:
+//			    return cat+"";
+//			}
+			
+			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:XML = this.dataProvider[this.dataProvider.length-1];
+				if(cat.toString().length > 4){
+					if(itm.@lst==cat){
+//						Alert.show(cat.toString());
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			    }else{
+			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+						return '';
+					}
+			    }
+			    // Return the customized categoryField value:
+			    return cat+"";
+			}
+			
+			
+			
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:XML = this.dataProvider[this.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여
+					if(itm.@lst==cat){
+						return null;
+					}else if(cat.toString().substring(4)=="00"){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			}
+  			
+  			public function moveAxisLabel():void{
+				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-7,topAxisRenderer.y);
+				bottomAxisRenderer.move(bottomAxisRenderer.x-7,bottomAxisRenderer.y);
+			}
+  			
+		]]>
+	</mx:Script>
+		
+
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		
+        
+        
+     <mx:backgroundElements>
+            <mx:GridLines  id="gridLine" 
+            	/>
+        </mx:backgroundElements>
+        
+        
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}"
+				labelAlign="right" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+				canDropLabels="true"
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="@lst"  labelFunction="defineLabel"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" baseAtZero="true" minimum="0"  labelFunction="defineVerAxisLabel"
+			/><!--labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop the columnSeries shadow..-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>
+		
+		<mx:series>
+			
+			<mx:ColumnSeries id="series_best" 
+							 xField="@lst" yField="@val" displayName="BEST"  
+							 itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+							 fill="{new SolidColor(ChartStyleAssets.ST_SHRT_RDPS.color)}"/>
+			
+			<mx:ColumnSeries id="series_gdps"   displayName="GDPS"  
+				itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+				fill="{new SolidColor(ChartStyleAssets.SC_MEDM_GDPS.color)}"
+				xField="@lst" yField="@val" 
+				>
+			</mx:ColumnSeries>	  
+			<mx:ColumnSeries id="series_ecmw"   displayName="ECMWF"  
+				xField="@lst" yField="@val" 
+				itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.ColumnRenderer4MergedModel"
+				fill="{new SolidColor(ChartStyleAssets.SC_MEDM_ECMW.color)}" 
+				>
+			</mx:ColumnSeries>	  
+		</mx:series>
+	</mx:ColumnChart>

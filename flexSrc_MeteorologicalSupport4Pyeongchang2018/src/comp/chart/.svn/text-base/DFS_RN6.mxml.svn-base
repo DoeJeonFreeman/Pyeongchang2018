@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="150" 
+	gutterLeft="30" gutterRight="30"
+	columnWidthRatio="1.0"
+	visible="true"
+	initialize="init()">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.STN_NPPM.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+			
+			
+			private function init():void{
+				callLater(resetLinearAxisData);
+			}
+			
+			private function resetLinearAxisData():void{
+				axis_ver.maximum += Math.ceil(axis_ver.computedMaximum * 0.2);
+				if(axis_ver.maximum > 6){
+					axis_ver.interval =Math.ceil((axis_ver.maximum )/6);
+				}else{
+					axis_ver.interval = axis_ver.maximum / 6;
+				}
+//				addAnnotationElements();
+			}
+			
+			
+			private function addAnnotationElements():void{
+//				if(this.dataProvider != null){
+//					for each(var item:XML in this.dataProvider){
+//						addLabelsToColumn(item["@lst"], item["@val"]);
+//					}
+//				}
+				//모든 데이터가 0일 때 자동으로 컴퓨티드 맥심엄 100으로 잡힘 ㅡ,.ㅡ 어케함?
+//				if( axis_ver.maximum < 10 ){ //|| axis_ver.computedMaximum==100
+//					axis_ver.maximum = 10; 
+//				}
+//				axis_ver.maximum += Math.ceil(axis_ver.computedMaximum * 0.2);
+//				axis_ver.interval =Math.ceil((axis_ver.maximum )/6);
+			}
+		
+			//ㄴㄴ
+			private function addLabelsToColumn(lst:String, val:Number):void{
+					var lbl:Label = new Label();
+					lbl.text =val + "";
+					lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+					lbl.width = 40; lbl.height = 20;
+					lbl.setStyle("fontSize","11");
+					lbl.setStyle("fontWeight","bold");
+					lbl.setStyle("textAlign","center");
+					canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), new CartesianCanvasValue(val + Math.ceil(axis_ver.interval*0.6),0));
+			}
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				if(axis_ver.computedMaximum==cat ){ //|| cat > axis_ver.computedMaximum-axis_ver.interval
+					trace("  axisLabelMaxVal == computedMaximum  " + cat)
+					return "mm";
+				}
+				trace("[linearAxis::compoutedMaximum]  " + axis_ver.computedMaximum)
+				trace("[linearAxis::labelItem]  " + cat)
+				return cat+"";
+			}
+  			
+  			
+  			private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				// Return the customized categoryField value:
+				var lbl_LST:String = cat.toString();
+				if(cat.toString().length == 4){
+					if(Number(cat.toString().substring(2,4))%6 !=0){
+						lbl_LST= '';
+					}
+				} 
+				return lbl_LST;
+			}
+			
+		]]>
+	</mx:Script>
+		
+
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines 
+            	direction="both" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            	
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+	           	axis="{axis_hor}" labelAlign="right"/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+           		axis="{axis_hor}" labelAlign="right"/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="@lst"  labelFunction="horLabelFunc" />
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" baseAtZero="true"  labelFunction="defineVerAxisLabel"
+			/><!--labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop the columnSeries shadow..-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>
+		
+		<mx:series>
+			<mx:ColumnSeries id="colSeries" 
+				xField="@lst" yField="@val" itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.RainBar" >
+				<!--
+				<mx:stroke>
+                    <mx:Stroke color="black" weight="1" alpha="0.9" />
+                </mx:stroke>
+                <mx:fill>
+                	<mx:LinearGradient angle="90">
+                        <mx:entries>
+                            <mx:Array>
+	                            <mx:GradientEntry color="0xBBBBBB"
+	                                        ratio="0.0"
+	                                        alpha="1.0" />
+	                            <mx:GradientEntry color="0xFFFFFF" 
+	                                        ratio="0.7"
+	                                        alpha="1.0" />
+                            </mx:Array>
+                        </mx:entries>
+                	</mx:LinearGradient>
+                </mx:fill>
+				-->
+			</mx:ColumnSeries>	  
+		</mx:series>
+	</mx:ColumnChart>

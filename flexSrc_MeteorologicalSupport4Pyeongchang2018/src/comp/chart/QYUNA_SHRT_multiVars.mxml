@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="100" 
+	gutterLeft="70" gutterRight="70"
+	initialize="initTempChart()"
+	showDataTips="true" 
+	dataTipFunction="dataTipFunc"  dataTipMode="multiple" 
+	creationComplete="addGraphicSymbol()" >
+	
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.timeSeries.meteogram.itmRenerer.DashedLineRenderer;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.LineSeriesLabel;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.chartingTool.BGLabel;
+			import comp.chart.graphic.WindSymbol;
+			
+			import mx.charts.GridLines;
+			import mx.charts.HitData;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.controls.TextInput;
+			import mx.core.UIComponent;
+			import mx.core.UITextField;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.RoundedRectangle;
+			import mx.graphics.Stroke;
+			
+			
+			
+			private function addGraphicSymbol():void{
+				//Alert.show(axis_ver.computedMaximum+' / '+axis_ver.maximum);
+//				callLater(adjustVAxes);
+				adjustVAxes();
+			}
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi/circleItemLegend_orange.png')] private var legend_cicle:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi/rectItemLegend.png')] private var legend_rect:Class;
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean):Object{
+				if(isOdd){
+					if(is00UTC){
+						return new bg_00UTC_odd();						
+					}else{
+						return new bg_12UTC_odd();						
+					}
+				}else{
+					if(is00UTC){
+						return new bg_00UTC_even();						
+					}else{
+						return new bg_12UTC_even();						
+					}
+				}	
+			}
+			
+			
+//			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean):void{
+//				var bgImg:Object = getProperBG(is00UTC, isOdd);
+//				bgImg.alpha = 1.0
+//				var gridLine:GridLines = new GridLines();
+//				gridLine.setStyle("direction","vertical");
+//				gridLine.setStyle("verticalTickAligned",true);
+//      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+//				this.backgroundElements=[bgImg,gridLine];
+//			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isVSRT:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","vertical");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+				if(isVSRT)
+					this.backgroundElements=[gridLine];
+				else
+					this.backgroundElements=[bgImg,gridLine];
+			}
+			
+			
+			public function adjustVAxes():void{
+				axis_ver_mMetres.maximum = axis_ver_mMetres.computedMaximum * 2;
+				validateNow();
+//				Alert.show("calllater(adjustVAxes(..) goddamn fxxkin' sucks ass)");
+			}
+			
+			
+			private function initTempChart():void{
+				t3hLine.setStyle("lineStroke", new Stroke(0xFB5318,1, 1.0)); 
+			 	t3hLine.setStyle("stroke", new Stroke(0xFB5318, 1, 1.0 ));  //circleitem line color
+             	t3hLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	t3hLine.setStyle("fill", 0xFB5318); 					//circleitem fill color
+             	t3hLine.setStyle("radius", 3); 
+			 	
+			 	
+				rehColumn.setStyle("lineStroke", new Stroke(0x1D9657,1, 1.0)); 
+			 	rehColumn.setStyle("stroke", new Stroke(0x15B06D, 1, 1.0 ));  //circleitem line color
+             	rehColumn.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	rehColumn.setStyle("fill", 0x15B06D); 					//circleitem fill color
+             	rehColumn.setStyle("radius", 3); 
+             	
+				
+				visLine.setStyle("lineStroke", new Stroke(0x0077EE, 1, 0.7)); 
+				visLine.setStyle("stroke", new Stroke(0x0077EE, 2, 0.7 ));  //circleitem line color
+				visLine.setStyle("fill", 0x0077EE); 					//circleitem fill color
+				visLine.setStyle("radius", 3); 
+				visLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				visLine.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+             	
+			}
+			
+	
+			
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				return (cat=="125") ?  "%" : cat+"";
+  			}
+			
+			private function defineVerticalLabel_km(cat:Object, pcat:Object,ax:LinearAxis):String {
+				return (cat=="15") ?  "km" : cat+"";
+  			}
+  			
+			private function defineVerticalLabel4mMetres(cat:Object, pcat:Object,ax:LinearAxis):String {
+				var str:String = (axis_ver_mMetres.computedMinimum== cat) ?  "mm"+"&#13;"+"(cm)" : cat+"";
+				return str;
+			}
+  			
+	        private function getwindSpeedUnitLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+		 	 		return "m/s";
+	  	 	} 	
+  			
+  	    	private function dataTipFunc(e:HitData):String {
+		        var s:String;
+		        var dateTime:String = Object(e.item).lst;
+		        s  = "<B>" + Object(e.element).displayName+'</B>\n'; 
+		        s +=  dateTime.substr(0,2) + '일 ' + dateTime.substr(2,4) + '시\n'; 
+		        s += "------------\n";
+		        s += Object(e.item).val + getSeriesUnit(Object(e.element).id);
+//		        s += "SEA:   <FONT COLOR='#3281DB'> " + e.item.sea + "</FONT>\n";
+//				s += '\n'+e.item.val;
+		        return s;
+		     }   
+//		
+			 
+			 private function getSeriesUnit(sID:String):String{
+			 	var properUnit:String = ' ';
+			 	if(sID=='t3hLine'){
+			 		properUnit += '℃';
+			 	}else if(sID=='rehColumn'|| sID=='popColumn'){
+			 		properUnit += '%';
+			 	}else if(sID=='rn3Column'){
+			 		properUnit += 'mm';
+			 	}else if(sID=='sn3Column'){
+			 		properUnit += 'cm';
+			 	}else if(sID=='visLine'){
+			 		properUnit += 'km';
+			 	}	
+			 	return properUnit;
+			 }
+
+		
+		]]>
+	</mx:Script>
+	
+		<mx:LinearAxis id="vAxis_invisible" 
+				minimum="0" 
+				maximum="15" 
+				interval="5" 
+				labelFunction="defineVerticalLabel_km"
+				/>
+				
+	
+		<mx:LinearAxis id="axis_ver_percentage" 
+				minimum="0" 
+				maximum="125" 
+				interval="25" 
+				labelFunction="defineVerticalLabel"/>
+				
+		<!--
+				맥시멈을 어떻게 잡나		
+				maximum="15"
+				interval="10"  
+		-->		
+		<mx:LinearAxis id="axis_ver_mMetres" 
+				minimum="0" 
+				labelFunction="defineVerticalLabel4mMetres"
+				/>
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas_t3h" includeInRanges="true" verticalAxis="{axis_ver}"/>
+			<mx:CartesianDataCanvas id="canvas_pop" includeInRanges="true" verticalAxis="{axis_ver_percentage}"/>
+			<mx:CartesianDataCanvas id="canvas_reh" includeInRanges="true" verticalAxis="{axis_ver_percentage}"/>
+			<mx:CartesianDataCanvas id="canvas_vis" includeInRanges="true" verticalAxis="{vAxis_invisible}"/> <!--meFine visibility annotaionElelents-->
+			<mx:CartesianDataCanvas id="canvas_r12" includeInRanges="true" verticalAxis="{axis_ver_mMetres}"/>
+			<mx:CartesianDataCanvas id="canvas_s12" includeInRanges="true" verticalAxis="{axis_ver_mMetres}"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+            	<!--
+		<mx:backgroundElements>
+            <mx:GridLines  
+            	direction="vertical"   horizontalShowOrigin="false"
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	/>
+        </mx:backgroundElements>
+            	-->
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			
+			<mx:AxisRenderer id="axis_visibility"
+				placement="left"
+				visible="true"
+				includeInLayout="true"
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{vAxis_invisible}"   
+			/> 
+			
+			<mx:AxisRenderer id="axis_left"
+				placement="left" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer id="axis_right2" canDropLabels="true"
+				placement="right" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver_mMetres}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+			<mx:AxisRenderer id="axis_right"
+				placement="right" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver_percentage}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.glStroke_h_a7}"
+	           	axis="{axis_hor}" />
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}"
+           		axis="{axis_hor}"/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  />
+		</mx:horizontalAxis> 
+		
+		<mx:verticalAxis> 
+			<!-- baseAtZero ㅠㅠ the default value is true .If all axis values are positive, the minimum axis value is zero.-->
+			<mx:LinearAxis id="axis_ver"  baseAtZero="false"/> <!--alignLabelsToInterval="true"  labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop shadow on a lineSeries-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>		
+
+
+
+
+		
+		<mx:series>
+		
+		
+		
+			<!--POP-->
+			<!--itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.VisibilityRenderer"  얘는 12345 그거 시정레빌별 -->
+			<!--
+			
+			<mx:ColumnSet type="clustered" columnWidthRatio=".35" >
+				<mx:ColumnSeries id="popColumn" horizontalAxis="{axis_hor}" verticalAxis="{vAxis_invisible}"  
+					yField="val" displayName="시정" itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.VisibilityAlternative">  
+				</mx:ColumnSeries>
+			</mx:ColumnSet>
+			-->
+				<mx:LineSeries id="visLine" horizontalAxis="{axis_hor}" verticalAxis="{vAxis_invisible}"  
+					yField="val" displayName="시정" interpolateValues="false" filterData="true">  
+				</mx:LineSeries>
+	<!--		
+	-->	
+		
+			<!--RN3 -->
+			<!--SN3 -->
+			<!--
+			<mx:AreaSeries id="rn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}"  
+					form="reverseStep" yField="val" xField="lst" displayName="3시간 강수량"  
+					areaStroke="{ChartStyleAssets.areaStroke_blue}" areaFill="{ChartStyleAssets.areaFill_blue}">
+			</mx:AreaSeries>
+			<mx:AreaSeries id="sn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}" 
+					form="reverseStep" yField="val" xField="lst" displayName="3시간 신적설" 
+					areaStroke="{ChartStyleAssets.areaStroke_yellow}" areaFill="{ChartStyleAssets.areaFill_yellow}">
+			</mx:AreaSeries>
+			-->
+			<!--12시간 강수/신적설-->
+			<!--12시간 강수/신적설-->
+			<mx:ColumnSet type="overlaid" columnWidthRatio="1.0" >
+				<mx:ColumnSeries id="rn3Column" horizontalAxis="{axis_hor}" 
+								 verticalAxis="{axis_ver_mMetres}"   
+								 itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.R12BarRenderer_GDPS"
+								 yField="val" displayName="3시간 강수">  
+				</mx:ColumnSeries>
+			</mx:ColumnSet>
+			<mx:ColumnSet type="overlaid" columnWidthRatio="1.0" >
+				<mx:ColumnSeries id="sn3Column" horizontalAxis="{axis_hor}" 
+								 verticalAxis="{axis_ver_mMetres}" 
+								 itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.S12BarRenderer_GDPS"
+								 yField="val" displayName="3시간 신적설" 	
+								 />  
+			</mx:ColumnSet>
+			
+			
+			<!--POP-->
+			<mx:ColumnSet type="clustered" columnWidthRatio=".30" >
+				<mx:ColumnSeries id="popColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"  
+								 yField="val" displayName="강수확률" itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.multiPOPBarRenderer">  
+				</mx:ColumnSeries>
+			</mx:ColumnSet>
+			
+			
+		
+			<!--REH lineSeries-->
+			<!--REH lineSeries-->
+			<mx:LineSeries id="rehColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"
+				yField="val" displayName="상대습도"  
+				form="segment" visible="true" > 
+			</mx:LineSeries>		
+				<!--itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.LineSeriesLabel_REH"-->
+			
+			
+			<!--Temperature-->
+			<!--Temperature-->
+			<mx:LineSeries id="t3hLine" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver}" 
+				yField="val" displayName="기온"  
+				form="segment" visible="true"> 
+				<!--itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.LineSeriesLabel"-->
+			</mx:LineSeries>
+			
+			<!--
+			<mx:ColumnSeries id="ptyLine" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver}"
+				yField="val" xField="lst" displayName="Precipitation" 
+				visible="false" includeInLayout="false"/> 
+			-->
+		</mx:series>
+		
+	</mx:CartesianChart>

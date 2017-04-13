@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.List;
+			private function deleteItemFromConfiguredList():void{
+				var configuredStations:List = owner as List;
+				configuredStations.dataProvider.removeItemAt(configuredStations.dataProvider.getItemIndex(data));
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Label text="{data.stnName + ' (' + data.stnCode + ')'}"/>
+	<mx:Button id="remove" label="x" click="deleteItemFromConfiguredList()"/>
+</mx:HBox>

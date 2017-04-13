@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="150" 
+	gutterLeft="35" gutterRight="35"
+	showDataTips="true" dataTipFunction="dataTipFunc"  dataTipMode="multiple" 
+	initialize="initTempChart()" 
+	creationComplete="creationCompleteHandler()"
+	>
+	<!--
+	creationComplete="creationCompleteHandler();callLater(moveAxisLabel)"
+	-->
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.timeSeries.meteogram.itmRenerer.DashedLineRenderer_t2;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.DashedLineRenderer;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.HitData;
+			import mx.graphics.SolidColor;
+			import mx.collections.XMLListCollection;
+			import mx.collections.ArrayCollection;
+			import mx.formatters.NumberFormatter;
+			import mx.controls.TextInput;
+			import mx.core.UITextField;
+			import comp.chart.chartingTool.BGLabel;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.RoundedRectangle;
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.graphics.Stroke;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+			import mx.charts.GridLines;
+
+			
+			public var minMaxArr:Array; 
+			public var minMaxArr_epsg:Array; 
+			public var minMaxArr_best:Array; 
+			public var minMaxArr_anotherOne:Array; 
+			
+			
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_odd/utc00_odd_150.png")] 
+			public var UTC00_bg:Class; //ecmwwf 00utc ODD (dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_even/utc00_even_150.png")] 
+			public var UTC00_bg_even:Class; //ecmwf 00utc EVEN(dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg/utc12_150.png")] 
+			public var UTC12_bg_ecmwf:Class; //ecmwf 12UTC dashedLine only
+
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_150.png")] 
+			public var UTC12_bg_dashed:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_145.png")] 
+			public var UTC00_bg_279hrs:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_145.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			
+			
+			[Bindable]private var isMinData:Boolean = true;
+			
+			private function initTempChart(alphaVal:Number=1.0,circleRadius:Number=3):void{
+				
+				//Best				
+				series_best_min.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_SHRT_KWRF.color, 1, alphaVal)); 
+				series_best_min.setStyle("stroke", new Stroke(ChartStyleAssets.ST_SHRT_KWRF.color, 2, alphaVal-0.2));  //circleitem line color
+				series_best_min.setStyle("fill", ChartStyleAssets.ST_SHRT_KWRF.color); 						   //circleitem fill color
+				series_best_min.setStyle("radius", circleRadius); 
+				series_best_min.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				series_best_min.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+             	
+				series_best_max.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_SHRT_KWRF.color, 1, alphaVal)); 
+				series_best_max.setStyle("stroke", new Stroke(ChartStyleAssets.ST_SHRT_KWRF.color, 2, alphaVal-0.2));  //circleitem line color
+				series_best_max.setStyle("fill", ChartStyleAssets.ST_SHRT_KWRF.color); 						   //circleitem fill color
+				series_best_max.setStyle("radius", circleRadius); 
+				series_best_max.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	
+				
+				//EPSG
+				series_epsg_min.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_EPSG.color, 1, alphaVal)); 
+			 	series_epsg_min.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_EPSG.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_epsg_min.setStyle("fill", ChartStyleAssets.ST_MEDM_EPSG.color); 						   //circleitem fill color
+             	series_epsg_min.setStyle("radius", circleRadius); 
+//             	series_epsg_min.setStyle("adjustedRadius", 2); 
+             	series_epsg_min.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	series_epsg_min.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+             	
+				series_epsg_max.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_EPSG.color, 1, alphaVal)); 
+			 	series_epsg_max.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_EPSG.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_epsg_max.setStyle("fill", ChartStyleAssets.ST_MEDM_EPSG.color); 						   //circleitem fill color
+             	series_epsg_max.setStyle("radius", circleRadius); 
+//             	series_epsg_max.setStyle("adjustedRadius", 2); 
+             	series_epsg_max.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	
+             	//PMOS2
+				series_mos2_min.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_GDPS.color, 1, alphaVal)); 
+			 	series_mos2_min.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_GDPS.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_mos2_min.setStyle("fill", ChartStyleAssets.ST_MEDM_GDPS.color); 						   //circleitem fill color
+             	series_mos2_min.setStyle("radius", circleRadius); 
+//             	series_mos2_min.setStyle("adjustedRadius", 2); 
+             	series_mos2_min.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	series_mos2_min.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+             	
+				series_mos2_max.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_GDPS.color, 1, alphaVal)); 
+			 	series_mos2_max.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_GDPS.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_mos2_max.setStyle("fill", ChartStyleAssets.ST_MEDM_GDPS.color); 						   //circleitem fill color
+             	series_mos2_max.setStyle("radius", circleRadius); 
+//             	series_mos2_max.setStyle("adjustedRadius", 2); 
+             	series_mos2_max.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	
+             	//ECMWF
+				series_ecmw_min.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_ECMW.color, 1, alphaVal)); 
+			 	series_ecmw_min.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_ECMW.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_ecmw_min.setStyle("fill", ChartStyleAssets.ST_MEDM_ECMW.color); 						   //circleitem fill color
+             	series_ecmw_min.setStyle("radius", circleRadius); 
+//             	series_ecmw_min.setStyle("adjustedRadius", 2); 
+             	series_ecmw_min.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+             	series_ecmw_min.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+             	
+             	
+				series_ecmw_max.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_MEDM_ECMW.color, 1, alphaVal)); 
+			 	series_ecmw_max.setStyle("stroke", new Stroke(ChartStyleAssets.ST_MEDM_ECMW.color, 2, alphaVal-0.2));  //circleitem line color
+             	series_ecmw_max.setStyle("fill", ChartStyleAssets.ST_MEDM_ECMW.color); 						   //circleitem fill color
+//				series_ecmw_max.setStyle("lineStroke", new Stroke(ChartStyleAssets.ST_SHRT_ECMW.color, 1, 1)); 
+//			 	series_ecmw_max.setStyle("stroke", new Stroke(ChartStyleAssets.ST_SHRT_ECMW.color, 2, 0.8 ));  //circleitem line color
+//             	series_ecmw_max.setStyle("fill", ChartStyleAssets.ST_MEDM_ECMW.color); 						   //circleitem fill color
+             	series_ecmw_max.setStyle("radius", circleRadius); 
+//             	series_ecmw_max.setStyle("adjustedRadius", 2); 
+             	series_ecmw_max.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+//             	series_ecmw_max.setStyle("lineSegmentRenderer", DashedLineRenderer); 
+             	
+//             	callLater(resetLinearAxisData);
+			}
+			
+			
+			private function creationCompleteHandler():void{
+				resetLinearAxisData();
+				this.validateNow();
+				moveAxisLabel();
+			}
+			
+
+			private function resetLinearAxisData():void{
+//				axis_ver.maximum = Math.round(axis_ver.maximum) + Math.ceil((axis_ver.maximum - axis_ver.minimum ) * 0.3 );
+//				axis_ver.minimum = Math.round(axis_ver.minimum) - Math.ceil((axis_ver.maximum - axis_ver.minimum ) * 0.3 );
+//				axis_ver.interval = Math.ceil((axis_ver.computedMaximum - axis_ver.computedMinimum)/5);
+//				if(axis_ver.maximum % axis_ver.interval !=0){
+//					axis_ver.computedMaximum += (axis_ver.maximum % axis_ver.interval);
+//				}
+				axis_ver.interval=5;
+				axis_left.setStyle("showLabels",true);
+				axis_right.setStyle("showLabels",true);	
+				
+				
+//				showMinMaxLabels();
+//				this.validateNow();
+			}
+
+
+			private function dataTipFunc(e:HitData):String {
+		        var s:String;
+		        var dateTime:String = Object(e.item).lst;
+		        s = "<B>" + Object(e.element).displayName+'</B>\n'; 
+		        s +=  dateTime.substring(0,2) + '월 ' + dateTime.substring(2,4)+'일\n'; 
+		        s += "------------\n";
+		        s += Object(e.item).val + ' ℃';;
+		        return s;
+		     }   
+
+
+			public function seperateMinMaxFromSeries(is12UTC:Boolean=false,isExistOnlyECMWF:Boolean=false,baseModel:String=''):void{
+				if(is12UTC)
+					get12UTCSeriesData(isExistOnlyECMWF,baseModel);
+				else
+					get00UTCSeriesData(isExistOnlyECMWF,baseModel);
+//				callLater(moveAxisLabel);	
+			}
+			
+			
+			private function getProperMMXArray(modelName:String):Array{
+				if(modelName=='PMOS2') {return minMaxArr;}
+				else if(modelName=='EPSG'){ return minMaxArr_epsg;}
+				else if(modelName=='BEST'){ return minMaxArr_best;}
+				else {return null;}
+			}
+			
+			private function get12UTCSeriesData(onlyECMWF:Boolean,baseModel:String):void{		
+				trace("get12UTCSeriesData() onlyECMWF == " + onlyECMWF + " n  baseModel == " + baseModel)
+				var minArr:ArrayCollection = new ArrayCollection();
+				var maxArr:ArrayCollection= new ArrayCollection();
+//				var currArr:Array = (onlyECMWF)? minMaxArr_anotherOne : minMaxArr;
+				var currArr:Array = (onlyECMWF)? minMaxArr_anotherOne : getProperMMXArray(baseModel);
+				for (var i:int=0; i<currArr.length; i++){
+					var currObj:Object = currArr[i];
+					var LST:String = currObj.lst.replace('/','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//min
+						item.lst = LST.substring(0,4)+'00';
+						minArr.addItem(item);
+
+						var item4max:Object = new Object();
+						item4max.lst = LST.substring(0,4)+'00';
+						maxArr.addItem(item4max);
+					}else{//max
+						var item4min:Object = new Object();
+						item4min.lst = LST.substring(0,4)+'12';
+						minArr.addItem(item4min);
+						
+						item.lst = LST.substring(0,4)+'12';
+						maxArr.addItem(item);
+					}
+//					
+				}
+//				trace("[min]"+minArr.length+"\n"+printArrayData(minArr) +"\n"+"[max]"+maxArr.length+"\n"+printArrayData(maxArr),"get12UTCSeries!!!!")
+				if(onlyECMWF){
+					trace('get12UTCSeriesData onlyECMWF')
+					series_ecmw_min.dataProvider = minArr;
+					series_ecmw_max.dataProvider = maxArr;
+				}else{
+					if(baseModel=="PMOS2"){
+						series_mos2_min.dataProvider = minArr;
+						series_mos2_max.dataProvider = maxArr;
+					}else if(baseModel=="BEST"){
+						series_best_min.dataProvider = minArr;
+						series_best_max.dataProvider = maxArr;
+					}else if(baseModel=="EPSG"){
+						series_epsg_min.dataProvider = minArr;
+						series_epsg_max.dataProvider = maxArr;
+					}
+				}
+			}
+
+			
+			private function get00UTCSeriesData(onlyECMWF:Boolean,baseModel:String):void{		
+				trace("get00UTCSeriesData() onlyECMWF == " + onlyECMWF + " n  baseModel == " + baseModel )
+				var minArr:ArrayCollection = new ArrayCollection();
+				var maxArr:ArrayCollection= new ArrayCollection();
+//				var currArr:Array = (onlyECMWF)? minMaxArr_anotherOne : minMaxArr;
+				var currArr:Array = (onlyECMWF)? minMaxArr_anotherOne : getProperMMXArray(baseModel);
+//				trace("get00UTCSeriesData() onlyECMWF == " + onlyECMWF + " n  baseModel == " + baseModel + '[currArr] ' + currArr)
+				for (var i:int=0; i<currArr.length; i++){
+					var currObj:Object = currArr[i];
+					var LST:String = currObj.lst.replace('/','');
+//					LST = LST.replace('_','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//max
+						item.lst = LST.substring(0,4)+'12';
+//						item.lst = LST; //요렇게 하니까 시리즈 데이터 날아감 ㅡ,.ㅡ  minLine(maxLine)에 xFeild 명시 하니까 ㅡ,.ㅡ?? 근데 Lst 명시하니까  한칸씩 밀려 
+						maxArr.addItem(item);
+
+						var item4min:Object = new Object();
+						item4min.lst = LST.substring(0,4)+'12';
+						minArr.addItem(item4min);
+					}else{//min
+						var item4max:Object = new Object();
+						item4max.lst = LST.substring(0,4)+'00';
+						maxArr.addItem(item4max);
+						
+						item.lst = LST.substring(0,4)+'00';
+//						item.lst = LST;
+						minArr.addItem(item);
+					}
+//					
+				}
+//				trace("[min]"+minArr.length+"\n"+printArrayData(minArr) +"\n"+"[max]"+maxArr.length+"\n"+printArrayData(maxArr),"get00UTCSeriesData")
+				if(onlyECMWF){
+					series_ecmw_min.dataProvider = minArr;
+					series_ecmw_max.dataProvider = maxArr;
+					trace('온니이씨엠')
+				}else{
+					if(baseModel=="PMOS2"){
+						series_mos2_min.dataProvider = minArr;
+						series_mos2_max.dataProvider = maxArr;
+						trace('피모스2')
+					}else if(baseModel=="BEST"){
+						series_best_min.dataProvider = minArr;
+						series_best_max.dataProvider = maxArr;	
+						trace('베스트ㅆㅂ')
+					}else if(baseModel=="EPSG"){
+						series_epsg_min.dataProvider = minArr;
+						series_epsg_max.dataProvider = maxArr;
+						trace('앙상블')
+					}
+				}
+			}
+
+
+
+			private function printArrayData(arr:ArrayCollection):String{
+				var str:String = '';
+				for each(var item:Object in arr){
+					str+=item.lst+' :: '+item.val+'\n';
+				}
+				return str;
+			}
+
+		
+			public function showMinMaxLabels(currModelName:String, isVisible:Boolean):void{
+				canvas.removeAllChildren();
+				if(! isVisible){
+					initTempChart(1,3);
+//					initTempChart();
+					return;
+				}else{//visible==TRUE
+					initTempChart(0.5,0);
+				}
+				
+				var seriesMax:Series;
+				var seriesMin:Series;
+				var curr_colour:int;
+				
+				if(currModelName=='gdps'){
+					seriesMax = series_mos2_max;	
+					seriesMin = series_mos2_min;	
+					curr_colour = ChartStyleAssets.ST_MEDM_GDPS.color;
+				}else if(currModelName=='ecmw'){
+					seriesMax = series_ecmw_max;	
+					seriesMin = series_ecmw_min;	
+					curr_colour = ChartStyleAssets.ST_MEDM_ECMW.color;
+				}else if(currModelName=='epsg'){
+					seriesMax = series_epsg_max;	
+					seriesMin = series_epsg_min;	
+					curr_colour = ChartStyleAssets.ST_MEDM_EPSG.color;
+				}else if(currModelName=='best'){
+					seriesMax = series_best_max;	
+					seriesMin = series_best_min;	
+					curr_colour = ChartStyleAssets.ST_SHRT_KWRF.color;
+				}				
+				
+				if(seriesMax.dataProvider != null){
+					isMinData = false;
+					seriesMax.setStyle("stroke", new Stroke(curr_colour, 1, 1 ));  //circleitem line color
+					seriesMax.setStyle("radius", 3);
+					seriesMax.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+					seriesMax.setStyle('lineStroke',new Stroke(curr_colour,2,1));
+					for each(var item:Object in seriesMax.dataProvider){
+//						addLabelsToColumn(item["@lst"], item["@val"]);
+						addLabelsToColumn(item.lst, item.val);
+					}
+				}
+				if(seriesMin.dataProvider != null){
+					isMinData = true;
+					seriesMin.setStyle("stroke", new Stroke(curr_colour, 1, 1 ));  //circleitem line color
+					seriesMin.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+					seriesMin.setStyle("radius", 3);
+					seriesMin.setStyle('lineStroke',new Stroke(curr_colour,2,1));
+					seriesMin.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer_t2));
+					for each(var itm:Object in seriesMin.dataProvider){
+//						addLabelsToColumn(item["@lst"], item["@val"]);
+						addLabelsToColumn(itm.lst, itm.val);
+					}
+				}
+//				callLater(moveAxisLabel);
+			}
+//		
+		    /** params lst:String, val:Number, minMaxFlag:String, minMaxVal:Number */
+			private function addLabelsToColumn(lst:String, val:Number):void{
+				var dataLabel:Label = new Label();
+				dataLabel.width = 50; dataLabel.height = 20;
+				dataLabel.setStyle("fontSize","12");
+				dataLabel.setStyle("textAlign","center");
+				dataLabel.setStyle("fontWeight","normal");
+				dataLabel.setStyle("color",0x000000);
+				
+				var currFormat:NumberFormatter = new NumberFormatter();
+				currFormat.precision = 1;
+				currFormat.rounding = "nearest";
+				
+				dataLabel.text = currFormat.format(val);
+				if(isMinData){
+					dataLabel.setStyle("paddingBottom",-20);
+				}else if(!isMinData){
+					dataLabel.setStyle("paddingTop",-20);
+				}
+				dataLabel.setActualSize(dataLabel.getExplicitOrMeasuredWidth(),dataLabel.getExplicitOrMeasuredHeight());	
+				canvas.addDataChild(dataLabel, new CartesianCanvasValue(lst,-(dataLabel.width / 2)), val);
+			}
+
+			// 12 UTC
+			public function truncateToFitLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				// Return the customized categoryField value:
+				return cat.toString().substring(0,2)+'.'+cat.toString().substring(2,4);
+			}
+			
+			
+			//00 UTC
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+//				return cat+'';
+				var itm:Object = series_mos2_min.dataProvider[series_mos2_min.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여  0425, 2013
+				if(itm.lst==cat){
+					return null;
+				}else if(cat == null){
+						return null;
+				}else if(cat.toString().substring(4,6)=="12"){
+					return null;
+				}else{
+					return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+				}
+			}
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				if(axis_ver.computedMaximum==cat || cat > axis_ver.computedMaximum-axis_ver.interval){
+					return "℃"; 
+				}
+				return cat+"";
+			}
+			
+			
+
+  			
+  			public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+				
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h);
+      			
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+  				var bgImg:Object = (is279hrs)? new UTC12_bg_dashed() : new UTC12_bg_ecmwf();
+				this.backgroundElements=[gridLine,bgImg];
+			}
+  			
+  			
+  			
+  			
+  			public function moveAxisLabel():void{
+//				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-7,topAxisRenderer.y);
+				bottomAxisRenderer.move(bottomAxisRenderer.x-7,bottomAxisRenderer.y);
+//				showMinMaxLabels();
+			}
+  			
+  			
+		]]>
+	</mx:Script>
+		<!--doesn't work ㅡ,.ㅡ-->
+		<!--
+		<mx:Style>
+			TextField{
+				padding-top: -40;
+			}
+		</mx:Style>
+		-->
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false 
+		    verticalCenter="true" ??
+		 -->
+         <mx:backgroundElements>
+            <mx:GridLines  id="gridLine" 
+            	/>
+        </mx:backgroundElements>
+        
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer id="axis_left"
+				placement="left" 
+				showLabels="false"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer id="axis_right"
+				placement="right" 
+				showLabels="false"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="false"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}"
+				labelAlign="right" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="truncateToFitLabel"/>
+		</mx:horizontalAxis> 
+		
+		<mx:verticalAxis> 
+			<!-- baseAtZero ㅠㅠ the default value is true .If all axis values are positive, the minimum axis value is zero.-->
+			<mx:LinearAxis id="axis_ver"  baseAtZero="false" labelFunction="defineVerAxisLabel" /> <!--alignLabelsToInterval="true"  labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop shadow on a lineSeries-->
+		<!--
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>		
+		-->
+		<mx:series>
+		<!--
+			<mx:LineSeries id="lineSeries" 
+				yField="@val" 
+				form="segment" visible="false">
+			</mx:LineSeries>
+				lineSegmentRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.DashedLineRenderer"
+		-->	
+			<mx:LineSeries id="series_ecmw_min"  yField="val" xField="lst"  horizontalAxis="{axis_hor}"  interpolateValues="true" displayName="ECMWF 최저 기온"/>
+			<mx:LineSeries id="series_ecmw_max" yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true"  displayName="ECMWF 최고 기온"/>
+			<mx:LineSeries id="series_mos2_min"  yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true" displayName="GDPS 최저 기온"/>
+			<mx:LineSeries id="series_mos2_max" yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true"  displayName="GDPS 최고 기온"/>
+			<mx:LineSeries id="series_epsg_min"  yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true" displayName="EPSG 최저 기온"/>
+			<mx:LineSeries id="series_epsg_max" yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true"  displayName="EPSG 최고 기온"/>
+			<mx:LineSeries id="series_best_min"  yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true" displayName="BEST 최저 기온"/>
+			<mx:LineSeries id="series_best_max" yField="val" xField="lst"  horizontalAxis="{axis_hor}" interpolateValues="true"  displayName="BEST 최고 기온"/>
+			
+		</mx:series>
+	</mx:CartesianChart>

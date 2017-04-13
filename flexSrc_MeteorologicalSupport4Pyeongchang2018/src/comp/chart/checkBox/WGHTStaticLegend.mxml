@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+	verticalAlign="middle" horizontalAlign="right"  horizontalGap="10" fontSize="12">
+	
+	<mx:HBox horizontalGap="0" verticalAlign="middle">
+		<mx:Image source="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_KWRF.png')"/>
+		<mx:Label text="RDPS"/>
+	</mx:HBox>
+	
+	<mx:HBox horizontalGap="0" verticalAlign="middle">
+		<mx:Image source="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/WGHT_GDPS.png')"/>
+		<mx:Label text="GDPS"/>
+	</mx:HBox>
+	
+	<mx:HBox horizontalGap="0" verticalAlign="middle">
+		<mx:Image source="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_PMOS.png')"/>
+		<mx:Label text="EPSG"/>
+	</mx:HBox>
+	
+	<mx:HBox horizontalGap="0" verticalAlign="middle">
+		<mx:Image source="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_ECMW.png')"/>
+		<mx:Label text="ECMWF"/>
+	</mx:HBox>
+	
+	<!--
+	<doe:ImageCheckBox id="cb_best" label="RDPS" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_PMOS.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1"  d/>
+	<doe:ImageCheckBox id="cb_pmos" label="GDPS" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_RDPS.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1"  />
+	<doe:ImageCheckBox id="cb_rdps" label="EPSG" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_KWRF.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1"   />
+	<doe:ImageCheckBox id="cb_ecmw" label="ECMW" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/Merged_ECMW.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1"/>	
+	-->
+</mx:HBox>

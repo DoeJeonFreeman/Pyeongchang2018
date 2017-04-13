@@ -1,0 +1,848 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WSD issuedAt="00UTC 20 Dec 2016" basedOn=" ">
+ <regionGroup grCode="9901" grName="알펜시아 센터(스키점프)">
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="스키점프-K125-출발" stnNo="2572">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="스키점프-K125-점프" stnNo="2555">
+   <dataSet lst="2010" ws="1.5" wd="323" />
+   <dataSet lst="2011" ws="2.0" wd="342" />
+   <dataSet lst="2012" ws="3.0" wd="352" />
+   <dataSet lst="2013" ws="4.0" wd="356" />
+   <dataSet lst="2014" ws="3.8" wd="357" />
+   <dataSet lst="2015" ws="4.0" wd="356" />
+   <dataSet lst="2016" ws="3.4" wd="3" />
+   <dataSet lst="2017" ws="3.2" wd="16" />
+   <dataSet lst="2018" ws="3.0" wd="8" />
+   <dataSet lst="2019" ws="2.5" wd="12" />
+   <dataSet lst="2020" ws="2.5" wd="173" />
+   <dataSet lst="2021" ws="3.3" wd="189" />
+   <dataSet lst="2022" ws="3.3" wd="177" />
+   <dataSet lst="2023" ws="3.5" wd="182" />
+   <dataSet lst="2100" ws="3.2" wd="185" />
+   <dataSet lst="2101" ws="3.4" wd="172" />
+   <dataSet lst="2102" ws="2.7" wd="180" />
+   <dataSet lst="2103" ws="3.6" wd="178" />
+   <dataSet lst="2104" ws="2.5" wd="180" />
+   <dataSet lst="2105" ws="2.7" wd="184" />
+   <dataSet lst="2106" ws="2.4" wd="189" />
+   <dataSet lst="2107" ws="1.6" wd="220" />
+   <dataSet lst="2108" ws="3.4" wd="3" />
+   <dataSet lst="2109" ws="2.9" wd="326" />
+  </stn>
+  <stn stnName="스키점프-K98-출발" stnNo="2573">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="스키점프-K98점프" stnNo="2574">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="스키점프-착지" stnNo="2575">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9902" grName="알펜시아 센터(종합)">
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="2010" ws="1.5" wd="323" />
+   <dataSet lst="2011" ws="2.0" wd="342" />
+   <dataSet lst="2012" ws="3.0" wd="352" />
+   <dataSet lst="2013" ws="4.0" wd="356" />
+   <dataSet lst="2014" ws="3.8" wd="357" />
+   <dataSet lst="2015" ws="4.0" wd="356" />
+   <dataSet lst="2016" ws="3.4" wd="3" />
+   <dataSet lst="2017" ws="3.2" wd="16" />
+   <dataSet lst="2018" ws="3.0" wd="8" />
+   <dataSet lst="2019" ws="2.5" wd="12" />
+   <dataSet lst="2020" ws="2.5" wd="173" />
+   <dataSet lst="2021" ws="3.3" wd="189" />
+   <dataSet lst="2022" ws="3.3" wd="177" />
+   <dataSet lst="2023" ws="3.5" wd="182" />
+   <dataSet lst="2100" ws="3.2" wd="185" />
+   <dataSet lst="2101" ws="3.4" wd="172" />
+   <dataSet lst="2102" ws="2.7" wd="180" />
+   <dataSet lst="2103" ws="3.6" wd="178" />
+   <dataSet lst="2104" ws="2.5" wd="180" />
+   <dataSet lst="2105" ws="2.7" wd="184" />
+   <dataSet lst="2106" ws="2.4" wd="189" />
+   <dataSet lst="2107" ws="1.6" wd="220" />
+   <dataSet lst="2108" ws="3.4" wd="3" />
+   <dataSet lst="2109" ws="2.9" wd="326" />
+  </stn>
+  <stn stnName="바이애슬론-중간" stnNo="2558">
+   <dataSet lst="2010" ws="1.5" wd="323" />
+   <dataSet lst="2011" ws="2.0" wd="342" />
+   <dataSet lst="2012" ws="3.0" wd="352" />
+   <dataSet lst="2013" ws="4.0" wd="356" />
+   <dataSet lst="2014" ws="3.8" wd="357" />
+   <dataSet lst="2015" ws="4.0" wd="356" />
+   <dataSet lst="2016" ws="3.4" wd="3" />
+   <dataSet lst="2017" ws="3.2" wd="16" />
+   <dataSet lst="2018" ws="3.0" wd="8" />
+   <dataSet lst="2019" ws="2.5" wd="12" />
+   <dataSet lst="2020" ws="2.5" wd="173" />
+   <dataSet lst="2021" ws="3.3" wd="189" />
+   <dataSet lst="2022" ws="3.3" wd="177" />
+   <dataSet lst="2023" ws="3.5" wd="182" />
+   <dataSet lst="2100" ws="3.2" wd="185" />
+   <dataSet lst="2101" ws="3.4" wd="172" />
+   <dataSet lst="2102" ws="2.7" wd="180" />
+   <dataSet lst="2103" ws="3.6" wd="178" />
+   <dataSet lst="2104" ws="2.5" wd="180" />
+   <dataSet lst="2105" ws="2.7" wd="184" />
+   <dataSet lst="2106" ws="2.4" wd="189" />
+   <dataSet lst="2107" ws="1.6" wd="220" />
+   <dataSet lst="2108" ws="3.4" wd="3" />
+   <dataSet lst="2109" ws="2.9" wd="326" />
+  </stn>
+  <stn stnName="크로스컨트리-출발" stnNo="2577">
+   <dataSet lst="2010" ws="1.5" wd="323" />
+   <dataSet lst="2011" ws="2.0" wd="342" />
+   <dataSet lst="2012" ws="3.0" wd="352" />
+   <dataSet lst="2013" ws="4.0" wd="356" />
+   <dataSet lst="2014" ws="3.8" wd="357" />
+   <dataSet lst="2015" ws="4.0" wd="356" />
+   <dataSet lst="2016" ws="3.4" wd="3" />
+   <dataSet lst="2017" ws="3.2" wd="16" />
+   <dataSet lst="2018" ws="3.0" wd="8" />
+   <dataSet lst="2019" ws="2.5" wd="12" />
+   <dataSet lst="2020" ws="2.5" wd="173" />
+   <dataSet lst="2021" ws="3.3" wd="189" />
+   <dataSet lst="2022" ws="3.3" wd="177" />
+   <dataSet lst="2023" ws="3.5" wd="182" />
+   <dataSet lst="2100" ws="3.2" wd="185" />
+   <dataSet lst="2101" ws="3.4" wd="172" />
+   <dataSet lst="2102" ws="2.7" wd="180" />
+   <dataSet lst="2103" ws="3.6" wd="178" />
+   <dataSet lst="2104" ws="2.5" wd="180" />
+   <dataSet lst="2105" ws="2.7" wd="184" />
+   <dataSet lst="2106" ws="2.4" wd="189" />
+   <dataSet lst="2107" ws="1.6" wd="220" />
+   <dataSet lst="2108" ws="3.4" wd="3" />
+   <dataSet lst="2109" ws="2.9" wd="326" />
+  </stn>
+  <stn stnName="크로스컨트리-중간" stnNo="2559">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="슬라이딩-중간" stnNo="2576">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+  <stn stnName="슬라이딩-도착" stnNo="2554">
+   <dataSet lst="2010" ws="1.3" wd="337" />
+   <dataSet lst="2011" ws="1.8" wd="351" />
+   <dataSet lst="2012" ws="3.0" wd="2" />
+   <dataSet lst="2013" ws="4.1" wd="4" />
+   <dataSet lst="2014" ws="3.9" wd="4" />
+   <dataSet lst="2015" ws="4.0" wd="3" />
+   <dataSet lst="2016" ws="3.4" wd="14" />
+   <dataSet lst="2017" ws="3.1" wd="11" />
+   <dataSet lst="2018" ws="3.2" wd="349" />
+   <dataSet lst="2019" ws="2.8" wd="8" />
+   <dataSet lst="2020" ws="3.0" wd="157" />
+   <dataSet lst="2021" ws="3.2" wd="171" />
+   <dataSet lst="2022" ws="3.0" wd="168" />
+   <dataSet lst="2023" ws="3.1" wd="173" />
+   <dataSet lst="2100" ws="3.0" wd="172" />
+   <dataSet lst="2101" ws="3.4" wd="165" />
+   <dataSet lst="2102" ws="2.4" wd="165" />
+   <dataSet lst="2103" ws="3.5" wd="170" />
+   <dataSet lst="2104" ws="2.2" wd="164" />
+   <dataSet lst="2105" ws="2.8" wd="167" />
+   <dataSet lst="2106" ws="2.3" wd="173" />
+   <dataSet lst="2107" ws="1.2" wd="185" />
+   <dataSet lst="2108" ws="3.2" wd="360" />
+   <dataSet lst="2109" ws="3.4" wd="330" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9903" grName="용평 알파인 경기장">
+  <stn stnName="발왕산" stnNo="2552">
+   <dataSet lst="2010" />
+   <dataSet lst="2011" />
+   <dataSet lst="2012" />
+   <dataSet lst="2013" />
+   <dataSet lst="2014" />
+   <dataSet lst="2015" />
+   <dataSet lst="2016" />
+   <dataSet lst="2017" />
+   <dataSet lst="2018" />
+   <dataSet lst="2019" />
+   <dataSet lst="2020" />
+   <dataSet lst="2021" />
+   <dataSet lst="2022" />
+   <dataSet lst="2023" />
+   <dataSet lst="2100" />
+   <dataSet lst="2101" />
+   <dataSet lst="2102" />
+   <dataSet lst="2103" />
+   <dataSet lst="2104" />
+   <dataSet lst="2105" />
+   <dataSet lst="2106" />
+   <dataSet lst="2107" />
+   <dataSet lst="2108" />
+   <dataSet lst="2109" />
+  </stn>
+  <stn stnName="알파인-대회전-출발" stnNo="2560">
+   <dataSet lst="2010" ws="2.0" wd="20" />
+   <dataSet lst="2011" ws="1.9" wd="12" />
+   <dataSet lst="2012" ws="2.2" wd="18" />
+   <dataSet lst="2013" ws="2.8" wd="19" />
+   <dataSet lst="2014" ws="2.6" wd="25" />
+   <dataSet lst="2015" ws="2.8" wd="17" />
+   <dataSet lst="2016" ws="2.6" wd="360" />
+   <dataSet lst="2017" ws="3.8" wd="331" />
+   <dataSet lst="2018" ws="4.0" wd="312" />
+   <dataSet lst="2019" ws="3.8" wd="273" />
+   <dataSet lst="2020" ws="3.1" wd="274" />
+   <dataSet lst="2021" ws="2.0" wd="270" />
+   <dataSet lst="2022" ws="1.5" wd="254" />
+   <dataSet lst="2023" ws="3.4" wd="216" />
+   <dataSet lst="2100" ws="3.9" wd="239" />
+   <dataSet lst="2101" ws="3.8" wd="248" />
+   <dataSet lst="2102" ws="1.3" wd="299" />
+   <dataSet lst="2103" ws="2.1" wd="235" />
+   <dataSet lst="2104" ws="0.7" wd="304" />
+   <dataSet lst="2105" ws="1.9" wd="279" />
+   <dataSet lst="2106" ws="2.2" wd="288" />
+   <dataSet lst="2107" ws="2.0" wd="333" />
+   <dataSet lst="2108" ws="4.0" wd="310" />
+   <dataSet lst="2109" ws="4.0" wd="298" />
+  </stn>
+  <stn stnName="알파인-대회전-중간1" stnNo="2578">
+   <dataSet lst="2010" ws="1.7" wd="24" />
+   <dataSet lst="2011" ws="1.8" wd="13" />
+   <dataSet lst="2012" ws="2.4" wd="17" />
+   <dataSet lst="2013" ws="2.9" wd="16" />
+   <dataSet lst="2014" ws="2.9" wd="20" />
+   <dataSet lst="2015" ws="3.2" wd="18" />
+   <dataSet lst="2016" ws="2.7" wd="6" />
+   <dataSet lst="2017" ws="3.5" wd="333" />
+   <dataSet lst="2018" ws="3.8" wd="307" />
+   <dataSet lst="2019" ws="3.8" wd="279" />
+   <dataSet lst="2020" ws="3.6" wd="278" />
+   <dataSet lst="2021" ws="3.6" wd="267" />
+   <dataSet lst="2022" ws="2.8" wd="247" />
+   <dataSet lst="2023" ws="3.5" wd="211" />
+   <dataSet lst="2100" ws="3.4" wd="234" />
+   <dataSet lst="2101" ws="3.5" wd="252" />
+   <dataSet lst="2102" ws="2.7" wd="270" />
+   <dataSet lst="2103" ws="3.0" wd="228" />
+   <dataSet lst="2104" ws="1.5" wd="208" />
+   <dataSet lst="2105" ws="3.0" wd="268" />
+   <dataSet lst="2106" ws="4.0" wd="279" />
+   <dataSet lst="2107" ws="3.0" wd="303" />
+   <dataSet lst="2108" ws="3.9" wd="301" />
+   <dataSet lst="2109" ws="3.8" wd="295" />
+  </stn>
+  <stn stnName="알파인-대회전-중간2" stnNo="2579">
+   <dataSet lst="2010" ws="0.6" wd="329" />
+   <dataSet lst="2011" ws="0.9" wd="339" />
+   <dataSet lst="2012" ws="1.8" wd="9" />
+   <dataSet lst="2013" ws="2.2" wd="8" />
+   <dataSet lst="2014" ws="2.1" wd="17" />
+   <dataSet lst="2015" ws="2.1" wd="11" />
+   <dataSet lst="2016" ws="2.0" wd="345" />
+   <dataSet lst="2017" ws="3.3" wd="327" />
+   <dataSet lst="2018" ws="4.0" wd="315" />
+   <dataSet lst="2019" ws="3.6" wd="294" />
+   <dataSet lst="2020" ws="3.5" wd="290" />
+   <dataSet lst="2021" ws="3.2" wd="281" />
+   <dataSet lst="2022" ws="2.4" wd="251" />
+   <dataSet lst="2023" ws="2.8" wd="199" />
+   <dataSet lst="2100" ws="2.3" wd="247" />
+   <dataSet lst="2101" ws="3.2" wd="268" />
+   <dataSet lst="2102" ws="3.0" wd="279" />
+   <dataSet lst="2103" ws="2.3" wd="229" />
+   <dataSet lst="2104" ws="1.5" wd="242" />
+   <dataSet lst="2105" ws="3.6" wd="281" />
+   <dataSet lst="2106" ws="3.4" wd="282" />
+   <dataSet lst="2107" ws="3.1" wd="289" />
+   <dataSet lst="2108" ws="4.1" wd="301" />
+   <dataSet lst="2109" ws="3.6" wd="306" />
+  </stn>
+  <stn stnName="알파인-대회전-도착" stnNo="2561">
+   <dataSet lst="2010" ws="1.7" wd="24" />
+   <dataSet lst="2011" ws="1.8" wd="13" />
+   <dataSet lst="2012" ws="2.4" wd="17" />
+   <dataSet lst="2013" ws="2.9" wd="16" />
+   <dataSet lst="2014" ws="2.9" wd="20" />
+   <dataSet lst="2015" ws="3.2" wd="18" />
+   <dataSet lst="2016" ws="2.7" wd="6" />
+   <dataSet lst="2017" ws="3.5" wd="333" />
+   <dataSet lst="2018" ws="3.8" wd="307" />
+   <dataSet lst="2019" ws="3.8" wd="279" />
+   <dataSet lst="2020" ws="3.6" wd="278" />
+   <dataSet lst="2021" ws="3.6" wd="267" />
+   <dataSet lst="2022" ws="2.8" wd="247" />
+   <dataSet lst="2023" ws="3.5" wd="211" />
+   <dataSet lst="2100" ws="3.4" wd="234" />
+   <dataSet lst="2101" ws="3.5" wd="252" />
+   <dataSet lst="2102" ws="2.7" wd="270" />
+   <dataSet lst="2103" ws="3.0" wd="228" />
+   <dataSet lst="2104" ws="1.5" wd="208" />
+   <dataSet lst="2105" ws="3.0" wd="268" />
+   <dataSet lst="2106" ws="4.0" wd="279" />
+   <dataSet lst="2107" ws="3.0" wd="303" />
+   <dataSet lst="2108" ws="3.9" wd="301" />
+   <dataSet lst="2109" ws="3.8" wd="295" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9904" grName="정선 알파인 경기장">
+  <stn stnName="가리왕산" stnNo="2900">
+   <dataSet lst="2010" />
+   <dataSet lst="2011" />
+   <dataSet lst="2012" />
+   <dataSet lst="2013" />
+   <dataSet lst="2014" />
+   <dataSet lst="2015" />
+   <dataSet lst="2016" />
+   <dataSet lst="2017" />
+   <dataSet lst="2018" />
+   <dataSet lst="2019" />
+   <dataSet lst="2020" />
+   <dataSet lst="2021" />
+   <dataSet lst="2022" />
+   <dataSet lst="2023" />
+   <dataSet lst="2100" />
+   <dataSet lst="2101" />
+   <dataSet lst="2102" />
+   <dataSet lst="2103" />
+   <dataSet lst="2104" />
+   <dataSet lst="2105" />
+   <dataSet lst="2106" />
+   <dataSet lst="2107" />
+   <dataSet lst="2108" />
+   <dataSet lst="2109" />
+  </stn>
+  <stn stnName="알파인-활강-출발" stnNo="2584">
+   <dataSet lst="2010" ws="2.0" wd="27" />
+   <dataSet lst="2011" ws="1.8" wd="6" />
+   <dataSet lst="2012" ws="2.0" wd="360" />
+   <dataSet lst="2013" ws="1.7" wd="353" />
+   <dataSet lst="2014" ws="2.0" wd="330" />
+   <dataSet lst="2015" ws="2.3" wd="317" />
+   <dataSet lst="2016" ws="2.3" wd="310" />
+   <dataSet lst="2017" ws="3.1" wd="312" />
+   <dataSet lst="2018" ws="3.3" wd="320" />
+   <dataSet lst="2019" ws="3.2" wd="296" />
+   <dataSet lst="2020" ws="3.8" wd="290" />
+   <dataSet lst="2021" ws="3.6" wd="273" />
+   <dataSet lst="2022" ws="3.6" wd="254" />
+   <dataSet lst="2023" ws="3.5" wd="268" />
+   <dataSet lst="2100" ws="3.3" wd="272" />
+   <dataSet lst="2101" ws="3.1" wd="268" />
+   <dataSet lst="2102" ws="3.1" wd="274" />
+   <dataSet lst="2103" ws="3.6" wd="261" />
+   <dataSet lst="2104" ws="3.5" wd="268" />
+   <dataSet lst="2105" ws="3.3" wd="268" />
+   <dataSet lst="2106" ws="3.3" wd="273" />
+   <dataSet lst="2107" ws="3.7" wd="275" />
+   <dataSet lst="2108" ws="3.8" wd="281" />
+   <dataSet lst="2109" ws="3.9" wd="285" />
+  </stn>
+  <stn stnName="알파인-슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="2010" ws="2.0" wd="27" />
+   <dataSet lst="2011" ws="1.8" wd="6" />
+   <dataSet lst="2012" ws="2.0" wd="360" />
+   <dataSet lst="2013" ws="1.7" wd="353" />
+   <dataSet lst="2014" ws="2.0" wd="330" />
+   <dataSet lst="2015" ws="2.3" wd="317" />
+   <dataSet lst="2016" ws="2.3" wd="310" />
+   <dataSet lst="2017" ws="3.1" wd="312" />
+   <dataSet lst="2018" ws="3.3" wd="320" />
+   <dataSet lst="2019" ws="3.2" wd="296" />
+   <dataSet lst="2020" ws="3.8" wd="290" />
+   <dataSet lst="2021" ws="3.6" wd="273" />
+   <dataSet lst="2022" ws="3.6" wd="254" />
+   <dataSet lst="2023" ws="3.5" wd="268" />
+   <dataSet lst="2100" ws="3.3" wd="272" />
+   <dataSet lst="2101" ws="3.1" wd="268" />
+   <dataSet lst="2102" ws="3.1" wd="274" />
+   <dataSet lst="2103" ws="3.6" wd="261" />
+   <dataSet lst="2104" ws="3.5" wd="268" />
+   <dataSet lst="2105" ws="3.3" wd="268" />
+   <dataSet lst="2106" ws="3.3" wd="273" />
+   <dataSet lst="2107" ws="3.7" wd="275" />
+   <dataSet lst="2108" ws="3.8" wd="281" />
+   <dataSet lst="2109" ws="3.9" wd="285" />
+  </stn>
+  <stn stnName="알파인-활강-중간" stnNo="2586">
+   <dataSet lst="2010" ws="2.0" wd="27" />
+   <dataSet lst="2011" ws="1.8" wd="6" />
+   <dataSet lst="2012" ws="2.0" wd="360" />
+   <dataSet lst="2013" ws="1.7" wd="353" />
+   <dataSet lst="2014" ws="2.0" wd="330" />
+   <dataSet lst="2015" ws="2.3" wd="317" />
+   <dataSet lst="2016" ws="2.3" wd="310" />
+   <dataSet lst="2017" ws="3.1" wd="312" />
+   <dataSet lst="2018" ws="3.3" wd="320" />
+   <dataSet lst="2019" ws="3.2" wd="296" />
+   <dataSet lst="2020" ws="3.8" wd="290" />
+   <dataSet lst="2021" ws="3.6" wd="273" />
+   <dataSet lst="2022" ws="3.6" wd="254" />
+   <dataSet lst="2023" ws="3.5" wd="268" />
+   <dataSet lst="2100" ws="3.3" wd="272" />
+   <dataSet lst="2101" ws="3.1" wd="268" />
+   <dataSet lst="2102" ws="3.1" wd="274" />
+   <dataSet lst="2103" ws="3.6" wd="261" />
+   <dataSet lst="2104" ws="3.5" wd="268" />
+   <dataSet lst="2105" ws="3.3" wd="268" />
+   <dataSet lst="2106" ws="3.3" wd="273" />
+   <dataSet lst="2107" ws="3.7" wd="275" />
+   <dataSet lst="2108" ws="3.8" wd="281" />
+   <dataSet lst="2109" ws="3.9" wd="285" />
+  </stn>
+  <stn stnName="알파인-활강-도착" stnNo="2587">
+   <dataSet lst="2010" ws="1.3" wd="18" />
+   <dataSet lst="2011" ws="1.1" wd="360" />
+   <dataSet lst="2012" ws="1.9" wd="344" />
+   <dataSet lst="2013" ws="1.9" wd="325" />
+   <dataSet lst="2014" ws="2.4" wd="292" />
+   <dataSet lst="2015" ws="3.3" wd="290" />
+   <dataSet lst="2016" ws="3.2" wd="286" />
+   <dataSet lst="2017" ws="3.7" wd="299" />
+   <dataSet lst="2018" ws="3.8" wd="303" />
+   <dataSet lst="2019" ws="3.0" wd="319" />
+   <dataSet lst="2020" ws="2.9" wd="324" />
+   <dataSet lst="2021" ws="1.9" wd="357" />
+   <dataSet lst="2022" ws="0.6" wd="51" />
+   <dataSet lst="2023" ws="1.1" wd="355" />
+   <dataSet lst="2100" ws="1.2" wd="360" />
+   <dataSet lst="2101" ws="0.6" wd="51" />
+   <dataSet lst="2102" ws="0.7" wd="27" />
+   <dataSet lst="2103" ws="0.7" wd="360" />
+   <dataSet lst="2104" ws="1.0" wd="360" />
+   <dataSet lst="2105" ws="1.1" wd="15" />
+   <dataSet lst="2106" ws="0.9" wd="54" />
+   <dataSet lst="2107" ws="0.7" wd="16" />
+   <dataSet lst="2108" ws="2.1" wd="346" />
+   <dataSet lst="2109" ws="3.5" wd="325" />
+  </stn>
+  <stn stnName="정선경기장-하부" stnNo="2571">
+   <dataSet lst="2010" ws="0.2" wd="180" />
+   <dataSet lst="2011" ws="0.6" wd="189" />
+   <dataSet lst="2012" ws="1.2" wd="290" />
+   <dataSet lst="2013" ws="1.7" wd="287" />
+   <dataSet lst="2014" ws="1.9" wd="264" />
+   <dataSet lst="2015" ws="2.3" wd="272" />
+   <dataSet lst="2016" ws="2.3" wd="277" />
+   <dataSet lst="2017" ws="2.4" wd="294" />
+   <dataSet lst="2018" ws="2.4" wd="300" />
+   <dataSet lst="2019" ws="1.7" wd="332" />
+   <dataSet lst="2020" ws="0.8" wd="346" />
+   <dataSet lst="2021" ws="0.4" wd="45" />
+   <dataSet lst="2022" ws="2.8" wd="161" />
+   <dataSet lst="2023" ws="3.0" wd="147" />
+   <dataSet lst="2100" ws="1.3" wd="151" />
+   <dataSet lst="2101" ws="2.7" wd="158" />
+   <dataSet lst="2102" ws="2.8" wd="153" />
+   <dataSet lst="2103" ws="3.2" wd="145" />
+   <dataSet lst="2104" ws="2.1" wd="152" />
+   <dataSet lst="2105" ws="1.0" wd="151" />
+   <dataSet lst="2106" ws="0.9" wd="159" />
+   <dataSet lst="2107" ws="3.0" wd="150" />
+   <dataSet lst="2108" ws="0.6" wd="231" />
+   <dataSet lst="2109" ws="2.1" wd="315" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9905" grName="보광 스노 경기장">
+  <stn stnName="태기산" stnNo="2570">
+   <dataSet lst="2010" />
+   <dataSet lst="2011" />
+   <dataSet lst="2012" />
+   <dataSet lst="2013" />
+   <dataSet lst="2014" />
+   <dataSet lst="2015" />
+   <dataSet lst="2016" />
+   <dataSet lst="2017" />
+   <dataSet lst="2018" />
+   <dataSet lst="2019" />
+   <dataSet lst="2020" />
+   <dataSet lst="2021" />
+   <dataSet lst="2022" />
+   <dataSet lst="2023" />
+   <dataSet lst="2100" />
+   <dataSet lst="2101" />
+   <dataSet lst="2102" />
+   <dataSet lst="2103" />
+   <dataSet lst="2104" />
+   <dataSet lst="2105" />
+   <dataSet lst="2106" />
+   <dataSet lst="2107" />
+   <dataSet lst="2108" />
+   <dataSet lst="2109" />
+  </stn>
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="2010" ws="3.5" wd="25" />
+   <dataSet lst="2011" ws="3.6" wd="24" />
+   <dataSet lst="2012" ws="3.0" wd="26" />
+   <dataSet lst="2013" ws="3.0" wd="24" />
+   <dataSet lst="2014" ws="3.1" wd="21" />
+   <dataSet lst="2015" ws="3.6" wd="18" />
+   <dataSet lst="2016" ws="3.8" wd="20" />
+   <dataSet lst="2017" ws="4.3" wd="25" />
+   <dataSet lst="2018" ws="4.2" wd="27" />
+   <dataSet lst="2019" ws="4.0" wd="20" />
+   <dataSet lst="2020" ws="3.8" wd="9" />
+   <dataSet lst="2021" ws="3.4" wd="353" />
+   <dataSet lst="2022" ws="3.1" wd="333" />
+   <dataSet lst="2023" ws="3.2" wd="344" />
+   <dataSet lst="2100" ws="3.4" wd="343" />
+   <dataSet lst="2101" ws="3.5" wd="350" />
+   <dataSet lst="2102" ws="3.4" wd="341" />
+   <dataSet lst="2103" ws="2.9" wd="338" />
+   <dataSet lst="2104" ws="3.1" wd="328" />
+   <dataSet lst="2105" ws="3.2" wd="328" />
+   <dataSet lst="2106" ws="3.5" wd="357" />
+   <dataSet lst="2107" ws="3.3" wd="7" />
+   <dataSet lst="2108" ws="3.6" wd="8" />
+   <dataSet lst="2109" ws="3.9" wd="10" />
+  </stn>
+  <stn stnName="크로스-도착" stnNo="2581">
+   <dataSet lst="2010" ws="2.3" wd="38" />
+   <dataSet lst="2011" ws="2.0" wd="41" />
+   <dataSet lst="2012" ws="1.8" wd="41" />
+   <dataSet lst="2013" ws="1.9" wd="36" />
+   <dataSet lst="2014" ws="2.1" wd="28" />
+   <dataSet lst="2015" ws="2.8" wd="21" />
+   <dataSet lst="2016" ws="2.7" wd="34" />
+   <dataSet lst="2017" ws="2.9" wd="55" />
+   <dataSet lst="2018" ws="3.0" wd="62" />
+   <dataSet lst="2019" ws="2.9" wd="63" />
+   <dataSet lst="2020" ws="2.8" wd="52" />
+   <dataSet lst="2021" ws="2.2" wd="43" />
+   <dataSet lst="2022" ws="2.7" wd="356" />
+   <dataSet lst="2023" ws="2.8" wd="347" />
+   <dataSet lst="2100" ws="2.2" wd="342" />
+   <dataSet lst="2101" ws="1.9" wd="6" />
+   <dataSet lst="2102" ws="2.4" wd="348" />
+   <dataSet lst="2103" ws="2.7" wd="345" />
+   <dataSet lst="2104" ws="2.5" wd="348" />
+   <dataSet lst="2105" ws="2.5" wd="344" />
+   <dataSet lst="2106" ws="2.6" wd="25" />
+   <dataSet lst="2107" ws="2.7" wd="31" />
+   <dataSet lst="2108" ws="2.8" wd="32" />
+   <dataSet lst="2109" ws="2.6" wd="53" />
+  </stn>
+  <stn stnName="슬로프스타일-출발" stnNo="2588">
+   <dataSet lst="2010" ws="2.9" wd="41" />
+   <dataSet lst="2011" ws="2.8" wd="44" />
+   <dataSet lst="2012" ws="2.4" wd="42" />
+   <dataSet lst="2013" ws="2.3" wd="41" />
+   <dataSet lst="2014" ws="2.5" wd="34" />
+   <dataSet lst="2015" ws="3.1" wd="31" />
+   <dataSet lst="2016" ws="3.1" wd="45" />
+   <dataSet lst="2017" ws="3.5" wd="55" />
+   <dataSet lst="2018" ws="3.6" wd="58" />
+   <dataSet lst="2019" ws="3.4" wd="54" />
+   <dataSet lst="2020" ws="3.2" wd="44" />
+   <dataSet lst="2021" ws="2.8" wd="38" />
+   <dataSet lst="2022" ws="2.6" wd="9" />
+   <dataSet lst="2023" ws="2.6" wd="360" />
+   <dataSet lst="2100" ws="2.5" wd="5" />
+   <dataSet lst="2101" ws="2.6" wd="21" />
+   <dataSet lst="2102" ws="2.7" wd="4" />
+   <dataSet lst="2103" ws="2.7" wd="360" />
+   <dataSet lst="2104" ws="2.5" wd="2" />
+   <dataSet lst="2105" ws="2.6" wd="358" />
+   <dataSet lst="2106" ws="3.2" wd="32" />
+   <dataSet lst="2107" ws="3.2" wd="36" />
+   <dataSet lst="2108" ws="3.5" wd="39" />
+   <dataSet lst="2109" ws="3.2" wd="44" />
+  </stn>
+  <stn stnName="모글-출발" stnNo="2582">
+   <dataSet lst="2010" ws="2.3" wd="38" />
+   <dataSet lst="2011" ws="2.0" wd="41" />
+   <dataSet lst="2012" ws="1.8" wd="41" />
+   <dataSet lst="2013" ws="1.9" wd="36" />
+   <dataSet lst="2014" ws="2.1" wd="28" />
+   <dataSet lst="2015" ws="2.8" wd="21" />
+   <dataSet lst="2016" ws="2.7" wd="34" />
+   <dataSet lst="2017" ws="2.9" wd="55" />
+   <dataSet lst="2018" ws="3.0" wd="62" />
+   <dataSet lst="2019" ws="2.9" wd="63" />
+   <dataSet lst="2020" ws="2.8" wd="52" />
+   <dataSet lst="2021" ws="2.2" wd="43" />
+   <dataSet lst="2022" ws="2.7" wd="356" />
+   <dataSet lst="2023" ws="2.8" wd="347" />
+   <dataSet lst="2100" ws="2.2" wd="342" />
+   <dataSet lst="2101" ws="1.9" wd="6" />
+   <dataSet lst="2102" ws="2.4" wd="348" />
+   <dataSet lst="2103" ws="2.7" wd="345" />
+   <dataSet lst="2104" ws="2.5" wd="348" />
+   <dataSet lst="2105" ws="2.5" wd="344" />
+   <dataSet lst="2106" ws="2.6" wd="25" />
+   <dataSet lst="2107" ws="2.7" wd="31" />
+   <dataSet lst="2108" ws="2.8" wd="32" />
+   <dataSet lst="2109" ws="2.6" wd="53" />
+  </stn>
+  <stn stnName="슬로프스타일-도착" stnNo="2583">
+   <dataSet lst="2010" ws="2.3" wd="38" />
+   <dataSet lst="2011" ws="2.0" wd="41" />
+   <dataSet lst="2012" ws="1.8" wd="41" />
+   <dataSet lst="2013" ws="1.9" wd="36" />
+   <dataSet lst="2014" ws="2.1" wd="28" />
+   <dataSet lst="2015" ws="2.8" wd="21" />
+   <dataSet lst="2016" ws="2.7" wd="34" />
+   <dataSet lst="2017" ws="2.9" wd="55" />
+   <dataSet lst="2018" ws="3.0" wd="62" />
+   <dataSet lst="2019" ws="2.9" wd="63" />
+   <dataSet lst="2020" ws="2.8" wd="52" />
+   <dataSet lst="2021" ws="2.2" wd="43" />
+   <dataSet lst="2022" ws="2.7" wd="356" />
+   <dataSet lst="2023" ws="2.8" wd="347" />
+   <dataSet lst="2100" ws="2.2" wd="342" />
+   <dataSet lst="2101" ws="1.9" wd="6" />
+   <dataSet lst="2102" ws="2.4" wd="348" />
+   <dataSet lst="2103" ws="2.7" wd="345" />
+   <dataSet lst="2104" ws="2.5" wd="348" />
+   <dataSet lst="2105" ws="2.5" wd="344" />
+   <dataSet lst="2106" ws="2.6" wd="25" />
+   <dataSet lst="2107" ws="2.7" wd="31" />
+   <dataSet lst="2108" ws="2.8" wd="32" />
+   <dataSet lst="2109" ws="2.6" wd="53" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9906" grName="평창 올림픽 스타디움">
+  <stn stnName="평창-올림픽-스타디움" stnNo="100">
+   <dataSet lst="2010" />
+   <dataSet lst="2011" />
+   <dataSet lst="2012" />
+   <dataSet lst="2013" />
+   <dataSet lst="2014" />
+   <dataSet lst="2015" />
+   <dataSet lst="2016" />
+   <dataSet lst="2017" />
+   <dataSet lst="2018" />
+   <dataSet lst="2019" />
+   <dataSet lst="2020" />
+   <dataSet lst="2021" />
+   <dataSet lst="2022" />
+   <dataSet lst="2023" />
+   <dataSet lst="2100" />
+   <dataSet lst="2101" />
+   <dataSet lst="2102" />
+   <dataSet lst="2103" />
+   <dataSet lst="2104" />
+   <dataSet lst="2105" />
+   <dataSet lst="2106" />
+   <dataSet lst="2107" />
+   <dataSet lst="2108" />
+   <dataSet lst="2109" />
+  </stn>
+  <stn stnName="강릉" stnNo="105">
+   <dataSet lst="2010" />
+   <dataSet lst="2011" />
+   <dataSet lst="2012" />
+   <dataSet lst="2013" />
+   <dataSet lst="2014" />
+   <dataSet lst="2015" />
+   <dataSet lst="2016" />
+   <dataSet lst="2017" />
+   <dataSet lst="2018" />
+   <dataSet lst="2019" />
+   <dataSet lst="2020" />
+   <dataSet lst="2021" />
+   <dataSet lst="2022" />
+   <dataSet lst="2023" />
+   <dataSet lst="2100" />
+   <dataSet lst="2101" />
+   <dataSet lst="2102" />
+   <dataSet lst="2103" />
+   <dataSet lst="2104" />
+   <dataSet lst="2105" />
+   <dataSet lst="2106" />
+   <dataSet lst="2107" />
+   <dataSet lst="2108" />
+   <dataSet lst="2109" />
+  </stn>
+ </regionGroup>
+</WSD>
+

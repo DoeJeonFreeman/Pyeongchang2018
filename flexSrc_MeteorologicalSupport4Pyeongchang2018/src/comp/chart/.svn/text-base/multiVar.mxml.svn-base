@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="200" 
+	gutterLeft="35" gutterRight="70"
+	initialize="initTempChart()"
+	showDataTips="true" 
+	creationComplete="addGraphicSymbol()"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.STN_NPPM.meteogram.itmRenerer.LineSeriesLabel;
+			import comp.chart.graphic.WindSymbol;
+			import mx.controls.TextInput;
+			import mx.core.UITextField;
+			import comp.chart.chartingTool.BGLabel;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.RoundedRectangle;
+			import mx.core.UIComponent;
+			import mx.controls.Alert;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.graphics.Stroke;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.STN_NPPM.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+			
+			
+			
+			public function doSomething(t3hArr:Array):void{
+				this.dataProvider = t3hArr;
+				trace('hahahahahah');
+			}
+			
+			private function addGraphicSymbol():void{
+	             	callLater(drawWindSymbol);
+			}
+			
+			
+			private function initTempChart():void{
+				t3hLine.setStyle("lineStroke", new Stroke(0xFF0000, 1, 1)); 
+			 	t3hLine.setStyle("stroke", new Stroke(0xFF0000, 2, 0.7 ));  //circleitem line color
+//             	t3hLine.setStyle("fill", 0xFFFFFF); 					//circleitem fill color
+//             	t3hLine.setStyle("radius", 3); 
+//             	t3hLine.setStyle("adjustedRadius", 2); 
+//             	t3hLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+
+             	
+//             	callLater(addMinMaxLable_N_adjustAxisRange);
+             	
+			}
+				
+
+//			private function addMinMaxLable_N_adjustAxisRange():void{
+//				axis_left.setStyle("showLabels",true);
+//				axis_right.setStyle("showLabels",true);
+//			}
+		
+//		
+			//params lst:String, val:Number, minMaxFlag:String, minMaxVal:Number
+//			private function addLabelsToColumn(...params):void{
+//				
+//			}
+
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				if(axis_ver.computedMaximum==cat || cat > axis_ver.computedMaximum-axis_ver.interval){
+					return "℃"; 
+				}
+				return cat+"";
+			}
+			
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				var str:String = (cat=="125") ?  "%" : cat+"";
+				if(cat=="150"){
+					str="";
+				}
+				return str;
+  			}
+  			
+  			
+			private function defineVerticalLabel4mMetres(cat:Object, pcat:Object,ax:LinearAxis):String {
+				
+				var str:String = (cat=="15") ?  "mm"+"&#13;"+"(cm)" : cat+"";
+				return str;
+			}
+  			
+  			
+  			
+  			
+  			private function drawWindSymbol(wannaDraw:String = null):void{
+  				if(wannaDraw=="dont"){
+  					return;
+  				}
+        		if(wsdLine.dataProvider != null){
+					for each(var item:Object in wsdLine.dataProvider){
+						var ws:Number =  item.ws; 
+						var wd:Number =  item.wd - 90;
+						var lst:String = item.lst;
+						
+						var ui:UIComponent = new UIComponent();
+						var windGraphic:WindSymbol = new WindSymbol(ws,  wd);
+						ui.addChild(windGraphic);
+					
+						var lbl_speed:Label = new Label();
+						lbl_speed.text = ws+"";
+						lbl_speed.setStyle("fontSize",10);
+//						lbl_speed.setStyle("color",0x555555);
+						lbl_speed.setStyle("fontWeight","normal");
+						lbl_speed.setStyle("paddingLeft",-10);
+						lbl_speed.setStyle("textAlign","center");
+					
+						var lbl_d16:Label = new Label();
+						lbl_d16.text = getWindDirectionStr(item.wd);
+						lbl_d16.setStyle("fontSize",11);
+						lbl_d16.setStyle("color",0x444444);
+						lbl_d16.setStyle("fontWeight","bold");
+						lbl_d16.setStyle("textAlign","center");
+   	   		           	lbl_d16.width = 40;
+						lbl_d16.truncateToFit = true;
+//     	            	lbl_d16.height = 20;
+//						lbl_d16.setActualSize(lbl_d16.getExplicitOrMeasuredWidth(), lbl_d16.getExplicitOrMeasuredHeight());
+						if(ws==0){
+							lbl_d16.text = "calm";
+							canvas.addDataChild(lbl_speed, lst , new CartesianCanvasValue(axis_ver.computedMaximum-7,0));
+//							canvas.addDataChild(lbl_d16,  new CartesianCanvasValue(lst,-(lbl_d16.width / 2)) , new CartesianCanvasValue(4.5,0));
+							continue;
+							
+						}
+//						trace('axis_ver.computedMaximum ::  '+axis_ver.computedMaximum);
+						canvas.addDataChild(ui, lst, new CartesianCanvasValue(axis_ver.computedMaximum-4,0)); //graphics
+						canvas.addDataChild(lbl_speed, lst , new CartesianCanvasValue(axis_ver.computedMaximum-7,0)); //speed label
+//						canvas.addDataChild(lbl_d16,  new CartesianCanvasValue(lst,-(lbl_d16.width / 2)) , new CartesianCanvasValue(4.5,0)); //16 windDirection label
+					}
+				}
+//				axis_right.setStyle("showLabels",true);
+        	}
+        	
+        	
+         private function getWindDirectionStr(wd:int):String{
+      	 	var wdStr:String;
+      	 	
+       		if(11.25 <= wd && wd < 33.75){
+				wdStr = "NNE";	
+			}else if(33.75 <= wd && wd < 56.25){
+				wdStr = "NE";
+			}else if(56.25 <= wd && wd < 78.75){
+				wdStr = "ENE";
+			}else if(78.75 <= wd && wd < 101.25){
+				wdStr = "E";
+			}else if(101.25 <= wd && wd < 123.75){
+				wdStr = "ESE";
+			}else if(123.75 <= wd && wd < 146.25){
+				wdStr = "SE";
+			}else if(146.25 <= wd && wd < 168.75){
+				wdStr = "SSE";
+			}else if(168.75 <= wd && wd < 191.25){
+				wdStr = "S";
+			}else if(191.25 <= wd && wd < 213.75){
+				wdStr = "SSW";
+			}else if(213.75 <= wd && wd < 236.25){
+				wdStr = "SW";
+			}else if(236.25 <= wd && wd < 258.75){
+				wdStr = "WSW";
+			}else if(258.75 <= wd && wd < 281.25){
+				wdStr = "W";
+			}else if(281.25 <= wd && wd < 303.75){
+				wdStr = "WNW";
+			}else if(303.75 <= wd && wd < 326.25){
+				wdStr = "NW";
+			}else if(326.25 <= wd && wd < 348.75){
+				wdStr = "NNW";
+			}else if((348.75 <= wd && wd <= 360) || (0 <= wd && wd < 11.25)){
+				wdStr = "N";
+			}
+	     	
+	     	return wdStr; 
+       } 		
+        	
+       private function getwindSpeedUnitLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+	 	 		return "m/s";
+  			} 	
+  			
+  			
+  			
+  			
+  		private function addMinMaxLable_N_adjustAxisRange():void{
+				
+				
+				var count:int = 1;
+				if(t3hLine.dataProvider != null){
+					for each(var item:Object in t3hLine.dataProvider){
+//				if(this.dataProvider != null){
+//					for each(var item:XML in this.dataProvider){
+						if(item.hasOwnProperty("max")){
+							//date of issue HH==12 이면 마지막 맥스값은 표출  X
+							if(count<21){
+								addLabelsToColumn(item["lst"], item["val"], "max", item["max"]);
+							}
+							addLabelsToColumn(item["lst"], item["val"]);
+						}else if(item.hasOwnProperty("min")){
+							addLabelsToColumn(item["lst"], item["val"], "min", item["min"]);
+						}else{
+							addLabelsToColumn(item["lst"], item["val"]);
+						}
+						count++;
+					}
+				}
+				axis_ver.maximum = Math.round(axis_ver.maximum) + Math.ceil((axis_ver.maximum - axis_ver.minimum ) * 0.5 );
+				axis_ver.interval = Math.ceil((axis_ver.computedMaximum - axis_ver.computedMinimum)/5);
+				if(axis_ver.maximum % axis_ver.interval !=0){
+					axis_ver.computedMaximum += (axis_ver.maximum % axis_ver.interval);
+				}	
+//				lineSeries.visible = true;
+				axis_left.setStyle("showLabels",true);
+				axis_right.setStyle("showLabels",true);
+			}
+		
+//		
+			//params lst:String, val:Number, minMaxFlag:String, minMaxVal:Number
+			private function addLabelsToColumn(...params):void{
+				var lst:String = params[0];
+				var val:Number = params[1];					
+				var lbl:Label = new Label();
+				lbl.width = 40; lbl.height = 20;
+				lbl.setStyle("fontSize","11");
+				lbl.setStyle("textAlign","center");
+				lbl.setStyle("paddingTop",-25);
+				lbl.text =val + "";
+				lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+				canvas.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+				
+				if(params.length > 2){ // ㅣlegnth==4
+					var _minMax:TextField = new TextField();
+					var flag:String = params[2];
+					var minMaxVal:String = params[3];
+					var textColor:uint = (flag=="max")? 0xFF0000 : 0x0055EE;
+					_minMax.text = minMaxVal;
+					_minMax.textColor = textColor;
+					_minMax.autoSize = TextFieldAutoSize.CENTER;
+					var tfStyle:TextFormat = new TextFormat(); 
+					tfStyle.size = 11;
+					tfStyle.bold = true;
+					tfStyle.font = "Verdana";
+					_minMax.setTextFormat(tfStyle);
+					
+					_minMax.x = 0; 
+					_minMax.y = 0;
+					
+					var mySprite:Sprite = new Sprite();
+					mySprite.graphics.lineStyle(1,0x000000,1);
+					mySprite.graphics.beginFill(0xFFFFFF,1.0);
+					mySprite.graphics.drawRect(0,0,_minMax.width,_minMax.height);
+					
+					mySprite.y = -45;
+					
+					mySprite.addChild(_minMax);
+					var uic:UIComponent = new UIComponent();
+					uic.addChild(mySprite); 
+					
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), val);
+					
+				}
+			}	
+  			
+		]]>
+	</mx:Script>
+		<!--doesn't work ㅡ,.ㅡ-->
+		<!--
+		<mx:Style>
+			TextField{
+				padding-top: -40;
+			}
+		</mx:Style>
+		-->
+		<mx:LinearAxis id="axis_ver_percentage" 
+				minimum="0" 
+				maximum="150" 
+				interval="25" 
+				labelFunction="defineVerticalLabel"/>
+				
+		<mx:LinearAxis id="axis_ver_mMetres" 
+				minimum="0" 
+				maximum="15"
+				interval="5" 
+				labelFunction="defineVerticalLabel4mMetres"
+				/>
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines 
+            	direction="both" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            	
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer id="axis_left"
+				placement="left" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer id="axis_right2"
+				placement="right" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver_mMetres}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+			<mx:AxisRenderer id="axis_right"
+				placement="right" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver_percentage}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+	           	axis="{axis_hor}" />
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}"
+           		axis="{axis_hor}"/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  />
+		</mx:horizontalAxis> 
+		
+		<mx:verticalAxis> 
+			<!-- baseAtZero ㅠㅠ the default value is true .If all axis values are positive, the minimum axis value is zero.-->
+			<mx:LinearAxis id="axis_ver"  baseAtZero="false" labelFunction="defineVerAxisLabel" maximum="40"/> <!--alignLabelsToInterval="true"  labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop shadow on a lineSeries-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>		
+
+		
+		<mx:series>
+			<mx:AreaSeries id="wsdLine" form="step" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}"  areaStroke="{ChartStyleAssets.areaStroke_blue}" areaFill="{ChartStyleAssets.areaFill_blue}"
+				xField="lst" yField="ws" visible="false" displayName="Wind"
+			/>
+			
+			
+						<!--
+						<mx:AreaSeries id="rn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}" areaStroke="{ChartStyleAssets.areaStroke_blue}" areaFill="{ChartStyleAssets.areaFill_blue}"
+								yField="val" xField="lst" displayName="3HrsRain" form="step">
+						</mx:AreaSeries>
+						<mx:AreaSeries id="sn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}" areaStroke="{ChartStyleAssets.areaStroke_yellow}" areaFill="{ChartStyleAssets.areaFill_yellow}"
+								yField="val" xField="lst" displayName="3HrsSnow" form="step">
+						</mx:AreaSeries>
+						-->
+				<mx:ColumnSet type="clustered" columnWidthRatio=".8" >
+					<mx:series>
+						<mx:ColumnSeries id="rn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}" 
+								yField="val" xField="lst" displayName="3HrsRain" itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.RainBar">
+						</mx:ColumnSeries>
+						<mx:ColumnSeries id="sn3Column" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_mMetres}" 
+								yField="val" xField="lst" displayName="3HrsSnow" itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.SnowBar">
+						</mx:ColumnSeries>
+					</mx:series>
+				</mx:ColumnSet>	
+		
+				<mx:ColumnSet type="overlaid" >
+						<mx:ColumnSeries id="rehColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"
+								yField="val" displayName="Humidity" >
+								<mx:stroke>
+				                    <mx:Stroke color="0x777777" weight="1" alpha="0.5" />
+				                </mx:stroke>
+				                 <mx:fill> <!--0x007733-->
+				                	<mx:LinearGradient angle="90">
+				                        <mx:entries>
+				                            <mx:Array>
+				                                <mx:GradientEntry color="0xC4C4FA"  
+				                                        ratio="0.0"
+				                                        alpha="1.0" />
+				                                <mx:GradientEntry color="0xCCCCFF" 
+				                                        ratio="1.0"
+				                                        alpha="0.8" />
+				                            </mx:Array>
+				                        </mx:entries>
+				                	</mx:LinearGradient>
+				                </mx:fill>
+							</mx:ColumnSeries>
+							
+							<mx:ColumnSeries id="popColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"
+								yField="val" displayName="POPrecipitaion" itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.POPBar"> 
+								<mx:stroke>
+				                    <mx:Stroke color="0x000000" weight="1" alpha="0.3" />
+				                </mx:stroke>
+				                <mx:fill><!--0x84E130-->
+				                	<mx:LinearGradient angle="90">
+				                        <mx:entries>
+				                            <mx:Array>
+				                                <mx:GradientEntry color="0xA0CCF9"
+				                                        ratio="1.0"
+				                                        alpha="0.8" />
+				                                <mx:GradientEntry color="0xA0CCF9" 
+				                                        ratio="1.0"
+				                                        alpha="0.7" />
+				                            </mx:Array>
+				                        </mx:entries>
+				                	</mx:LinearGradient>
+				                </mx:fill>
+							</mx:ColumnSeries>
+				</mx:ColumnSet>
+			
+			<mx:LineSeries id="t3hLine" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver}"
+				yField="val" displayName="Temperature" 
+				form="segment" visible="true" itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.LineSeriesLabel"> 
+				<!--itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.LineSeriesLabel"-->
+				<!--itemRenderer="asset.DFS.STN_NPPM.meteogram.itmRenerer.LabeledRenderer2"-->
+			</mx:LineSeries>
+			
+		</mx:series>
+		
+	</mx:CartesianChart>

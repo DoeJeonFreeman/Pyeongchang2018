@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%"
+		xmlns:doe="com.doe.flex.ui.form.util.*" verticalAlign="middle" horizontalAlign="right" horizontalGap="2" paddingRight="-5">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			private function clickEvent4MaxTemperature():void{
+//				cb_max.selected = (cb_max.selected)? false : true; it doesnt need 
+				var evt:MouseEvent = new MouseEvent(MouseEvent.CLICK);
+				cb_max.dispatchEvent(evt);
+			}
+		]]>
+	</mx:Script>	
+	<doe:ImageCheckBox id="cb_all" label="모두 선택" labelPlacement="right" paddingLeft="2" horizontalGap="1" visible="false"/>
+	<doe:ImageCheckBox id="cb_max" label="최고기온" imageSource="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/dfs_maxT.png')" labelPlacement="right" paddingLeft="0" horizontalGap="1" />
+	<mx:Image source="@Embed('asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/dfs_minT.png')" click="clickEvent4MaxTemperature()"/>
+	<mx:Label text="최저기온" fontSize="12" paddingLeft="-3" click="{cb_max.dispatchEvent(new MouseEvent(MouseEvent.CLICK))}"/>
+</mx:HBox>

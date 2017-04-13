@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="40" 
+	gutterLeft="35"  gutterRight="70"
+	initialize="init()"
+	creationComplete="moveAxisRenderer(parentApplication.isMEDM)">
+
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.graphic.WindSymbol2_arrow;
+			
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.core.UIComponent;
+			import mx.formatters.NumberFormatter;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_00UTC_odd.png')] private var bg_00UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_00UTC_even.png')] private var bg_00UTC_even_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_12UTC_odd.png')] private var bg_12UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_12UTC_even.png')] private var bg_12UTC_even_KWRF:Class;
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						return new bg_00UTC_odd();						
+					}else{
+						return new bg_12UTC_odd();						
+					}
+				}else{
+					if(is00UTC){
+						return new bg_00UTC_even();						
+					}else{
+						return new bg_12UTC_even();						
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isVSRT:Boolean=false):void{
+//				var bgImg:Object = getProperBG(is00UTC, isOdd, isVSRT);
+				var bgImg:Object = getProperBG(is00UTC, isOdd);
+				bgImg.alpha = 1
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","vertical");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+				if(isVSRT)
+					this.backgroundElements=[gridLine];
+				else
+					this.backgroundElements=[bgImg,gridLine];
+					
+			}		
+
+
+			private function init():void{
+				callLater(drawWindSymbol);
+			}
+			
+			
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_odd/utc00_odd_45.png")] 
+			public var UTC00_bg:Class; //ecmwwf 00utc ODD (dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_even/utc00_even_45.png")] 
+			public var UTC00_bg_even:Class; //ecmwf 00utc EVEN(dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg/utc12_45.png")] 
+			public var UTC12_bg_ecmwf:Class; //ecmwf 12UTC dashedLine only
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_45.png")] 
+			public var UTC12_bg_dashed:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_45.png")] 
+			public var UTC00_bg_279hrs:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_45.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+		
+			
+        	private function drawWindSymbol():void{
+        		axis_ver.minimum=0; 
+        		axis_ver.maximum=3;
+        		axis_ver.interval=4;
+				
+        		if(this.dataProvider != null){
+        			for each(var item:Object in this.dataProvider){
+        				if(!item.hasOwnProperty("ws")){
+        					continue;
+        				}
+						var ws:Number =  item.ws; 
+						var wd:Number =  item.wd - 90;
+						var lst:String = item.lst;
+						
+						var ui:UIComponent = new UIComponent();
+						var windGraphic:WindSymbol2_arrow = new WindSymbol2_arrow(ws,  wd);
+						ui.addChild(windGraphic);
+
+						var currFormat:NumberFormatter = new NumberFormatter();
+						currFormat.precision = 1;
+						currFormat.rounding = "nearest";
+					
+						var lbl_speed:Label = new Label();
+						lbl_speed.text = currFormat.format(ws).toString();
+						lbl_speed.setStyle("fontSize",12);
+//						lbl_speed.setStyle("color",0x555555);
+//						lbl_speed.setStyle("paddingLeft",-10);
+						lbl_speed.setStyle("textAlign","center");
+   	   		           	lbl_speed.width = 38;
+						lbl_speed.truncateToFit = true;
+//						trace(lbl_speed.width+'   lbl_speed label width');
+					
+//						var lbl_d16:Label = new Label();
+//						lbl_d16.text = getWindDirectionStr(item.wd);
+//						lbl_d16.setStyle("fontSize",11);
+//						lbl_d16.setStyle("color",0x444444);
+//						lbl_d16.setStyle("fontWeight","bold");
+//						lbl_d16.setStyle("textAlign","center");
+//   	   		           	lbl_d16.width = 40;
+//						lbl_d16.truncateToFit = true;
+//     	            	lbl_d16.height = 20;
+//						lbl_d16.setActualSize(lbl_d16.getExplicitOrMeasuredWidth(), lbl_d16.getExplicitOrMeasuredHeight());
+						if(ws==0){
+							lbl_speed.text = "정온";
+							lbl_speed.width = 35;
+							lbl_speed.truncateToFit =true;
+							lbl_speed.setStyle("fontSize",12);
+							canvas.addDataChild(lbl_speed,  new CartesianCanvasValue(lst,-(lbl_speed.width / 2)) , new CartesianCanvasValue(2,0));
+							continue;
+							
+						}
+
+						canvas.addDataChild(ui, lst, new CartesianCanvasValue(2,0)); //graphics
+						canvas.addDataChild(lbl_speed,new CartesianCanvasValue(lst,-(lbl_speed.width / 2)) , new CartesianCanvasValue(1,0)); //speed label
+//						canvas.addDataChild(lbl_d16,  new CartesianCanvasValue(lst,-(lbl_d16.width / 2)) , new CartesianCanvasValue(4.5,0)); //16 windDirection label
+					}
+				}
+				axis_right.setStyle("showLabels",true);
+        	}
+        	
+        	
+         private function getWindDirectionStr(wd:int):String{
+      	 	var wdStr:String;
+      	 	
+       		if(11.25 <= wd && wd < 33.75){
+				wdStr = "NNE";	
+			}else if(33.75 <= wd && wd < 56.25){
+				wdStr = "NE";
+			}else if(56.25 <= wd && wd < 78.75){
+				wdStr = "ENE";
+			}else if(78.75 <= wd && wd < 101.25){
+				wdStr = "E";
+			}else if(101.25 <= wd && wd < 123.75){
+				wdStr = "ESE";
+			}else if(123.75 <= wd && wd < 146.25){
+				wdStr = "SE";
+			}else if(146.25 <= wd && wd < 168.75){
+				wdStr = "SSE";
+			}else if(168.75 <= wd && wd < 191.25){
+				wdStr = "S";
+			}else if(191.25 <= wd && wd < 213.75){
+				wdStr = "SSW";
+			}else if(213.75 <= wd && wd < 236.25){
+				wdStr = "SW";
+			}else if(236.25 <= wd && wd < 258.75){
+				wdStr = "WSW";
+			}else if(258.75 <= wd && wd < 281.25){
+				wdStr = "W";
+			}else if(281.25 <= wd && wd < 303.75){
+				wdStr = "WNW";
+			}else if(303.75 <= wd && wd < 326.25){
+				wdStr = "NW";
+			}else if(326.25 <= wd && wd < 348.75){
+				wdStr = "NNW";
+			}else if((348.75 <= wd && wd <= 360) || (0 <= wd && wd < 11.25)){
+				wdStr = "N";
+			}
+	     	return wdStr; 
+       } 		
+        	
+			
+       private function getwindSpeedUnitLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+	 	 		return "m/s";
+  	   } 	
+     
+			
+//       private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+//				var lbl_LST:String = cat.toString();
+//				if(cat.toString().length > 4){
+//					lbl_LST= cat.toString().substring(0,2) +'/'+cat.toString().substring(2,4);
+//				} else{
+//					
+//				}
+//				return lbl_LST;
+//		}
+			private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				// Return the customized categoryField value:
+				//var itm:XML = this.dataProvider[this.dataProvider.length-1];
+				var lbl_LST:String = cat.toString();
+				if(cat.toString().length == 4){
+					if(parentApplication.isVSRT){
+						if(Number(cat.toString().substring(2,4))%2 !=0){
+							lbl_LST= '';
+						}
+					}else{
+						if(Number(cat.toString().substring(2,4))%6 !=0){
+							lbl_LST= '';
+						}
+					}
+				} 
+				return lbl_LST;
+			}
+			
+		public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+			var itm:Object = this.dataProvider[this.dataProvider.length-1];//00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여
+			if(itm.lst==cat){
+				return null;
+				//					}else if(cat.toString().substring(4)=="00"){
+				//						return null;
+			}else{
+				return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+			}
+		}
+		
+		/*			
+		*/
+		public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+			if(isOddNum){
+				var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+			}else{
+				var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+			}
+			//				bgImg.alpha = .9;	
+			vGridLine.setStyle("direction","none");
+			vGridLine.setStyle("verticalTickAligned",true);
+			this.backgroundElements=[bgImg,vGridLine];
+		}
+		
+		public function set12UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+			//      			vGridLine.setStyle("horizontalStroke",ChartStyleAssets.ensemble_hGrid);
+			var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+			var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+			vGridLine.setStyle("direction","vertical");
+			vGridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+			vGridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+			vGridLine.setStyle("verticalChangeCount",2);
+			vGridLine.setStyle("verticalTickAligned",true);
+			vGridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+			//요것도 is279hrs 받아서 처리 
+			// UTC12_bg_dashed 애는 긴거
+			// UTC12_bg_dashed_ecmwf 얘는 짧은거
+			var bgImg:Object = (is279hrs)? new UTC12_bg_dashed() : new UTC12_bg_ecmwf();
+			this.backgroundElements=[vGridLine,bgImg];
+		}
+			
+			public function moveAxisRenderer(isMEDM:Boolean):void{
+				if(isMEDM)moveAxisLabel();
+			}
+			
+			public function moveAxisLabel():void{
+				trace('fx calllater:: moveAxisLabel')
+				bottomAxisRenderer.move(bottomAxisRenderer.x+55,bottomAxisRenderer.y);
+			}
+  		
+]]>
+	</mx:Script>
+	
+	
+
+	
+	
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+			<!--
+            <mx:GridLines 
+            	direction="both" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            -->	
+            <mx:GridLines id="vGridLine"/> 
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<!--verticalAxisTitleAlignment="flippedVertical"-->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				showLabels="false"
+				axisStroke="{ChartStyleAssets.axisStroke}"
+			/> 
+			<mx:AxisRenderer id="axis_right" placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				showLabels="false" 
+				labelAlign="top"
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"
+			top	axisStroke="{ChartStyleAssets.axisStroke}"
+		-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+	           	axis="{axis_hor}"/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"/> <!--invisibleAxis-->
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"  labelGap="-10"
+           		axis="{axis_hor}"/>
+			<!--
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+			-->
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="horLabelFunc"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" labelFunction="getwindSpeedUnitLabel" />
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:LineSeries id="colSeries" 
+				xField="lst" yField="ws" visible="false"
+			/>
+		</mx:series>
+		
+</mx:CartesianChart>	    	
+	    	

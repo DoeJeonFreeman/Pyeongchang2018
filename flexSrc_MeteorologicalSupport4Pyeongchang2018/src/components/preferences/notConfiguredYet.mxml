@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:preferences="components.preferences.*" 
+	paddingBottom="0" paddingLeft="30" paddingRight="0" paddingTop="30" width="70%"
+	verticalScrollPolicy="off" horizontalScrollPolicy="off"
+	>
+	
+	<mx:Metadata>
+			[Event("redrawConfiguredStations")]
+	</mx:Metadata>
+	
+	
+	<mx:Style>
+			ToolTip{
+				font-size:12;
+			}
+			.titleStyle{
+				font-size:12;
+				color:#ffffff;
+			}
+			HRule{
+				stroke-color:0x49565f;
+				shadow-color:0x3f484f;
+			}
+			.titleWindow{
+				border-thickness-left:0;
+				border-thickness-right:0;
+				border-alpha:1.0;
+				border-color:#5671A5;
+				background-alpha:1.0;
+				background-color:#ededed;
+				background-gradient-colors:#a12d2d,#a12d2d;
+				drop-shadow-enabled:true;
+				corner-radius:0;
+				padding-top:0;
+				padding-bottom:0;
+				padding-left:0;
+				padding-right:0;
+			}
+			
+			.buttonStyle{
+				fill-alphas:1,1,1,1;
+				fill-colors:#32393f,#32393f,#32393f,#32393f;
+			}
+			
+			.textinput{
+				border-style:solid;
+				border-thickness:1;
+				corner-radius:10;
+			}
+			
+			
+			Alert{
+				message-style-name: "alertMsg";	
+			}
+			
+			.alertMsg{
+				font-size: 12;
+			}
+			
+	</mx:Style>
+	
+	<mx:Script>
+		<![CDATA[
+			import components.events.CheckBoxEvent;
+			import components.preferences.userSharedObj.LSOHandler;
+			import components.util.DateMgr;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.XMLListCollection;
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			import mx.utils.ObjectUtil;
+			
+			
+			public static const configuredStationChanged:String = 'redrawConfiguredStations';
+			
+			[Bindable]
+			private var lbl_titleSurffix:String='';
+			
+			private const PATH_PYCH:String = "PYCH_STATION_MAPPER.xml";
+			
+			private var isMEDMConfig:Boolean;
+			private var isSSPSConfig:Boolean;
+			private var sObj_listHandler:LSOHandler;
+			private var sObj_mainPageSetter:LSOHandler;
+			
+			[Bindable]
+            private var groupList:XMLListCollection;
+			private var stationInfoXML:XML; 
+		
+			[Bindable]
+            public var configuredStations:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			[Embed(source="asset/personalization/done.png")]
+			public var iconSymbol_group:Class;
+		
+			[Bindable]
+			[Embed(source="asset/personalization/done.png")]
+			public var iconSymbol_stn:Class;
+			
+			
+			protected function drawUserSpecifiedTimeseries():void{
+				this.dispatchEvent(new Event(configuredStationChanged));
+			}
+			
+			
+			private function openPersonalizationDialog():void{
+				 var popupURL:String = "TimeseriesPersonalizationSettingDialog.html";
+   				 ExternalInterface.call("addPersonalizationSettingPopup",popupURL);
+			}
+
+		
+			public function loadStationInfo(isMEDM:Boolean,isSSPS:Boolean):void{
+				isMEDMConfig = isMEDM;
+				isSSPSConfig = isSSPS;
+				lbl_titleSurffix = "(평창올림픽)";
+//				lbl_mainTitle.text = lbl_mainTitle.text + lbl_titleSurffix; //addchild하기전에 화면단 접근하면 에러나염
+				var loader:URLLoader = new URLLoader();
+				loader.dataFormat = URLLoaderDataFormat.TEXT;
+				loader.addEventListener(Event.COMPLETE, stationDataLoaded);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, xmlLoadFailed); 
+				//July 2014,  중기 지점리스트는 기존 단기와 정보가 다름. 지점정보 파일++ 
+				loader.load(new URLRequest(PATH_PYCH)); 
+			}
+			
+				
+			private function stationDataLoaded(e:Event):void{
+				try{
+					stationInfoXML = new XML(e.target.data);
+//					delete stationInfoXML.regionGroup[0]; //itWorks
+//					delete stationInfoXML.regionGroup.(@grCode=='8318');//  got this error: "Error #1119: Delete operator is not supported with operand of type XMLList
+					for each (var match:XML in stationInfoXML.regionGroup.(@grCode=='8318')) {
+//						Alert.show("mapperXML.regionGroup.(@grCode=='8318') :: match.childIndex() is : " + match.childIndex())
+						delete stationInfoXML.regionGroup[match.childIndex()];
+					}
+					groupList = new XMLListCollection(stationInfoXML.regionGroup); // 전체지점정보파일 
+					sObj_listHandler =  parentApplication.sObj_personalization_PYCH ;
+					sObj_mainPageSetter = parentApplication.defaultPageSetter;
+					initSOConfiguration();//사용자 SO 지점리스트 뽑아와 리스트에 바인딩 
+				}catch(err:TypeError){
+					Alert.show(err.message,"[PersonalizationSettings]FILE TYPE Err.");
+				}
+			}
+			
+			
+			private function xmlLoadFailed(e:Event):void{
+				var cornerGutter:Number = 20; //haha
+				var topRightCorner:Alert =Alert.show("지점정보 파일이 존재하지 않습니다. ","An IOError occurred");
+				topRightCorner.width = 270;
+				PopUpManager.centerPopUp(topRightCorner);
+				topRightCorner.x = this.width - topRightCorner.width - cornerGutter;
+	//			topRightCorner.y = cornerGutter
+				topRightCorner.y = 0;
+			}	
+			
+            
+            private function treeLabelHandler(item:Object):String {
+                var node:XML = XML(item);
+                if ( node.localName() == "regionGroup" ){
+					
+//                    return (node.hasOwnProperty("@mainStn"))? node.@grName+"("+node.@mainStn+")" : node.@grName;
+                    return node.@grName;
+				}else{
+                    return node.@stnName;
+				}
+            }
+			
+          
+           
+		   private function configuredStationLabelFunc(node_configured:Object):String{
+		  		return node_configured.stnName + ' (' + node_configured.stnCode + ')';
+		   }
+           
+           
+           private function showConfirmationMessage():void{
+          		//Alert.show("r u sure u wanna leave this page?","rm?",Alert.YES|Alert.NO,null,cancelHandler,null,Alert.NO);
+              	var cornerGutter:Number = 20; //haha
+				var topRightCorner:Alert =Alert.show("모든 지점을 삭제하시겠습니까?",'',Alert.YES|Alert.NO,null,removeAllStationFromList,null,Alert.YES);
+				topRightCorner.width = 270;
+				PopUpManager.centerPopUp(topRightCorner);
+				topRightCorner.x = Application.application.width - topRightCorner.width - cornerGutter;
+				topRightCorner.y = 0;	
+           }				
+           
+           private function cancelHandler(event:CloseEvent):void{
+           		//if(event.detail == Alert.YES){
+	           		//PopUpManager.removePopUp(this);
+	           		//parentApplication.popupActivated = false;
+           		if(event.detail != Alert.NO){
+	           		PopUpManager.removePopUp(this);
+	           		//parentApplication.popupActivated = false;
+					//do something else..	           			
+           		}
+           }
+			
+			
+			private function printConfiguredData():String{
+				var str:String='';
+				var cnt:uint=0;
+				for each(var obj:Object in configuredStations){
+					str+= '[' + cnt + ']grCode=='+obj.grCode+ ' ' +obj.stnName + ' (' + obj.stnCode + ')\n'
+					cnt++;
+				}
+				return str;
+			}	
+			
+			
+		// Personalization Settings.. Oct 14, 2013
+		private function initSOConfiguration():void{
+			//sharedObject에 중기 지점리스트 추가하세요!!!!!			
+            if (sObj_listHandler.getObjects()) {
+                configuredStations = ObjectUtil.copy(sObj_listHandler.getObjects()) as ArrayCollection;
+            }
+            if(sObj_listHandler.getLastConfiguration()){
+            	lbl_lastUpdate.text = '[최근 변경일] '+ DateMgr.getYYYYMMDDStr(sObj_listHandler.getLastConfiguration(),'preference');
+            }
+            if(configuredStations){
+//	            Alert.show(printConfiguredData(),'configuredList');
+            }
+		}
+		
+		
+        private function addStation():void {
+               if (tree_stn.selectedItem && ! tree_stn.selectedItem.hasOwnProperty('@grCode')){
+	           	   var node_selected:Object = new Object();
+	           	   node_selected.stnCode = tree_stn.selectedItem.@stnCode.toString();
+	           	   node_selected.stnName = tree_stn.selectedItem.@stnName.toString();
+	           	   node_selected.grCode = XML(tree_stn.selectedItem).parent().@grCode.toString();
+               	  	if(duplicationCheck(node_selected)==false && configuredStations.length < 10){
+		               configuredStations.addItem(node_selected);
+               	  	}else if(duplicationCheck(node_selected)==false && configuredStations.length == 10){
+               	  		var cornerGutter:Number = 20; //haha
+						var topRightCorner:Alert =Alert.show("지점 등록은 최대 10 개까지 설정할 수 있습니다.");
+						topRightCorner.width = 270;
+						PopUpManager.centerPopUp(topRightCorner);
+						topRightCorner.x = Application.application.width - topRightCorner.width - cornerGutter;
+						topRightCorner.y = 0;
+               	  	}
+               }
+        }
+        
+        
+        private function removeStation():void {
+			 if (list_configured.selectedIndex > -1)
+                   configuredStations.removeItemAt(list_configured.selectedIndex);
+        }
+        
+        
+        private function removeAllStationFromList(event:CloseEvent):void {
+        	if(event.detail == Alert.YES){
+				 if (configuredStations.length != 0)
+	                   configuredStations.removeAll();
+       		 } //else if(event.detail != Alert.NO){
+					//do something else..	           			
+		//	       		 }
+        }
+        
+           
+       	private function duplicationCheck(item4check:Object):Boolean{
+           	var flag:Boolean = false;
+           	for each(var item:Object in configuredStations){
+           		if(item4check.stnCode == item.stnCode){
+           			trace('item4check.stnCode: '+item4check.stnCode + ' vs itemInArrColl: ' + item.stnCode ,'isDuplicates')
+           			flag = true;
+           			break;
+           		}
+           	}
+           	return flag;
+           	
+       	}
+        
+			
+		private function applyChanges():void{
+			sObj_listHandler.replaceStationList(configuredStations);
+			sObj_listHandler.storeLastConfiguration();
+			if(configuredStations.length == 0){
+				lbl_lastUpdate.text = '최소 한 개 이상의 지점을 추가해야 합니다.';
+				if( sObj_mainPageSetter.getRegionCode()=='555')
+					sObj_mainPageSetter.storeRegionCode(null,false,true); // 단기 PMOS 주요도시로 리스토어
+			}else{
+				lbl_lastUpdate.text = '[최근 변경일] '+ DateMgr.getYYYYMMDDStr(sObj_listHandler.getLastConfiguration(),'preference');
+			}
+			drawUserSpecifiedTimeseries();
+		}	
+
+
+        private function tree_expandItem(evt:MouseEvent):void {
+            if (tree_stn.selectedItem && tree_stn.dataDescriptor.isBranch(tree_stn.selectedItem)) {
+                tree_stn.expandChildrenOf(tree_stn.selectedItem, !tree_stn.isItemOpen(tree_stn.selectedItem));
+                btn_addToList.enabled = false;
+            }else{
+                btn_addToList.enabled = true;
+            }
+        }
+		// Personalization Settings..
+		// Oct 14, 2013
+		
+			
+		private function setTreeIcons(item:Object):Class{
+			var iconClass:Class;
+			switch(XML(item).localName()){
+				case "regionGroup":
+					iconClass = null;
+					break
+				case "station":
+		//						iconClass = iconSymbol_group;
+					iconClass = null;
+					break;
+			}
+			
+			return iconClass;
+		}	
+			
+			
+		private function setListIcons(item:Object):Class{
+			return iconSymbol_stn;
+		}	
+			
+			
+		private function textInput_change():void{
+			if(searchStationByName.text.length == 0){
+				groupList.filterFunction = null;
+			}else{
+				trace('[textInput_change() text.length != 0]')
+				groupList.filterFunction = xmlListColl_filterFunc;
+			}
+			groupList.refresh();
+			trace('groupList.refresh() was called..')
+			forceRefresh(tree_stn,groupList);
+		}
+		
+		
+		private function forceRefresh(tree:Tree, dataProvider:Object):void{
+			tree.dataProvider = dataProvider;
+			if(groupList.length>0){
+				tree.scrollToIndex(0);
+			}
+			tree.validateNow();
+		}
+		
+		
+		private function xmlListColl_filterFunc(item:Object):Boolean{
+			if(searchStationByName.text.length==0){
+				return true;
+			}	
+			var flag:String = 'i';
+			
+			if(String(XML(item)..@stnName.toString()).match(new RegExp(searchStationByName.text,'i'))){
+				return true;
+			}
+			return false;
+			
+		}
+			
+		
+/**
+			private function setSelectedOne(e:ListEvent):void{
+				trace('setSelectedOne(e:ListEvent)');
+			 	for each( var item:XML in list_stn.dataProvider){
+			 		if(item.hasOwnProperty('@selected')){
+						if(e.currentTarget.selectedItem.@grCode == item.@grCode){
+							item.@selected = (e.currentTarget.selectedItem.@selected=='true')? false:true;
+						}else{
+				 			item.@selected=false;
+						}
+			 		}
+			 	}
+			}
+			
+			 * 
+			private function setSelectedOne_temporary(e:CheckBoxEvent):void{
+				trace('setSelectedOne2(e:myCheckBoxEvent was fired~)');
+			 	for each( var item:XML in list_stn.dataProvider){
+			 		if(item.hasOwnProperty('@selected')){
+						if(e.selectedItem.@grCode == item.@grCode){
+						}else{
+				 			item.@selected=false;
+						}
+			 		}
+			 	}
+			 	e.stopPropagation();
+			}
+			
+			
+			private function setSelectedItemAsMainStation():void{
+			 	for each( var item:XML in list_stn.dataProvider){
+			 		if(item.hasOwnProperty('@selected')){
+						if(item.@selected=='true'){
+							trace(item.@grCode,item.@grName);
+							listSOHandler.storeRegionCode(item.@grCode.toString());
+							break;
+						}
+			 		}
+			 	}
+			}
+ */			
+			
+		public function up():void{
+            if(list_configured.selectedIndex == -1){
+                return;
+            }
+            
+            if(list_configured.selectedIndex == 0)return;
+            
+            var selectedRowInx : Number = list_configured.selectedIndex;
+            var itemToShift : Object = configuredStations.getItemAt(selectedRowInx) as Object;
+            
+            configuredStations.addItemAt(itemToShift, list_configured.selectedIndex-1);
+            configuredStations.removeItemAt(list_configured.selectedIndex);
+            list_configured.selectedIndex = selectedRowInx;
+            list_configured.invalidateDisplayList();
+        }
+
+        
+		public function down():void{
+            if(list_configured.selectedIndex == -1){
+                return;
+            }
+            
+            if(list_configured.selectedIndex == configuredStations.length-1){
+	            return;
+            }
+            
+            var selectedRowInx : Number = list_configured.selectedIndex;
+            configuredStations.addItemAt(configuredStations.removeItemAt(selectedRowInx),selectedRowInx+1);
+            list_configured.selectedIndex = selectedRowInx;
+            list_configured.invalidateDisplayList();
+        }
+				
+			
+			
+	]]>
+</mx:Script>
+
+	<mx:Label id="lbl_mainTitle" text="{'지점가이던스 관심지점 설정'+lbl_titleSurffix}" fontSize="18" fontWeight="bold"/>
+	<mx:HRule width="100%"/>
+	
+	<!--
+	<mx:Label text="설정하기" 
+		fontSize="13" textDecoration="underline" 
+		color="blue"
+		buttonMode="true"
+		useHandCursor="true"
+		mouseChildren="false" 
+		click="openPersonalizationDialog()"/>
+	-->
+	<mx:VBox width="70%" 
+			verticalGap="5" horizontalAlign="left" paddingLeft="20"
+			verticalScrollPolicy="off" horizontalScrollPolicy="off">
+			<mx:Label text="사용자가 지정한 임의의 지점들을 &quot;관심지점&quot; 의 지점들로 등록합니다." fontSize="13"/>
+			<mx:Label text="※ 사용자 PC별로 설정됨." fontSize="12"/>
+			<mx:HRule width="100%"  strokeColor="#dddddd" shadowColor="#eeeeee"/>
+			<preferences:TextInputWithIconInsideLikeFinder id="searchStationByName" color="black" width="100"  enabled="true" text="지점명"
+				textIndent="20" fontSize="12" maxChars="5" click="{searchStationByName.text=''}" 
+				styleName="textinput" imeMode="{IMEConversionMode.KOREAN}" change="textInput_change()"
+				includeInLayout="false" visible="false"
+				/>	
+				
+			
+			<mx:HBox width="100%" height="400" horizontalAlign="left">
+					<mx:VBox width="230" height="100%" >
+						<mx:Label text="선택 가능 지점 :" fontSize="13"/>
+						 
+						<!--청 무관 개별지점 선택-->
+						<mx:Tree id="tree_stn" cornerRadius="5"
+							backgroundColor="0xf5f5f5" color="0x444444"
+							width="100%" height="90%" fontSize="12" rowHeight="25"
+							itemRenderer="comp.util.ui.tree.TreeItemLinesRenderer" 
+							click="tree_expandItem(event)"
+							iconFunction="setTreeIcons"
+							dataProvider="{groupList}"
+							labelFunction="treeLabelHandler"
+							allowMultipleSelection="false" allowDragSelection="false"
+							/>
+							<!--
+								click="tree_expandItem(event)"
+								iconFunction="setTreeIcons"
+								itemRenderer="components.control.RendererCheckBox"
+								itemRenderer="mx.controls.CheckBox"
+								itemRenderer="comp.util.ui.tree.TreeItemLinesRenderer" 
+								mx.controls.CheckBox
+							-->
+					</mx:VBox>
+					<mx:VBox width="150" height="100%"  verticalAlign="middle" horizontalAlign="center"  >
+						<!--label="Add to List &gt; &lt;Remove from List" -->
+			            <mx:Button id="btn_addToList" label="추가 &gt;" width="80%" fontSize="13" enabled="false"
+			                click="addStation()"/>
+			            <mx:Button id="btn_removeFromList" label="&lt; 삭제" width="80%" fontSize="13"
+			            	enabled="{(configuredStations.length>0)?true:false}"
+			                click="removeStation()"/>
+			            <mx:Button id="btn_RMrf" label="&lt;&lt;전체 삭제" width="80%" fontSize="12"
+			            	enabled="{(configuredStations.length>0)?true:false}"
+			                click="showConfirmationMessage()"/>
+			        </mx:VBox>         
+			        <mx:VBox width="220" height="100%"  >
+			        	<mx:HBox horizontalGap="0" horizontalAlign="left" width="100%" borderStyle="none">
+							<mx:Label text="선택된 지점 :" fontSize="13" width="80%" />
+			        		<mx:HBox width="20%" backgroundColor="#69a0dd"  verticalAlign="middle" horizontalAlign="center" 
+							cornerRadius="4" borderStyle="solid"  borderThickness="0"
+							paddingLeft="5">
+			        			<mx:Label text="{configuredStations.length}/10" fontSize="12" color="0xffffff"/>
+			        		</mx:HBox>
+			       		 </mx:HBox>
+				        <mx:List id="list_configured" dataProvider="{configuredStations}" cornerRadius="5" toolTip="최대 10개의 지점을 선택할 수 있습니다."
+				        	backgroundColor="0xf5f5f5" color="0x444444"
+				        	width="100%" height="90%" fontSize="12"
+				        	dragEnabled="true" dragMoveEnabled="true" 
+				        	dropEnabled="true"  
+				        	allowMultipleSelection="false"
+				        	labelFunction="configuredStationLabelFunc"
+				        	iconFunction="setListIcons"/>
+				        <mx:HBox width="100%" horizontalAlign="center">
+		        			<mx:Button label="↑" click="up()"/>
+		        			<mx:Button label="↓" click="down()"/>
+				        </mx:HBox>	
+				        	<!--
+					        	itemRenderer="components.preferences.configuredStnRenderer"
+				        	-->
+			        </mx:VBox>
+			</mx:HBox>
+			<!--
+			<mx:HRule width="99%" strokeColor="#49565f" shadowColor="#3f484f"/>
+			-->			        
+			<mx:HRule width="100%" strokeColor="#eeeeee" shadowColor="#dddddd"/>
+			
+			<mx:HBox width="100%" height="50" verticalAlign="middle">
+				<mx:HBox width="80%" horizontalAlign="left" verticalAlign="middle">
+					<mx:Image source="@Embed(source='asset/personalization/help.png')"
+						buttonMode="true" useHandCursor="true" mouseChildren="false"
+						/>
+					<mx:Label id="lbl_lastUpdate" text="최소 한 개 이상의 지점을 추가해야 합니다. " fontSize="13" />
+				</mx:HBox>
+				<mx:HBox width="20%" horizontalAlign="right" verticalAlign="middle"
+					paddingRight="10">
+					<mx:Button label="변경사항 적용" click="applyChanges()" fontSize="13"/> <!--Apply Changes styleName="buttonStyle"-->
+				</mx:HBox>
+				<!--
+				Apply Changes
+				<mx:Button label="Cancel" click="showConfirmationMessage()"/>
+				-->
+			</mx:HBox>
+		</mx:VBox>	
+		
+</mx:VBox> 

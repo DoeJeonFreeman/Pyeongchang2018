@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="115" 
+	gutterLeft="70" gutterRight="70"
+	initialize="initTempChart()"
+	showDataTips="true" 
+	   dataTipFunction="dataTipFunc"  dataTipMode="multiple" 
+	creationComplete="addGraphicSymbol()" > <!--dataTipFunction="dataTipFunc" mouseSensitivity="500"-->
+	
+	<mx:Script>
+		<![CDATA[
+			import asset.DFS.timeSeries.meteogram.itmRenerer.DashedLineRenderer;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.LineSeriesLabel;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.chartingTool.BGLabel;
+			import comp.chart.graphic.WindSymbol;
+			
+			import mx.charts.HitData;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.controls.TextInput;
+			import mx.core.UIComponent;
+			import mx.core.UITextField;
+			import mx.events.IndexChangedEvent;
+			import mx.graphics.RoundedRectangle;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi/circleItemLegend_orange.png')] private var legend_cicle:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/PTY_multi/rectItemLegend.png')] private var legend_rect:Class;
+			
+			
+						//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_odd/utc00_odd_120.png")] 
+			public var UTC00_bg:Class; //ecmwwf 00utc ODD (dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_even/utc00_even_120.png")] 
+			public var UTC00_bg_even:Class; //ecmwf 00utc EVEN(dashedLine n shade)
+			//ECMWF
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg/utc12_120.png")] 
+			public var UTC12_bg_ecmwf:Class; //ecmwf 12UTC dashedLine only
+
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_120.png")] 
+			public var UTC12_bg_dashed:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_120.png")] 
+			public var UTC00_bg_279hrs:Class;
+			//GDAPS			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_120.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			
+			
+			public var minMaxArr:Array; 
+			
+			
+			private function addGraphicSymbol():void{
+//				trace(axis_ver.computedMaximum+' / '+axis_ver.maximum);
+//				trace('min/maxTemp Arr.len  '+minMaxArr.length+'')
+				
+				adjustVAxes();
+				moveAxisLabel();
+			}
+			
+			public function isolatesMinMaxSeries(is12UTC:Boolean =false):void{
+				if(is12UTC){
+					get12UTCSeriesData();
+				}else{
+					get00UTCSeriesData();
+				}
+					
+			}
+			
+			public function stripSlashes():void{
+				var newDp:ArrayCollection = new ArrayCollection();
+				for (var i:int=0; i<minMaxArr.length; i++){
+					var currObj:Object = minMaxArr[i];
+					var LST:String = currObj.lst.replace('/','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//min
+						item.lst = LST.substring(0,4)+'00';
+						newDp.addItem(item);
+					}else{//max
+						item.lst = LST.substring(0,4)+'12';
+						newDp.addItem(item);
+					}
+				}
+				maxLine.dataProvider = newDp;
+			}
+			
+
+
+			private function get12UTCSeriesData():void{		
+				var minArr:ArrayCollection = new ArrayCollection();
+				var maxArr:ArrayCollection= new ArrayCollection();
+				for (var i:int=0; i<minMaxArr.length; i++){
+					var currObj:Object = minMaxArr[i];
+					var LST:String = currObj.lst.replace('/','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//min
+						item.lst = LST.substring(0,4)+'00';
+						minArr.addItem(item);
+
+						var item4max:Object = new Object();
+						item4max.lst = LST.substring(0,4)+'00';
+						maxArr.addItem(item4max);
+					}else{//max
+						var item4min:Object = new Object();
+						item4min.lst = LST.substring(0,4)+'12';
+						minArr.addItem(item4min);
+						
+						item.lst = LST.substring(0,4)+'12';
+						maxArr.addItem(item);
+					}
+//					
+				}
+//				minLine.dataProvider = minArr;
+				maxLine.dataProvider = maxArr;
+//				trace("[min]"+minArr.length+"\n"+printArrayData(minArr) +"\n"+"[max]"+maxArr.length+"\n"+printArrayData(maxArr),"get12UTCSeries!!!!")
+			}
+			private function get00UTCSeriesData():void{		
+				var minArr:ArrayCollection = new ArrayCollection();
+				var maxArr:ArrayCollection= new ArrayCollection();
+				for (var i:int=0; i<minMaxArr.length; i++){
+					var currObj:Object = minMaxArr[i];
+					var LST:String = currObj.lst.replace('/','');
+//					LST = LST.replace('_','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//max
+						item.lst = LST.substring(0,4)+'12';
+//						item.lst = LST; //요렇게 하니까 시리즈 데이터 날아감 ㅡ,.ㅡ  minLine(maxLine)에 xFeild 명시 하니까 ㅡ,.ㅡ?? 근데 Lst 명시하니까  한칸씩 밀려 
+						maxArr.addItem(item);
+
+						var item4min:Object = new Object();
+						item4min.lst = LST.substring(0,4)+'12';
+						minArr.addItem(item4min);
+					}else{//min
+						var item4max:Object = new Object();
+						item4max.lst = LST.substring(0,4)+'00';
+						maxArr.addItem(item4max);
+						
+						item.lst = LST.substring(0,4)+'00';
+//						item.lst = LST;
+						minArr.addItem(item);
+					}
+//					
+				}
+//				minLine.dataProvider = minArr;
+				maxLine.dataProvider = maxArr;
+//				trace("[min]"+minArr.length+"\n"+printArrayData(minArr) +"\n"+"[max]"+maxArr.length+"\n"+printArrayData(maxArr),"get00UTCSeriesData")
+			}
+
+			
+			private function printArrayData(arr:ArrayCollection):String{
+				var str:String = '';
+				for each(var item:Object in arr){
+					str+=item.lst+' :: '+item.val+'\n';
+				}
+				return str;
+			}
+			
+//			
+			private function adjustVAxes():void{
+				axis_ver_mMetres.maximum = axis_ver_mMetres.computedMaximum * 2;
+				validateNow();
+			}
+			
+			
+			private function initTempChart():void{
+//             	minLine.setStyle("lineStroke", new Stroke(0x0055BB, 1, 1)); 
+//			 	minLine.setStyle("stroke", new Stroke(0x0055EE, 2, 0.8 ));  //circleitem line color
+//             	minLine.setStyle("fill", 0xFFFFFF); 						   //circleitem fill color
+//             	minLine.setStyle("radius", 3); 
+//             	minLine.setStyle("adjustedRadius", 2); 
+//             	minLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				maxLine.setStyle("lineStroke", new Stroke(0xCC3300, 1, 1)); 
+			 	maxLine.setStyle("stroke", new Stroke(0xCC3300, 2, 0.8 ));  //circleitem line color
+             	maxLine.setStyle("fill", 0xFFFFFF); 						   //circleitem fill color
+             	maxLine.setStyle("radius", 3); 
+             	maxLine.setStyle("adjustedRadius", 2); 
+             	maxLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				
+				rehColumn.setStyle("lineStroke", new Stroke(0x1D9657,1, 1.0)); 
+				rehColumn.setStyle("stroke", new Stroke(0x15B06D, 1, 1.0 ));  //circleitem line color
+				rehColumn.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				rehColumn.setStyle("fill", 0x15B06D); 					//circleitem fill color
+				rehColumn.setStyle("radius", 3); 
+				
+				
+				visLine.setStyle("lineStroke", new Stroke(0x0077EE, 1, 0.7)); 
+				visLine.setStyle("stroke", new Stroke(0x0077EE, 2, 0.7 ));  //circleitem line color
+				visLine.setStyle("fill", 0x0077EE); 					//circleitem fill color
+				visLine.setStyle("radius", 3); 
+				visLine.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				visLine.setStyle('lineSegmentRenderer',new ClassFactory(DashedLineRenderer));
+			}
+			
+	
+			
+	
+  			
+  			
+			private function defineVerticalLabel4mMetres(cat:Object, pcat:Object,ax:LinearAxis):String {
+				var str:String = (axis_ver_mMetres.computedMinimum== cat) ?  "mm"+"&#13;"+"(cm)" : cat+"";
+				return str;
+			}
+  			
+  			
+        	
+  			
+  	    	private function dataTipFunc(e:HitData):String {
+		        var s:String;
+		        var dateTime:String = Object(e.item).lst;
+		        s = "<B>" + Object(e.element).displayName+'</B>\n'; 
+		        if(Object(e.element).id=='maxLine' ||Object(e.element).id=='minLine' ){
+			        s +=  dateTime.substring(0,2) + '월 ' + dateTime.substring(2,4)+'일\n'; 
+			        s += "------------\n";
+		        }else{
+			        s +=  dateTime.substring(0,2) + '월 ' + dateTime.substring(2,4)+'일 '+dateTime.substring(4,6)+'시\n'; 
+			        s += "------------------\n";
+		        }
+		        s += Object(e.item).val + getSeriesUnit(Object(e.element).id);
+
+
+
+		        return s;
+		     }   
+//		
+			 
+			 private function getSeriesUnit(sID:String):String{
+			 	var properUnit:String = ' ';
+			 	if(sID=='maxLine' || sID=='minLine' ){
+			 		properUnit += '℃';
+			 	}else if(sID=='rehColumn' || sID=='popColumn'){
+			 		properUnit += '%';
+			 	}else if(sID=='visLine'){
+			 		properUnit += 'km';
+			 	}else if(sID=='rn3Column'){
+			 		properUnit += 'mm';
+			 	}else if(sID=='sn3Column'){
+			 		properUnit += 'cm';
+			 	}	
+			 	return properUnit;
+			 }
+		
+
+			//even && 00UTC 
+			/*
+			public function set00UTC_vGridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+				
+				bgImg.alpha = .9;	
+				this.backgroundElements=[bgImg];	
+			}
+			*/
+	  		public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				trace('same old shit nothing different day')
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+//				bgImg.alpha = .9;	
+				vGridLine.setStyle("direction","none");
+				vGridLine.setStyle("verticalTickAligned",true);
+				this.backgroundElements=[bgImg,vGridLine];
+			}
+  			
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+//      			vGridLine.setStyle("horizontalStroke",ChartStyleAssets.ensemble_hGrid);
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				vGridLine.setStyle("direction","vertical");
+				vGridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				vGridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				vGridLine.setStyle("verticalChangeCount",2);
+				vGridLine.setStyle("verticalTickAligned",true);
+				vGridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+				//요것도 is279hrs 받아서 처리 
+				// UTC12_bg_dashed 애는 긴거
+				// UTC12_bg_dashed_ecmwf 얘는 짧은거
+				var bgImg:Object = (is279hrs)? new UTC12_bg_dashed() : new UTC12_bg_ecmwf();
+				this.backgroundElements=[vGridLine,bgImg];
+			}
+			
+			
+			//12 UTC
+			private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:Object = rn3Column.dataProvider[rn3Column.dataProvider.length-1];
+				if(itm.lst==cat){
+					return null;
+				}
+				// Return the customized categoryField value:
+				return cat.toString().substring(0,2) +'.'+cat.toString().substring(2,4);
+			}
+			
+			//00 UTC
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:Object = rn3Column.dataProvider[rn3Column.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여  0425, 2013
+					if(itm.lst==cat){
+						return null;
+					}
+					 else if(cat == null){
+							return null;
+					}else if(cat.toString().substring(4,6)=="00"){
+						return null;
+					}else{ //12시꺼
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);   //00 마지막에 튀어나오는 04/26이 12신가보네
+					}
+			}
+			
+			
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				return (cat=="125") ?  "%" : cat+"";
+			}
+			
+			private function defineVerticalLabel_km(cat:Object, pcat:Object,ax:LinearAxis):String {
+				return (cat=="15") ?  "km" : cat+"";
+			}
+			
+			
+//	      private function mouseChartHandler(event:MouseEvent):void {
+//			// define a region for the findDataPoint function
+//				var sensitiveRegion:Rectangle = new Rectangle( event.stageX-5, 0, 10, this.document.height);   
+//	
+//	            var hitItems:Array = new Array();
+//	
+//	            if (event.currentTarget.name =! "lineChart") return;
+//	
+//	            for each ( var chartItem:ChartItem in lineChart.getItemsInRegion( sensitiveRegion ) ) {
+//	            	if ( chartItem.element.name == "seriesMean" ) {
+//	            		var item:LineSeriesItem = chartItem as LineSeriesItem;
+//	
+//	            		var xTime:Date = item.xValue as Date;
+//	            		var yVal:Number = item.yValue as Number;
+//	
+//	            		var dataPoints:Array = seriesMean.findDataPoints( item.x, item.y, 2 );
+//	
+//	            		var hitItem:HitData = dataPoints[0];//new HitData( new Date().getMilliseconds()*Math.random(), 1, item.x, item.y, chartItem);
+//	
+//						if (hitItem) {
+//			                  		hitItems.push( hitItem );
+//			
+//									// Add DataTip to stage if not existing
+//									if ( !this.stageFlyout ) {
+//										this.stageFlyout = this.addChild( flyout );
+//									} 
+//			
+//				            		flyout.x = hitItem.x + 60;
+//				            		flyout.hitData = hitItem;
+//			
+//								}
+//			
+//			            	}
+//			            }  
+//	      }
+
+
+ 			public function moveAxisLabel():void{
+				bottomAxisRenderer.move(bottomAxisRenderer.x-5,bottomAxisRenderer.y);
+			} 			
+			
+		]]>
+	</mx:Script>
+		
+	<mx:LinearAxis id="vAxis_invisible" 
+				   minimum="0" 
+				   maximum="15" 
+				   interval="5" 
+				   labelFunction="defineVerticalLabel_km"
+				   />
+	
+	
+	<mx:LinearAxis id="axis_ver_percentage" 
+				   minimum="0" 
+				   maximum="125" 
+				   interval="25" 
+				   labelFunction="defineVerticalLabel"/>
+	
+		<mx:LinearAxis id="axis_ver_mMetres" 
+				minimum="0" 
+				labelFunction="defineVerticalLabel4mMetres"
+				/>
+				
+	
+		
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas_max" includeInRanges="true" verticalAxis="{axis_ver}"/>
+			<mx:CartesianDataCanvas id="canvas_min" includeInRanges="true" verticalAxis="{axis_ver}"/>
+			<mx:CartesianDataCanvas id="canvas_pop" includeInRanges="true" verticalAxis="{axis_ver_percentage}"/>
+			<mx:CartesianDataCanvas id="canvas_reh" includeInRanges="true" verticalAxis="{axis_ver_percentage}"/>
+			<mx:CartesianDataCanvas id="canvas_vis" includeInRanges="true" verticalAxis="{vAxis_invisible}"/>
+			<mx:CartesianDataCanvas id="canvas_r12" includeInRanges="true" verticalAxis="{axis_ver_mMetres}"/>
+			<mx:CartesianDataCanvas id="canvas_s12" includeInRanges="true" verticalAxis="{axis_ver_mMetres}"/>
+		</mx:annotationElements>
+		
+		<!-- vGridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines id="vGridLine" 
+            	/>
+            	<!--
+            	direction="vertical"   horizontalShowOrigin="false"
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h_a2}" 
+            	-->
+            	
+        </mx:backgroundElements>
+        
+		<mx:verticalAxisRenderers>
+        	<!-- axis renderering
+			<mx:AxisRenderer id="axis_left"
+				placement="left" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer id="axis_right" canDropLabels="true"
+				placement="right" 
+				showLabels="true"
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver_mMetres}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+			-->
+			
+			
+			<mx:AxisRenderer id="axis_visibility"
+							 placement="left"
+							 visible="true"
+							 includeInLayout="true"
+							 axisStroke="{ChartStyleAssets.axisStroke}"
+							 showLabels="true"
+							 minorTickPlacement="none"  
+							 tickPlacement="none" 
+							 axis="{vAxis_invisible}"   
+							 /> 
+			
+			<mx:AxisRenderer id="axis_left"
+							 placement="left" 
+							 showLabels="true"
+							 minorTickPlacement="none"  
+							 tickPlacement="none" 
+							 axis="{axis_ver}"   
+							 axisStroke="{ChartStyleAssets.axisStroke}"
+							 fontSize="11" 
+							 /> 
+			<mx:AxisRenderer id="axis_right2" canDropLabels="true"
+							 placement="right" 
+							 showLabels="true"
+							 minorTickPlacement="none"  
+							 tickPlacement="none" 
+							 axis="{axis_ver_mMetres}"  
+							 axisStroke="{ChartStyleAssets.axisStroke}"
+							 fontSize="11" 
+							 />
+			<mx:AxisRenderer id="axis_right"
+							 placement="right" 
+							 showLabels="true"
+							 minorTickPlacement="none"  
+							 tickPlacement="none" 
+							 axis="{axis_ver_percentage}"  
+							 axisStroke="{ChartStyleAssets.axisStroke}"
+							 fontSize="11" 
+							 />
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.glStroke_h_a7}"
+	           	axis="{axis_hor}" />
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"/>
+   			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="horLabelFunc"/>
+		</mx:horizontalAxis> 
+		
+		<mx:verticalAxis> 
+			<!-- baseAtZero ㅠㅠ the default value is true .If all axis values are positive, the minimum axis value is zero.-->
+			<mx:LinearAxis id="axis_ver"  baseAtZero="false"/> <!--alignLabelsToInterval="true"  labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop shadow on a lineSeries-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>		
+
+
+
+
+		
+		<mx:series>
+		
+			<!--12시간 강수/신적설-->
+			<!--12시간 강수/신적설-->
+			<mx:ColumnSet type="overlaid" columnWidthRatio="1.0" >
+				<mx:ColumnSeries id="rn3Column" horizontalAxis="{axis_hor}" 
+					verticalAxis="{axis_ver_mMetres}"   
+					itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.R12BarRenderer_GDPS"
+					yField="val" displayName="12시간 강수">  
+				</mx:ColumnSeries>
+					<!--
+						stroke="{ChartStyleAssets.areaStroke_blue}" fill="{ChartStyleAssets.areaFill_blue}" 
+					-->
+			</mx:ColumnSet>
+			<mx:ColumnSet type="overlaid" columnWidthRatio="1.0" >
+				<mx:ColumnSeries id="sn3Column" horizontalAxis="{axis_hor}" 
+					verticalAxis="{axis_ver_mMetres}" 
+					 itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.S12BarRenderer_GDPS"
+					yField="val" displayName="12시간 신적설" 	
+					/>  
+					<!--
+						stroke="{ChartStyleAssets.areaStroke_yellow}"  fill="{ChartStyleAssets.areaFill_yellow}" 
+					-->
+			</mx:ColumnSet>
+					
+			<!--POP
+			-->
+			<mx:ColumnSet type="overlaid" columnWidthRatio=".30" >
+				<mx:ColumnSeries id="popColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"  
+								 yField="val" displayName="강수확률" itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.multiPOPBarRenderer">  
+				</mx:ColumnSeries>
+			</mx:ColumnSet>
+			<!--
+				<mx:ColumnSeries id="popColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}" 
+								 yField="val" displayName="강수확률" visible="true" >
+				</mx:ColumnSeries>
+			-->
+			<!--REH lineSeries-->
+			<!--REH lineSeries-->
+			<mx:LineSeries id="rehColumn" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver_percentage}"
+						   yField="val" displayName="상대습도"  
+						   form="segment" visible="true" > 
+			</mx:LineSeries>
+			
+			
+			<mx:LineSeries id="visLine" horizontalAxis="{axis_hor}" verticalAxis="{vAxis_invisible}"  
+						   yField="val" displayName="시정" interpolateValues="false" filterData="true">  
+			</mx:LineSeries>
+			
+			
+			<!--Max Temperature-->
+			<!--Max Temperature-->
+			<mx:LineSeries id="maxLine" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver}" 
+				 yField="val" displayName="최저/최고 기온"  interpolateValues="true" 
+				form="segment"> 
+			</mx:LineSeries>		
+			<!--
+			-->
+			<!--Min Temperature-->
+			<!--Min Temperature
+			<mx:LineSeries id="minLine" horizontalAxis="{axis_hor}" verticalAxis="{axis_ver}"  
+			  	yField="val" displayName="최저기온"  interpolateValues="true" 
+				form="segment" > 
+			</mx:LineSeries>
+			-->
+			<!--
+			-->
+			
+			
+			
+		</mx:series>
+		
+	</mx:CartesianChart>

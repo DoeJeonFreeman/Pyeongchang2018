@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="60" 
+	gutterLeft="35" gutterRight="35"
+	visible="true"
+	initialize="init()" 
+	creationComplete="moveAxisLabel()"
+	showDataTips="false"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import comp.util.common.CommonUtil;
+			import mx.controls.Alert;
+			import mx.formatters.NumberFormatter;
+			import mx.charts.renderers.BoxItemRenderer;
+			import mx.charts.series.items.LineSeriesItem;
+			import mx.graphics.IFill;
+			import mx.charts.ChartItem;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.ItemRendererUtil;
+			import mx.collections.ArrayCollection;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						return new bg_00UTC_odd();						
+					}else{
+						return new bg_12UTC_odd();						
+					}
+				}else{
+					if(is00UTC){
+						return new bg_00UTC_even();						
+					}else{
+						return new bg_12UTC_even();						
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isKWARF);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalTickAligned",false);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.ensemble_hGrid);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+			
+			
+			
+			
+		
+			
+			
+			
+			private function init():void{
+             	ls_median.setStyle("radius", 3); 
+//             	ls_min.setStyle("adjustedRadius", 2); 
+             	
+				callLater(resetLinearAxisData);
+			}
+			
+			[Bindable]public var maxPrcp:Number;
+			public var prcp90th:Number;
+			
+			private function resetLinearAxisData():void{
+				axis_ver.maximum = maxPrcp;//+10;//maxPrcp;
+				runOutlierHandler();
+			}
+			
+			public function runOutlierHandler():void{
+				canvas_outlier.removeAllChildren();
+				if(this.dataProvider != null){
+					for each(var cItem:Object in this.dataProvider){
+						addOutlierLabelToCanvas(cItem);
+					}
+				}
+			}
+			
+			private function addOutlierLabelToCanvas(item:Object):void{
+				var formatter:NumberFormatter = new NumberFormatter();
+				formatter.precision = 0;
+				formatter.rounding = "nearest";
+				
+				if(Number(item.mx) > maxPrcp){
+					var lbl_max:Label = new Label();
+					lbl_max.truncateToFit = true;	
+			        lbl_max.setStyle("fontSize", 10);	      
+			        lbl_max.setStyle("textAlign", "left");
+			        lbl_max.setStyle("color", 0xFF0000);
+			        lbl_max.setStyle("paddingTop",-2);
+			        lbl_max.width = 30;
+			        lbl_max.text = formatter.format(item.mx);
+			        canvas_outlier.addDataChild(lbl_max, new CartesianCanvasValue(item.lst,2), maxPrcp);
+				}
+			}
+			
+			/* canDropLabels=true 땜에 인터벌 커졌는데.. computedInterval은 어케구하나 
+			CommonUtil.getInstance().showAlertDialogOnScreenTop("axis_ver.computedMaximum: " +
+																this.axis_ver.computedMaximum +
+																"\naxis_ver.interval: " +
+																this.axis_ver.interval
+																,'addAnnotationElements..(labelPositioning)')
+			*/													
+			public function addAnnotationElements(isVisible:Boolean=true):void{
+				if(isVisible){
+					if(this.dataProvider != null){
+						if(this.ls_median.items)trace("this.ls_median.items true")
+//						ls_median.dataProvider = this.dataProvider;
+						var p:Point = ls_median.dataToLocal(null,0);
+						var minY:Number = p.y; 
+						var maxY:Number = 0;
+//						for each(var item:LineSeriesItem in ls_median.items){
+//							addLabelsToColumn(String(item.xValue), Number(item.yValue), minY, maxY);
+//						}
+						for each(var item:Object in this.dataProvider){
+//							trace("[WTF]"+ String(item.lst) + " / " + Number(item.median));
+							addLabelsToColumn(String(item.lst), Number(item.median), minY, maxY);
+						}
+						trace("=============================================================================================")
+					}
+//					testFunc_labelPositioning();//test
+				}else{
+					canvas.removeAllChildren();
+				}
+			}
+			
+			public function testFunc_labelPositioning():void{
+				for each(var item:LineSeriesItem in ls_median.items){
+//					trace('[LSI.xValue]' + item.xValue +', [yVal]'+item.yValue +'\t(x,y)=(' + item.x + ','+item.y+') '+(item.y + this.computedGutters.top+this.getStyle("paddingTop")));
+					var p:Point = new Point(item.x,item.y);
+					var d:Array = ls_median.localToData(p);
+					var da:Number = Number(d[1]);
+					var format4Screen:String = axis_ver.formatForScreen(da);
+//						var d:Array = new Array();
+//						d.push("071200");
+//						d.push(0);
+//						p = ls_median.dataToLocal(null,70)
+//						trace('[xVal]' + item.xValue +' [yVal]'+item.yValue +'\t(' +Math.floor(p.x)+','+Math.floor(p.y)+') \t'+(p.y - this.computedGutters.top));
+					p = ls_median.dataToLocal(d[0],d[1])
+//					trace(d[0] + ' .vs. '+d[1])
+					trace('[xVal]' + item.xValue +' [yVal]'+item.yValue +'\t(' +Math.floor(p.x)+','+Math.floor(p.y)+') \t'+format4Screen);
+				}
+			}
+		
+			private function verticalAlignTextField(tf:TextField):void{
+				tf.y -= Math.round((tf.height - tf.textHeight)/2);
+			}
+		
+			//ㄴㄴ
+			private function addLabelsToColumn(lst:String, val:Number, minY:Number, maxY:Number):void{
+				var currFormat:NumberFormatter = new NumberFormatter();
+				currFormat.precision = 1;
+				currFormat.rounding = "nearest";
+			
+				var _median:TextField = new TextField();
+				_median.text =currFormat.format(val+'');// minMaxVal;
+				_median.textColor = 0x246495;//textColor;
+				_median.autoSize = TextFieldAutoSize.CENTER;
+				var tfStyle:TextFormat = new TextFormat(); 
+				tfStyle.size = 11;
+				tfStyle.bold = true;
+				tfStyle.font = "Verdana";
+				_median.setTextFormat(tfStyle);
+				
+				_median.x = 0; 
+				_median.y = 0;
+				verticalAlignTextField(_median);
+				
+				var mySprite:Sprite = new Sprite();
+				mySprite.graphics.lineStyle(1,0x397bae); //0x3e89c2
+				mySprite.graphics.beginFill(0xFFFFFF,1.0); //0x3e89c2
+//				mySprite.graphics.drawRect(0,0,_median.width,_median.height);
+				mySprite.graphics.drawRect(0,0,_median.width,13);
+//				mySprite.y = - (_median.height/2);
+				mySprite.y = - 7;
+				mySprite.addChild(_median);
+				var uic:UIComponent = new UIComponent();
+				uic.addChild(mySprite); 
+				
+				var point:Point  = ls_median.dataToLocal(lst,val);
+				var lineHeight:Number = point.y;
+//				var labelHeight:Number = lineHeight + (_median.height/2); // 레이블 하단 YPos
+//				var labelTopYPos:Number = lineHeight - (_median.height/2); // 레이블 상단 YPos
+				/*mySprite drawRect하면서 하이트13줬는데  _median.height이랑 mySprite.height 찍어보면 17임 
+				일단 13으로 강제로 주고  autoSize속성 봐봐*/
+//				trace(_median.height + " .vs. "+mySprite.height)
+				var labelHeight:Number = lineHeight + (13/2); // 레이블 하단 YPos
+				var labelTopYPos:Number = lineHeight - (13/2); // 레이블 상단 YPos
+
+				var adjustedLabelCenterPosY:Number;
+				
+				if(minY < labelHeight){
+//					adjustedLabelCenterPosY = minY - (_median.height/2);
+					adjustedLabelCenterPosY = minY - (13/2);
+					point = new Point(lineHeight,adjustedLabelCenterPosY)
+					var d:Array = ls_median.localToData(point);
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), Number(d[1]));
+					trace(lst + "[" + val+ "]\t(minY < labelHeight) " + minY + " < " + labelHeight + "  얘들은 바닥에 깔아")
+				}else if(maxY > labelTopYPos){
+//					adjustedLabelCenterPosY = maxY + (_median.height/2);
+					adjustedLabelCenterPosY = maxY + (13/2);
+					point = new Point(lineHeight,adjustedLabelCenterPosY)
+					var d:Array = ls_median.localToData(point);
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), Number(d[1]));
+					trace(lst + "[" + val+ "]\t(minY > labelTopYPos) " + maxY + " > " + labelTopYPos + "얘들은 천장에 바싹")
+				}else{
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), val);
+					trace(lst + "[" + val+ "]\t" + "걍")
+				}
+			}
+			
+			
+			/*			
+			private function addLabelsToColumn(lst:String, val:Number, minY:Number, maxY:Number):void{
+				var currFormat:NumberFormatter = new NumberFormatter();
+				currFormat.precision = 1;
+				currFormat.rounding = "nearest";
+			
+				var _median:TextField = new TextField();
+				_median.text =currFormat.format(val+'');// minMaxVal;
+				_median.textColor = 0xFFFFFF;//textColor;
+				_median.autoSize = TextFieldAutoSize.CENTER;
+				var tfStyle:TextFormat = new TextFormat(); 
+				tfStyle.size = 11;
+				tfStyle.bold = true;
+				tfStyle.font = "Verdana";
+				_median.setTextFormat(tfStyle);
+				
+				_median.x = 0; 
+				_median.y = 0;
+				
+				var mySprite:Sprite = new Sprite();
+				mySprite.graphics.lineStyle(1,0x555555);
+				mySprite.graphics.beginFill(0x3e89c2,1.0); //0x3e89c2
+				mySprite.graphics.drawRect(0,0,_median.width,_median.height);
+				mySprite.y = - (_median.height/2);
+				mySprite.addChild(_median);
+				var uic:UIComponent = new UIComponent();
+				uic.addChild(mySprite); 
+				
+//				var p:Point = new Point(item.x,item.y);
+//					var d:Array = ls_median.localToData(p);
+//					var da:Number = Number(d[1]);
+//					var format4Screen:String = axis_ver.formatForScreen(da);
+//					p = ls_median.dataToLocal(d[0],d[1])
+//					trace('[xVal]' + item.xValue +' [yVal]'+item.yValue +'\t(' +Math.floor(p.x)+','+Math.floor(p.y)+') \t'+format4Screen);
+//
+				var point:Point  = ls_median.dataToLocal(lst,val);
+				var lineHeight:Number = point.y;
+				var labelHeight:Number = lineHeight + (_median.height/2); // 레이블 하단 YPos
+				var labelTopYPos:Number = lineHeight - (_median.height/2); // 레이블 상단 YPos
+				var adjustedLabelCenterPosY:Number;
+				
+				if(minY < labelHeight){
+					adjustedLabelCenterPosY = minY - (_median.height/2);
+					point = new Point(lineHeight,adjustedLabelCenterPosY)
+					var d:Array = ls_median.localToData(point);
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), Number(d[1]));
+					trace(lst + "[" + val+ "]\t(minY < labelHeight) " + minY + " < " + labelHeight)
+				}else if(maxY > labelTopYPos){
+					adjustedLabelCenterPosY = maxY + (_median.height/2);
+					point = new Point(lineHeight,adjustedLabelCenterPosY)
+					var d:Array = ls_median.localToData(point);
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), Number(d[1]));
+					trace(lst + "[" + val+ "]\t(minY > labelTopYPos) " + maxY + " > " + labelTopYPos)
+				}else{
+//					mySprite.y = (val >= prcp90th)? 0 :-(_median.height/2);// -45;
+					canvas.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), val);
+				}
+			}
+			*/
+			
+			private function defineVerAxisLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+//				if(cat.toString() == '0') return "";
+				if(axis_ver.computedMaximum==cat) return "mm"; 
+				return cat+"";
+			}
+  			
+  			
+  		
+			
+			
+			
+
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_60.png")] 
+			public var UTC12_bg_dashed:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_60.png")] 
+			public var UTC00_bg_279hrs:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_60.png")] 
+			public var UTC00_bg_279hrs_even:Class;	
+			
+			
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC12_bg_279hrs/utc12_279hrs_150.png")] 
+			public var UTC12_bg_dashed_heightUp:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_odd/utc00_279hrs_odd_145.png")] 
+			public var UTC00_bg_279hrs_heightUp:Class;
+			[Embed (source = "/asset/rasterGraphic/gridLines/UTC00_bg_279hrs_even/utc00_279hrs_even_145.png")] 
+			public var UTC00_bg_279hrs_even_heightUp:Class;	
+			
+			
+																					//single
+  		public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false,isNotInMulti:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (isNotInMulti)? new UTC00_bg_279hrs_even_heightUp : new UTC00_bg_279hrs_even();
+				}else{
+					var bgImg:Object = (isNotInMulti)? new UTC00_bg_279hrs_heightUp() :  new UTC00_bg_279hrs() ;
+				}
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+//				gridLine.setStyle("direction","none");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.ensemble_hGrid);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean = false, isNotInMulti:Boolean=false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.ensemble_hGrid);
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+				var bgImg:Object =(isNotInMulti)? new UTC12_bg_dashed_heightUp() : new UTC12_bg_dashed()
+				this.backgroundElements=[gridLine,bgImg];
+			}
+				
+			
+			
+			
+			
+			
+			
+			
+			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:Object = this.dataProvider[this.dataProvider.length-1];
+				if(cat.toString().length > 4){
+					if(itm.lst==cat){
+//						Alert.show(cat.toString());
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			    }else{
+			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+						return '';
+					}
+			    }
+			    // Return the customized categoryField value:
+			    return cat+"";
+			}
+			
+			
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:Object = this.dataProvider[this.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여
+					if(itm.lst==cat){
+						return null;
+					}else if(cat.toString().substring(4)=="00"){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"."+cat.toString().substring(2,4);
+					}
+			}
+			
+			/*
+			 *ls_median 초기화 시점 확인하자  
+			 */
+			public function moveAxisLabel():void{
+				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-7,topAxisRenderer.y);
+				bottomAxisRenderer.move(bottomAxisRenderer.x-7,bottomAxisRenderer.y);
+callLater(addAnnotationElements);
+			}
+			
+			public function changeFillColor(element:ChartItem, index:Number):IFill{
+//				if(element.item)
+				var currItem:LineSeriesItem = LineSeriesItem(element);
+				if(Number(currItem.yValue)==0){
+					return new SolidColor(0x3e89c2,0);
+				}
+				return new SolidColor(0x3e89c2,1);
+			}
+			
+			
+		]]>
+	</mx:Script>
+		
+		<mx:SolidColor id="up" color="0xb8e7f2" alpha=".8"/>
+        <mx:SolidColor id="down" color="0xb8e7f2" alpha=".8"/>
+
+        <!-- Define custom Stroke for the candle wick. -->
+        <mx:Stroke id="wick" color="black" weight="2"/>
+
+        <!-- Define custom Stroke for the candle box. -->
+        <mx:Stroke id="box" color="black" weight="1"/>
+		
+		
+		
+
+		<!-- cartesianDataCanvas 
+		-->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas_outlier" includeInRanges="true"/>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+	     <mx:backgroundElements>
+            <mx:GridLines  id="gridLine" 
+            	/>
+        </mx:backgroundElements>
+        
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/> 
+			<mx:AxisRenderer placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="11" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}"
+				labelAlign="right" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+				labelAlign="right"
+           		/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="defineLabel" />
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" minimum="0" baseAtZero="true" interval="10" labelFunction="defineVerAxisLabel" 
+			/><!--labelFunction="defineVerAxisLabel"-->
+		</mx:verticalAxis>
+		
+		<!--drop the columnSeries shadow..-->
+		<mx:seriesFilters>
+			<mx:Array/>
+		</mx:seriesFilters>
+		
+		<mx:series>
+				<!--
+			<mx:ColumnSeries id="colSeries" 
+				xField="lst" yField="median" itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.RainBar" >
+				
+			</mx:ColumnSeries>	  
+			
+				-->
+			
+			<!--앙상블 0xb7e7f2
+			<mx:ColumnSeries columnWidthRatio=".05"
+				dataProvider="{pseudoData}"
+				xField="lst"
+				yField="mx"
+				minField="mn"
+				stroke="{box}"
+				fill="{new SolidColor(0x63d37f,1)}"
+				/>
+			<mx:ColumnSeries columnWidthRatio=".15"
+				dataProvider="{pseudoData}"
+				xField="lst"
+				yField="pr90th"
+				minField="pr10th"
+				stroke="{box}"
+				fill="{new SolidColor(0x79bd8f,1)}"
+				/>
+			-->
+			<!--
+			 filterData="false"
+			 Any chart series has a filterData property which is set to true by default. If true then some optimisation code means that the chart 
+			 makes no attempt to draw things it considers out-of-range. If you set it to false then for that series the chart will attempt to draw 
+			 all points regardless of values. In the case of a candlestick chart with a reasonable number of data values then this is just 
+			 what you want - the partial candlestick area is shown and the ordinary area clipping means that Flex does not attempt to draw outside 
+			 the axes. It also works for situations like where you have a line marked on top of another series (maybe a threshold line at a fixed value) 
+			 which again runs the risk of being clipped if you zoom. You need to be careful if the series has large numbers of points, since the 
+			 optimisation which is on by default is intended to prevent the code doing unnecessary work, but in my case it was just what was needed.
+			-->
+           <!--
+			<mx:CandlestickSeries filterData="false"
+                highField="mx" 
+                openField="pr90th" 
+                closeField="pr10th" columnWidthRatio=".15" 
+                lowField="mn" 
+             	fill="{up}" 
+                declineFill="{down}"
+                boxStroke="{box}"
+           />
+           		캔들스틱은 chartItem으로 받을 때 HLOCSeriesItem으로 캐스팅해야함!!!
+                itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.RainBar"
+           -->
+           
+           		<!--캔들스틱 얼터네이립 민맥스-->
+       			<mx:ColumnSeries columnWidthRatio="0.01" filterData="false"
+				xField="lst"
+				yField="mx"
+				minField="mn"
+				itemRenderer="{ItemRendererUtil.createWithProperties(asset.DFS.timeSeries.meteogram.itmRenerer.EnsembleMaxPrcpFilter,{vAxisMaximum:maxPrcp})}"
+				/>
+           		<!--캔들스틱 얼터네이립 10 to 90th-->
+				<mx:ColumnSeries columnWidthRatio=".15" filterData="false"
+				xField="lst"
+				yField="pr90th"
+				minField="pr10th"
+				itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.EnsemblePrcpBar"
+				/>
+           
+           
+			<mx:ColumnSeries columnWidthRatio=".35" filterData="false"
+				xField="lst" 
+				yField="pr75th"
+				minField="pr25th" 
+				itemRenderer="asset.DFS.timeSeries.meteogram.itmRenerer.EnsemblePrcpBar"
+				/>
+			<mx:LineSeries id="ls_median" yField="median" xField="lst"   verticalAxis="{axis_ver}"
+				horizontalAxis="{axis_hor}"
+				interpolateValues="true"  
+				itemRenderer="mx.charts.renderers.BoxItemRenderer" fillFunction="{changeFillColor}"
+				lineStroke="{new Stroke(0x3e89c2,1,1)}" />
+				<!--
+				lineStroke="{new Stroke(0x1b6be7,1,1)}" />
+				-->
+			<!--앙상블-->
+			
+			
+		</mx:series>
+	</mx:CartesianChart>

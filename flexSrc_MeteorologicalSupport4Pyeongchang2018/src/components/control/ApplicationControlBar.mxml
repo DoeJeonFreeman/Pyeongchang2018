@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ApplicationControlBar dock="true" 
+	xmlns:meteogram="comp.chart.*" verticalGap="0" layout="vertical" horizontalAlign="center"
+	initialize="getLatestStuff()"  width="100%" height="100%" styleName="plain" 
+	xmlns:util="components.util.*" xmlns:control="components.control.*">
+	<!--
+	creationComplete="LoadXML(true)"
+	-->
+	<mx:Style>
+		.ToggleButtonBar{
+			fill-colors:#ffffff,#b8b9b9,#b8b9b9,#ffffff;
+			border-color:#e6e6e6;
+			theme-color:#e6e6e6;
+			}
+	</mx:Style>
+	
+	<mx:Script>  
+		<![CDATA[
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.rpc.http.HTTPService;
+			import comp.chart.CIRRUS_WSD;
+			import comp.chart.CIRRUS_T3H;
+			import mx.events.IndexChangedEvent;
+			import mx.events.ListEvent;
+			import components.util.DateMgr;
+			import comp.chart.DFS_POP;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.chartClasses.ChartBase;
+			import comp.chart.WSD;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.LabeledRenderer2;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.LineSeriesLabel;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.t3hLabel;
+			import mx.containers.HBox;
+			import components.util.ui.charts.CheckBoxLegend;
+			import mx.charts.series.LineSeries;
+			import mx.charts.series.ColumnSeries;
+			import mx.utils.XMLUtil;
+			import mx.utils.ObjectProxy;
+			import mx.utils.ArrayUtil;
+			import mx.rpc.xml.SimpleXMLDecoder;
+			import mx.collections.ArrayCollection;
+			import comp.chart.multivar3col;
+			import com.maccherone.urlmultiloader.URLMultiLoader;
+			import comp.chart.chartingTool.TimeSeriesLoader;
+			import comp.chart.chartingTool.ByteArrayUtil;
+			import mx.core.UIComponent;
+			import com.maccherone.urlmultiloader.URLMultiLoaderTest;
+			import comp.chart.ori_DFS_T3H;
+			import comp.chart.DFS_T3H;
+			import comp.chart.DFS_REH;
+			import comp.chart.DFS_PTY;
+			import comp.chart.DFS_SKY;
+			import comp.chart.DFS_WSD;
+			import comp.chart.DFS_SN3;
+			import comp.chart.DFS_RN3;
+			import mx.charts.ColumnChart;
+			import mx.events.ItemClickEvent;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import mx.charts.chartClasses.CartesianChart;
+		    
+		    
+		    
+		    [Bindable] private var isTimeSeries:Boolean = true;
+		    
+		    
+		    private var savedIndex:int = 0;
+		    
+		    private var latestDateTimeUTC:Date;
+		    private var selectedDate:String='';
+		    
+			[Bindable] private var list:XML; 
+			private var list_wsd:XML; 
+			private var list_t3h:XML; 
+			
+			
+			[Bindable] private var dateOfIssue:String = ''; 
+			[Bindable] private var basedOn:String; 
+			[Bindable] private var idx_tgBtn:int;
+	
+	
+		
+			[Bindable] private var grCodeNum:uint;
+			[Bindable] private var grCodeIdx:uint;
+			
+			[Bindable] private var currVar:String = 'T3H';
+			
+			private var repos_tSeries:String = "XML/";
+			private var repos_grid:String = "SHRT_R120_cirrus/";   //tmp or uvw
+			
+			
+			private var fileNamePrefix:String = "KOPP_RDPS_5KM_STN_";
+			
+			private const TRIM:RegExp = /^ +| +$/g;  //str=str.replace(TRIM,"")
+			private const LTRIM:RegExp = /^ +/g; //   /\s+/g
+			private const RTRIM:RegExp = / +$/g;
+			
+			
+			
+			private var max_Temperature:Number = 8318;
+			private var min_Temperature:Number = -555;
+			
+			
+			[Bindable] private var userSO:SharedObject;
+			private var lastVisited:String;
+			
+			private function initApp():void{
+				userSO = SharedObject.getLocal("dfs_cirrus_a","/");
+//				if( ! userSO.data.visitDate){
+//					lastVisited = ' ';
+//					storeVisitDate();
+//				}else{
+//					Alert.show(getVisitDate()+'', 'last visited on  ');
+//					lastVisited = 'last visited on ' + getVisitDate();
+//				}
+				 if( ! userSO.data.regionGroupCode && ! userSO.data.regionGroupIndex){	
+					grCodeNum = 0;
+					grCodeIdx = 0;
+					storeGroupCode(true);
+					trace('! userSO.data.regionGroupCode && ! userSO.data.regionGroupIndex')
+				 }else{
+				 	grCodeNum = getGroupCode();
+				 	grCodeIdx = getGroupIndex();
+				 	trace(grCodeNum +' \tcode/idx\t '+grCodeIdx)
+				 }
+			}
+			
+			private function getVisitDate():Date{
+				return userSO.data.visitDate;
+			}
+			
+			private function storeVisitDate():void{
+				userSO.data.visitDate = new Date();
+				userSO.flush();
+			}
+			
+			private function getGroupCode():uint{
+				return userSO.data.regionGroupCode;
+			}
+			
+			private function getGroupIndex():uint{
+				return userSO.data.regionGroupIndex;
+			}
+			
+			private function storeGroupCode(isInit:Boolean=false):void{
+				var gCode:uint = (!isInit)? Number(grCode_comboBinder.selectedItem.@gCode):0;
+				var gIndex:uint = (!isInit)? Number(grCode_comboBinder.selectedIndex):0;
+				userSO.data.regionGroupCode = gCode;
+				userSO.data.regionGroupIndex = gIndex;
+				userSO.flush();
+				trace('sotreGroudCode(code n idx)  '+ gCode +' / '+ gIndex)
+			}
+			
+			
+			private function getLatestStuff():void{
+				
+				initApp();
+				
+				var ohMyLord:URLMultiLoader = new URLMultiLoader();
+				var req_currStuff:URLRequest = new URLRequest("dateTime_cirrus.dat");
+				var req_groupList:URLRequest = new URLRequest("groupList.xml");
+				ohMyLord.addURLRequest("latestOne", req_currStuff);
+				ohMyLord.addURLRequest("groupList", req_groupList);
+				ohMyLord.addEventListener(Event.COMPLETE, setLatestOne);
+				ohMyLord.addEventListener(IOErrorEvent.IO_ERROR, onError);
+				ohMyLord.load();
+			}
+			
+			private function setLatestOne(evt:Event):void{
+				var currDateTime_UTC:Object = (evt.target as URLMultiLoader).data;
+				var dateStr:String = new String(currDateTime_UTC['latestOne']);
+				var gList:XML= new XML(currDateTime_UTC['groupList']);
+				dateStr = dateStr.replace(LTRIM,'');
+				dateStr = dateStr.replace(RTRIM,'');
+				latestDateTimeUTC = DateMgr.str2Date(dateStr);
+				selectedDate = dateStr;//hahahah			
+				grCode_comboBinder.dataProvider = gList.children();	
+				grCode_comboBinder.selectedIndex = grCodeIdx;
+				var UTCDateArr:ArrayCollection = new ArrayCollection();
+				for(var i:uint=0; i<14;i++){
+					var tempDate:Date = DateMgr.addHours(latestDateTimeUTC, i*-12);
+					var obj:Object = new Object();
+					obj.label = DateMgr.getYYYYMMDDStr(tempDate,'slash')+' UTC';	
+					obj.data = DateMgr.getYYYYMMDDStr(tempDate);				
+					UTCDateArr.addItem(obj);
+				}
+				
+				date_comboBinder.dataProvider = UTCDateArr;
+				
+			}
+			
+			
+			private function LoadXML(init:Boolean = false):void{
+				if(init){
+					loadAllTimeSeriesData(DateMgr.getYYYYMMDDStr(latestDateTimeUTC));
+				}else{
+					loadSingleVar();
+				}
+			}
+			
+			
+				//그룹코드나 변수가 바뀔때여 
+			private function changeRetrivalCondition():void{
+				grCodeNum =  Number(grCode_comboBinder.selectedItem.@gCode);
+				currVar = (tg_variable.selectedIndex==0)? "T3H" : "WSD";
+				if(tg_guidance.selectedIndex==0){
+					storeGroupCode();////////////////////////////////////마지막 접속 지점
+					tgBtn_fnItemClick();
+				}else{
+//					imageControlBarClickHandler();
+					setGRIDImage()
+				}
+			}
+			
+			private function iPad2(dStr:String):String{
+				return dStr+'00';
+			}
+			
+			private function loadAllTimeSeriesData(dateTime:String):void{
+				var multiLoader:URLMultiLoader = new URLMultiLoader();
+				var req_T3H:URLRequest =  new URLRequest(repos_tSeries +'KOPP/' + fileNamePrefix + "T3H." + iPad2(dateTime) + ".xml");			
+				var req_WSD:URLRequest = new URLRequest(repos_tSeries +'KOPP/' + fileNamePrefix + "WSD." + iPad2(dateTime) + ".xml");			
+				multiLoader.addURLRequest("t3h",req_T3H); 
+				multiLoader.addURLRequest("wsd",req_WSD); 
+				multiLoader.addEventListener(Event.COMPLETE, filesLoaded);
+				multiLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+				multiLoader.load();
+			}
+	
+			private function filesLoaded(event:Event):void {
+				var seriesData:Object = (event.target as URLMultiLoader).data;
+					list_t3h = new XML(seriesData['t3h']);
+					list_wsd = new XML(seriesData['wsd']);
+					list = list_t3h.regionGroup[grCodeNum];
+					
+					seekMinMaxVal(list);
+					
+					dateOfIssue = list_t3h.@issuedAt;
+					basedOn = 'KOPP';//'KOPP';
+					lbl_varType.text = '기온';
+					callLater(drawMeteogram);
+			}
+	
+	
+			private function loadTimeSeriesData(dateTime:String):void{
+				var multiLoader:URLMultiLoader = new URLMultiLoader();
+				var req_T3H:URLRequest =  new URLRequest(repos_tSeries +'KOPP/' + fileNamePrefix + "T3H." + iPad2(dateTime) + ".xml");			
+				var req_WSD:URLRequest = new URLRequest(repos_tSeries +'KOPP/' + fileNamePrefix + "WSD." + iPad2(dateTime) + ".xml");			
+				multiLoader.addURLRequest("t3h",req_T3H); 
+				multiLoader.addURLRequest("wsd",req_WSD); 
+				multiLoader.addEventListener(Event.COMPLETE, filesLoaded_temp);
+				multiLoader.addEventListener(IOErrorEvent.IO_ERROR, changeDateFaultHandler);
+				multiLoader.load();
+			}
+	
+	 
+			private function filesLoaded_temp(event:Event):void {
+				var seriesData:Object = (event.target as URLMultiLoader).data;
+					list_t3h = new XML(seriesData['t3h']);
+					list_wsd = new XML(seriesData['wsd']);
+
+					tgBtn_fnItemClick();
+										
+					savedIndex = date_comboBinder.selectedIndex;
+					
+					
+//					setGRIDImage();					
+					
+			}
+	
+	 		private function loadSingleVar():void{
+	 			trace('loadSingleVar()');
+	 		}
+	 
+			private function onError(event:Event):void {
+				Alert.show("Not Available !","IO Err.");
+			}
+				
+			private function changeDateFaultHandler(event:Event):void {
+				date_comboBinder.selectedIndex = savedIndex;
+				Alert.show("Not Available !!","IO Err.");
+			}
+				
+			
+			
+			private function drawMeteogram():void{
+				
+				
+				chartBox.removeAllChildren();
+				var lbl:Label;
+				for(var i:int = 0; i<list.children().length(); i++){
+					lbl = new Label();
+					lbl.setStyle("width","300");
+					lbl.setStyle("height","20");
+					lbl.truncateToFit = true;
+					lbl.setStyle("fontSize",15);
+//					lbl.setStyle("fontFamily","dotum");
+					lbl.setStyle("fontWeight","bold");
+					lbl.text = (list.stn[i].@stnName )+" ("+list.stn[i].@stnNo+")";
+					
+					var chart:* = getChartInstance();
+					
+					chart.dataProvider = list.stn[i].dataSet;
+					
+					if(tg_variable.selectedIndex==0){
+						chart.axis_ver.maximum = getMaxVal();
+						chart.axis_ver.minimum =  getMinVal();
+					}
+					
+					if(list.children().length()==1){
+						chart.height += chart.height * 0.3;
+						chart.topAxisRenderer.setStyle("showLabels",true);
+						chart.bottomAxisRenderer.setStyle("showLabels",true);
+					}else if(i==0){
+						chart.topAxisRenderer.setStyle("showLabels",true);
+						chart.setStyle("gutterTop",30);
+						chart.height += 26;
+					}else if(i==(list.children().length()-1)){
+						chart.bottomAxisRenderer.setStyle("showLabels",true);
+						chart.setStyle("gutterBottom",30);
+						chart.height += 26;
+					}
+					chartBox.addChild(lbl);
+					chartBox.addChild(chart);
+					lbl.setStyle("paddingLeft",chart.getStyle("gutterLeft")-3);		
+					lbl.setStyle("paddingBottom",-10);
+					
+				}
+				resetMinMax();
+			}		
+			
+			
+			
+			
+			private function tgBtn_fnItemClick():void{
+	//			var bSelected:Boolean = e.target.rawChildren.getChildAt(e.index).selected;
+	//			idx_tgBtn = e.index;
+	
+				idx_tgBtn = tg_variable.selectedIndex;
+				switch(idx_tgBtn){
+					case  0 : list = list_t3h.regionGroup[grCodeNum]; basedOn = 'KOPP'; lbl_varType.text = '기온'; dateOfIssue = list_t3h.@issuedAt;seekMinMaxVal(list);break;
+					case  1 : list = list_wsd.regionGroup[grCodeNum]; basedOn = 'KOPP';  lbl_varType.text = '바람'; dateOfIssue = list_wsd.@issuedAt;break;
+				}
+				drawMeteogram();
+			}
+			
+			
+			private function getChartInstance():*{
+				var chart:*;
+				switch(idx_tgBtn){
+					case  0 : chart = new CIRRUS_T3H(); break;
+					case  1 : chart = new CIRRUS_WSD; break;
+				}
+				return chart;
+			}
+			
+			
+			private function saveAnImageInPNG():void {
+	    		var fileRef:FileReference = new FileReference();
+	    		fileRef.save(ByteArrayUtil.getByteArrayFrom(timeSeriesContainer), lbl_varType.text+"_"+new Date().toDateString()+".png" );
+	   		}
+	    		
+			
+			private function changeGuidance(e:ItemClickEvent):void{
+	//			Alert.show("viewStackeChanged:  "+ e.index + " \n" + e.target.toString());
+				var selectedChild:uint = e.index;
+				vStack.selectedIndex = selectedChild;
+				isTimeSeries = (selectedChild==0)? true : false; 
+				if(selectedChild==1){
+					lbl_varType.includeInLayout = false;
+					lbl_varType.visible =false;
+					setGRIDImage();	
+				}else{
+					lbl_varType.includeInLayout = true;
+					lbl_varType.visible =true;
+					tgBtn_fnItemClick();
+				}
+			}
+			 
+			
+			
+			private function setGRIDImage():void{
+					
+				var variable:String='';
+				if(tg_variable.selectedIndex==0){
+					variable= 'tmp';
+				}else{
+					variable = 'uvw';
+				}
+				
+				var httpService_grid:HTTPService = new HTTPService();
+				httpService_grid.url = repos_grid + variable + '/dfs_kopp_rdps_map_' +variable+ '_00_' + selectedDate.substr(0,10) + '.png';
+				httpService_grid.addEventListener(ResultEvent.RESULT,gridImgResultHandler);
+				httpService_grid.addEventListener(FaultEvent.FAULT,gridImgFaultHandler);
+				httpService_grid.send();
+			}
+			
+			
+			
+			private function gridImgResultHandler(e:ResultEvent):void{
+				var variable:String='';
+				if(tg_variable.selectedIndex==0){
+					variable= 'tmp';
+				}else{
+					variable = 'uvw';
+				}
+				/////////////////////////////////////////////////////////////////				
+				/////////////////////////////////////////////////////////////////				
+				/////////////////////////////////////////////////////////////////				
+				var imageList:XMLList = new XMLList();
+				/////////////////////////////////////////////////////////////////				
+				/////////////////////////////////////////////////////////////////				
+				/////////////////////////////////////////////////////////////////			
+//				var source:String = repos_grid + variable + '/dfs_kopp_rdps_map_' +variable+ '_00_' + selectedDate.substr(0,10) + '.png';
+//				img_grd.changeSource(source);
+//				Alert.show('setGRIDImage()\n'+source)
+				var timeLineArr:ArrayCollection = new ArrayCollection();
+				var d:Date = DateMgr.str2Date(selectedDate);
+//				DateMgr.getYYYYMMDDStr(d)
+				d = DateMgr.addHours(d,15);				
+				for(var i:uint=0; i<24;i++){
+					var tempDate:Date = DateMgr.addHours(d, i*3);
+					var obj:Object = new Object();
+					obj.label = DateMgr.getYYYYMMDDStr(tempDate).substr(6,4);	
+					obj.data = DateMgr.getYYYYMMDDStr(tempDate);				
+					timeLineArr.addItem(obj);
+					/////////////////////////////////////////////////////////////////				
+					/////////////////////////////////////////////////////////////////				
+					/////////////////////////////////////////////////////////////////				
+					var src_temporary:String = repos_grid + variable + '/dfs_kopp_rdps_map_' +variable+ pad2(i) + selectedDate.substr(0,10) + '.png';
+					var imgX:XML = new XML(<img/>);
+					var url:String = src_temporary;
+					imgX.@source=url;
+					
+					imgX.@display=obj.label;
+					
+					imgX.@LST=obj.data;
+					imageList += imgX;
+					/////////////////////////////////////////////////////////////////				
+					/////////////////////////////////////////////////////////////////				
+					/////////////////////////////////////////////////////////////////				
+				}
+				
+//				tg_timeLineBar.dataProvider = timeLineArr;
+//				tg_timeLineBar.selectedIndex=0;
+				player.imageList = imageList;
+//				Alert.show(imageList.toXMLString())
+				player.visible =true;
+			}
+			
+			private function gridImgFaultHandler(e:FaultEvent):void{
+				Alert.show('No data avilable !');
+			}
+			
+//			private function imageControlBarClickHandler(e:ItemClickEvent=null):void{
+//				var variable:String='';
+//				var idx:uint = (e)? e.index : tg_timeLineBar.selectedIndex;
+//				if(tg_variable.selectedIndex==0){
+//					variable= 'tmp';
+//				}else{
+//					variable = 'uvw';
+//				}
+//				
+//				var source:String = repos_grid + variable + '/dfs_kopp_rdps_map_' +variable+ pad2(idx) + selectedDate.substr(0,10) + '.png';
+//				
+//				img_grd.changeSource(source);
+////				Alert.show(source +'\n' + selectedDate)
+//			}
+			
+			private function pad2(index:uint):String{
+				var idx:String = index+'';
+				if(idx.length < 2){
+					idx = '0'+idx;
+				}
+				return '_'+idx+'_';
+			}
+			
+
+			private function dateChangeHandler(e:Event=null):void{
+				if(e){
+					selectedDate = e.currentTarget.selectedItem.data+'';
+					loadTimeSeriesData(selectedDate);
+					if(tg_guidance.selectedIndex==1){
+						setGRIDImage();
+					}
+				}else{
+					date_comboBinder.selectedIndex=0;
+					selectedDate = date_comboBinder.selectedItem.data+'';
+					loadTimeSeriesData(selectedDate);
+				}
+//					시계열 파일 로드 완료된 시점에서 filesLoaded_temp()에서 호출
+//					시계열 파일 로드 완료된 시점에서 filesLoaded_temp()에서 호출
+				
+				
+//	            str_urlReq = receivedFileName;
+//	            grCode = grCodeNum;
+//	            str_typeOfChart = chartType;
+//            	LoadXML();
+			}
+
+			
+			private function seekMinMaxVal(currList:XML):void{
+				var arr_4assignMaxMin:Array = new Array();
+				for each(var element:XML in currList..@val){
+					trace(element+'')
+					arr_4assignMaxMin.push(Number(element));
+				}
+		    	var maxVal:Number =  Math.max.apply(null, arr_4assignMaxMin)
+		    	var minVal:Number =   Math.min.apply(null, arr_4assignMaxMin)
+				if(maxVal != Infinity  && minVal != Infinity){
+				    assignMaxMin(maxVal, minVal);
+				}else{
+//					do something
+				}
+			}
+			
+			
+			private function assignMaxMin(max:Number, min:Number){
+				if(max_Temperature == 8318 && min_Temperature == -555){
+					max_Temperature = max;
+					min_Temperature = min;
+				}else{
+					if(max > max_Temperature){
+						max_Temperature = max;
+					}
+					if(min < min_Temperature){
+						min_Temperature = min;
+					}
+				}
+			}
+			
+			
+			private function resetMinMax():void{
+				max_Temperature = 8318;
+				min_Temperature = -555;
+			}
+			
+			public function getMaxVal():Number{
+					return Math.ceil(max_Temperature);
+			}
+	
+			public function getMinVal():Number{
+					return Math.floor(min_Temperature);
+			}
+			
+			
+			//doe
+			public function sortXMLListByAttribute(list:XMLList, attribute:String, options:uint = 0):XMLList {
+				// store in array to sort on
+				var xmlArray:Array = new Array();
+				for each (var item:XML in list) {
+					var object:Object = { data:item, order:item.attribute(attribute) };
+					xmlArray.push(object);
+				}
+				xmlArray.sortOn('order', options);
+				// sorting~
+				var sortedXmlList:XMLList = new XMLList();
+				for each (var xmlObject:Object in xmlArray) {
+					sortedXmlList += xmlObject.data;
+				}
+				return sortedXmlList;
+			}
+			
+			
+			private function DDJJLabelFunc(item:Object):String{
+				return item.@display.toString().substr(0,2) + '일 ' + item.@display.toString().substr(2,2) +'시';  
+			}
+			
+			
+			private function hSlider_dataTipFunc(val:String):String{
+				var idx:uint = Number(val);
+				return player._imageList[idx].@display+'';
+			}
+		
+		]]>
+	</mx:Script>
+
+	
+				<mx:HBox width="100%">
+					<!--GUIDANCE CHOOSER-->
+		            <mx:ToggleButtonBar id="tg_guidance"  selectedIndex="0" itemClick="changeGuidance(event)" 
+		            	direction="vertical" width="12%" height="100%" fontSize="12">
+		                <mx:dataProvider>
+		                    <mx:ArrayCollection>
+		                        <mx:Object label="지점가이던스" data="_STN"/>
+		                        <mx:Object label="격자가이던스" data="_GRD"/>
+		                    </mx:ArrayCollection>
+		                </mx:dataProvider>
+		            </mx:ToggleButtonBar>
+		            
+					<mx:VBox width="88%">
+						<mx:HBox width="100%">
+							
+							<mx:HBox width="50%" horizontalAlign="left" verticalAlign="middle">
+								<mx:Label text="Variable: "/>
+				                <mx:ToggleButtonBar id="tg_variable"  selectedIndex="0" itemClick="changeRetrivalCondition()" fontSize="12">
+				                    <mx:dataProvider>
+				                        <mx:ArrayCollection>
+				                            <mx:Object label="기온" data="T3H"/>
+				                            <mx:Object label="바람" data="WSD"/>
+				                        </mx:ArrayCollection>
+				                    </mx:dataProvider>
+				                </mx:ToggleButtonBar>
+							</mx:HBox>
+							<mx:HBox width="50%" horizontalAlign="right" verticalAlign="middle">			        
+								<mx:Label text="Based on: "/>
+								<!--
+								<mx:Button label="KOPP"/>
+				                -->
+				                <mx:ToggleButtonBar id="tgModel"  selectedIndex="0">
+				                    <mx:dataProvider>
+				                        <mx:Array>
+				                            <mx:String>KOPP</mx:String>
+				                            <!--
+				                            <mx:String>UKPP</mx:String>
+				                            -->
+				                        </mx:Array>
+				                    </mx:dataProvider>
+				                </mx:ToggleButtonBar>
+				    		</mx:HBox>      
+				    		
+			    		</mx:HBox>
+			    		
+			    		
+			    		      
+						<mx:HBox horizontalGap="2" verticalAlign="middle">
+							<mx:Spacer width="5"/>
+							<mx:Button label="Now" fontSize="10" click="dateChangeHandler(null)"/>
+							<mx:Spacer width="5"/>
+							<!--
+							<mx:Button label="-12Hrs" fontSize="10"/>
+							-->
+							<!--date_selector (one week)-->
+							<!--date_selector (one week)-->
+							<mx:ComboBox id="date_comboBinder" width="180"  selectedIndex="0" openDuration="100" closeDuration="0"
+								rowCount="{date_comboBinder.dataProvider.length}" fontSize="12"
+								change="dateChangeHandler(event)"/>
+							<!--	
+							<mx:Button label="+12Hrs" fontSize="10"/>
+							-->
+							<!--regionGroup selector 1 to 50-->
+							<!--regionGroup selector-->
+							<mx:Spacer width="5"/>
+							<mx:ComboBox id="grCode_comboBinder"    rowCount="20" openDuration="100" closeDuration="0"
+								fontSize="12"
+								includeInLayout="{isTimeSeries}" visible="{isTimeSeries}"
+								change="changeRetrivalCondition()">
+			        			<mx:dataProvider>
+			        				<mx:Array>
+			        					<mx:Number>45</mx:Number>
+			        					<mx:Number>47</mx:Number>
+			        				</mx:Array>
+			        			</mx:dataProvider>
+			        		</mx:ComboBox>
+			        		
+							<mx:Spacer width="50"/>
+							
+							<mx:HBox id="controlContainer" verticalAlign="middle" horizontalAlign="center" horizontalGap="5" 
+								backgroundImage="@Embed(source='image/imgPlayer/bg.png')"
+								includeInLayout="{!isTimeSeries}" visible="{!isTimeSeries}">				
+								<mx:Image id="prevButton" toolTip="Prev" source="@Embed(source='image/imgPlayer/before.png')" click="player.prev(event)"
+									buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+								<mx:Image id="nextButton" toolTip="Next" source="@Embed(source='image/imgPlayer/next.png')" click="player.next(event)"
+									buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+								<mx:Canvas height="20" >
+									<mx:HSlider id="hSlider_grid" width="370"  y="-5" minimum="0" maximum="{player._imageList.length()-1}" snapInterval="1"
+										value="{player.currIndex}" change="player.sliderChange(event)" dataTipFormatFunction="hSlider_dataTipFunc"
+								 	    trackSkin="@Embed(source='image/imgPlayer/bar.png')" 
+								 		thumbSkin="@Embed(source='image/imgPlayer/ball.png')"
+										liveDragging="true" 
+									 	/>
+									 	<!--
+											 labels="{[player._imageList[0].@display,player._imageList[player._imageList.length()-1].@display]}"									 	
+									 	-->
+								</mx:Canvas>
+								<mx:Image id="playButton" toolTip="Play" source="@Embed(source='image/imgPlayer/b_play2.png')" click="player.play(event)"
+									buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+								<mx:Image id="stopButton" toolTip="Stop" source="@Embed(source='image/imgPlayer/b_play2_s.png')" click="player.stop(event)"
+									buttonMode="true" useHandCursor="true" mouseChildren="false"/>
+								<mx:CheckBox id="showFile" selected="false" alpha="0.01" change="player.displayFileNameChange(event)"/>
+								<mx:ComboBox height="20" labelFunction="DDJJLabelFunc"
+									id="cb_gridTimeline"  openDuration="300" closeDuration="0"
+									dataProvider="{player._imageList}" labelField="@display"
+									dataChange="player.imageListDataChange(event)" rowCount="12" fontSize="12"
+									selectedIndex="{player.currIndex}" change="player.comboChange(event)"/>
+							</mx:HBox>
+							
+							
+							
+						</mx:HBox>
+						
+						
+					</mx:VBox>
+				</mx:HBox>
+		        
+		    </mx:ApplicationControlBar>
+		    

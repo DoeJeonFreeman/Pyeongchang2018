@@ -1,0 +1,44 @@
+/* CSS file */
+
+/*
+	@font-face{
+		src:systemFont("굴림");
+		fontFamily:"doeGool";	
+		advancedAntiAliasing:true;
+	   unicodeRange:U+0020-U+0020,U+0041-U+005A,U+0061-U+007A,       
+	   				  U+0020-U+007E,U+1100-U+11F9,U+3000-U+303F,U+3131-U+318E,U+327F-U+327F,U+AC00-U+D7A3,U+FF01-U+FF60, 
+	   				  U+0030-U+0039,U+002E-U+002E, 
+	   				  U+6b,U+6d,U+b2,    
+	   				  U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E; 
+	}
+	
+	Label{
+		fontFamily:doeDum;	
+	}
+*/	
+	LegendItem {
+		fontSize: 12;
+		font-weight:normal;
+	}
+	
+	Alert{
+		message-style-name: "alertMsg";	
+	}
+	
+	.alertMsg{
+		font-size: 12;
+	}	
+	
+    DataTip {
+        fontSize: 12; 
+    }
+    
+    ImageCheckBox {
+    	font-size:12
+	}
+	
+	ToolTip{
+		font-size:12;
+	}
+	
+	

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://blog.flexexamples.com/2007/08/20/creating-custom-dialog-boxes-using-the-popupmanager-and-titlewindow-classes/ -->
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml"
+		xmlns:control="components.control.*"
+		layout="vertical" 
+		titleStyleName="titleText"
+		backgroundColor="0xffffff"
+		backgroundAlpha="1.0"
+		borderColor="0xffffff"
+		borderAlpha="1"
+		cornerRadius="0"
+		dropShadowEnabled="true"
+		showCloseButton="true"
+		creationComplete="creationCompleteHandler()"
+		close="titleWindow_close(event)" xmlns:util="components.util.*" 
+		>
+	<mx:Script>
+		<![CDATA[
+			import mx.binding.utils.BindingUtils;
+			import mx.binding.utils.ChangeWatcher;
+			import mx.containers.Canvas;
+			import mx.core.Application;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			[Bindable]
+			public var stationEnvInfo:XML;
+			
+			private function creationCompleteHandler():void{
+//				drawBorder();
+				var watcher:ChangeWatcher = BindingUtils.bindSetter(stationChanged, this, "stationEnvInfo"); 
+			}
+			
+			public function setStationEnv(someInfo:XML):void{
+				setENVInfo(someInfo);
+			}
+			
+			private function setENVInfo(stnNode:XML):void{
+				stationEnvInfo = stnNode;
+			}
+			
+			private function stationChanged(o:Object):void{
+				refreshInfoWindow();
+			}
+			
+			
+			private function titleWindow_close(evt:CloseEvent):void {
+				PopUpManager.removePopUp(this)
+			}
+			
+			private function titleWindow_continue():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function drawBorder():void{
+				var pt:Point = new Point(-50, -460);
+				var global:Point = Application.application.localToGlobal(pt);
+				var origin:Point =global;
+				var destination:Point = new Point(-15,-470);
+				var lineThickness:Number = 1;
+				var lineColor:Number = 0xdddddd;
+				var lineAlpha:Number = 1;
+				
+				var tip:Canvas = new Canvas();
+				
+				tip.graphics.clear();
+				tip.graphics.beginFill(0xffffff,1);
+				
+				tip.graphics.lineStyle(lineThickness,lineColor,lineAlpha);
+				tip.graphics.moveTo(origin.x,origin.y);
+				tip.graphics.lineTo(destination.x,destination.y);
+				tip.graphics.lineStyle(1,0xffffff,lineAlpha);
+				tip.graphics.lineTo(-15,-450);
+				tip.graphics.lineStyle(1,0xdddddd,1);
+				tip.graphics.lineTo(origin.x,origin.y);
+				tip.graphics.endFill();
+				addChild(tip);
+			}	
+			
+			
+			private function refreshInfoWindow():void{
+				var windowTitle:String = stationEnvInfo.@stnName.toString().replace("-", " ") + " (" + stationEnvInfo.@stnCode + ")";
+				this.title = windowTitle ; 
+				map_stn.changeSource("maps/"+stationEnvInfo.@stnCode+".png");
+				textarea.text = "위도 : " + setPrecision(Number(stationEnvInfo.@lat),2) 
+							  + "\n경도 : " + setPrecision(Number(stationEnvInfo.@lon),2)
+							  + "\n고도 : " + stationEnvInfo.@alti+'m'
+							  + "\n동네예보 격자점 : " + setPrecision(Number(stationEnvInfo.@gx),1) + ", " + setPrecision(Number(stationEnvInfo.@gy),1)
+							  + "\n편집관서 : 47" + stationEnvInfo.@stn_edit;
+				
+			}
+			
+		
+			var setPrecision:Function = function(number:Number, precision:int) {
+				precision = Math.pow(10, precision);
+				return Math.round(number * precision)/precision;
+			}
+			
+			
+		]]>
+	</mx:Script>
+	
+		<mx:Style>
+		.titleText {
+			fontSize: 14px;
+			font-weight:bold;
+		}
+		.headingText {
+			paddingTop: 10px;
+			paddingBottom: 10px;
+			fontSize: 10px;
+		}
+	</mx:Style>
+	<mx:VBox>
+		<mx:Canvas>
+			<!--
+			<mx:Image  id="map_stn" width="350" height="350" x="0" y="0"/>
+			-->
+			<util:SSPSEnvInfoImage id="map_stn" width="350" height="350" x="0" y="0"/>
+			<mx:Image  id="scaleBar"  x="251" y="337"
+				source="@Embed(source='components/control/scaleBar.png')"/>
+		</mx:Canvas>
+		<control:AutoResizableTextArea id="textarea"  selectable="false" editable="false"
+		width="100%" fontSize="13" autoResize="true"
+		/>
+	</mx:VBox>	
+</mx:TitleWindow>

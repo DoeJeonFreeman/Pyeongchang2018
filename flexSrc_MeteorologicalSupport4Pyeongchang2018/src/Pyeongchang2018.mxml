@@ -1,0 +1,2835 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:preferences="components.preferences.*"
+	creationComplete="creationCompleteHandler();buildKeyStringMan()" initialize="init()" 
+	updateComplete="this.visible=true;" 	
+	backgroundGradientColors="[0xFFFFFF,0xFFFFFF]" borderColor="0xFFFFFF"
+	minWidth="1280" width="100%"  verticalScrollPolicy="auto" horizontalScrollPolicy="auto" height="100%" paddingTop="5"
+	verticalGap="0">
+	
+	<mx:Style source="asset/DFS/timeSeries/meteogram/CSS/meteogramStyle.css"/>
+	
+	<!--
+		creationComplete="creationCompleteHandler();initApp(true)
+	-->
+	
+	
+	<mx:Script>  
+		<![CDATA[
+			import com.doe.flex.ui.form.util.CBGroup_PYEONGCHANG;
+			import com.doe.flex.ui.form.util.CheckBoxGroup2;
+			import com.doe.flex.ui.form.util.ImageCheckBox;
+			import com.maccherone.urlmultiloader.URLMultiLoader;
+			
+			import comp.chart.MEDM_MMX;
+			import comp.chart.MEDM_POP;
+			import comp.chart.MEDM_PTY;
+			import comp.chart.MEDM_R12;
+			import comp.chart.MEDM_REH;
+			import comp.chart.MEDM_S12;
+			import comp.chart.MEDM_SKY;
+			import comp.chart.MEDM_VIS;
+			import comp.chart.MEDM_WSD;
+			import comp.chart.PrcpTypeNCloud;
+			import comp.chart.PrcpTypeNCloud_MEDM;
+			import comp.chart.QYUNA_MEDM_multiVars;
+			import comp.chart.QYUNA_SHRT_multiVars;
+			import comp.chart.QYUNA_VSRT_multiVars;
+			import comp.chart.SHRT_POP;
+			import comp.chart.SHRT_PTY;
+			import comp.chart.SHRT_REH;
+			import comp.chart.SHRT_RN3;
+			import comp.chart.SHRT_SKY;
+			import comp.chart.SHRT_SN3;
+			import comp.chart.SHRT_T3H;
+			import comp.chart.SHRT_VIS;
+			import comp.chart.SHRT_WSD;
+			import comp.chart.WSD;
+			import comp.chart.chartingTool.ByteArrayUtil;
+			import comp.chart.chartingTool.LegendItem_filledRect;
+			import comp.chart.checkBox.CB_PYEONCGHANG_SHRT;
+			import comp.chart.checkBox.CB_PYEONCGHANG_VSRT;
+			import comp.chart.checkBox.CB_PYEONGCHANG_MEDM;
+			import comp.util.common.CommonUtil;
+			
+			import components.control.DJFBox;
+			import components.preferences.notConfiguredYet;
+			import components.preferences.userSharedObj.LSOHandler;
+			import components.util.Constants;
+			import components.util.DateMgr;
+			
+			import mx.charts.AxisLabel;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianChart;
+			import mx.charts.chartClasses.ChartBase;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.renderers.CircleItemRenderer;
+			import mx.charts.series.ColumnSeries;
+			import mx.charts.series.LineSeries;
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.Alert;
+			import mx.controls.CheckBox;
+			import mx.controls.HRule;
+			import mx.controls.Label;
+			import mx.core.UIComponent;
+			import mx.formatters.NumberFormatter;
+			import mx.graphics.Stroke;
+			import mx.managers.PopUpManager;
+			import mx.utils.ObjectProxy;
+			
+			
+			
+			[Embed (source = "/asset/ci/logo_1.gif")] 
+			public var CI_KMA:Class; 
+			
+			
+//			private var IS_FXXKINGVERBOSE:Boolean = false;
+			/**
+			 * 모델비교를 지점비교로 바꾸면 됨ㅋㅋㅋㅋ
+			 * 모델비교관련 소스코드 괜히 날렸네 ㅎㅎ 아니다 이참에 리팩터링 하자.
+			 * 
+			 * */
+			
+			[Bindable]private var appWidth:uint = 1380;
+			private var drawVSRTthruMEDM:Boolean = true;
+			
+			// Personalization Settings..
+			// Oct 14, 2013
+			[Bindable]
+			public var configuredStations:ArrayCollection = new ArrayCollection();
+//			public var userDefined_isMEDM:String;
+//			public var userDefined_baseModel:String;
+			public var userDefined_grCode:String;
+//			public var userDefined_isOlympic:String;
+			
+			[Bindable]
+			public var sObj_personalization_PYCH:LSOHandler; //SSPS
+			
+			[Bindable] 
+			public var defaultPageSetter:LSOHandler; //defaultPageSO
+			
+			//모델합성, Dec 2013
+			[Bindable]
+			private var isMergedModel:Boolean = false;
+			
+			public var isExistOnlyKWRF:Boolean = false;
+			public var isExistOnlyECMWF:Boolean = false;
+			
+			//Sep 02, 2013
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/btn_settings.png')] private var btn_settings:Class
+			
+			private var isMainStation:Boolean = false;			
+			[Bindable]private var isUserConfigured:Boolean = false;			
+			[Bindable] private var isMultiSeries:Boolean = true;
+			
+//			[Bindable]private var isEnsemble:Boolean = false;			
+			[Bindable]private var isPYEONGCHANG:Boolean = true;			
+			
+			[Bindable]public var PYCHStationMapper:XML;			
+			[Bindable]public var ac_stnMapper:ArrayCollection;
+			
+			[Bindable] private var xmlRoot:XML; 
+			[Bindable] private var stations:XML; 
+			//for multiVar charting
+			[Bindable] private var list_reh:XML; 
+			[Bindable] private var list_pop:XML; 
+			[Bindable] private var list_rn3:XML; 
+			[Bindable] private var list_sn3:XML; 
+			[Bindable] private var list_wsd:XML; 
+			[Bindable] private var list_sky:XML; 
+			[Bindable] private var list_pty:XML; 
+			[Bindable] private var list_t3h:XML; 
+			//meFine
+			[Bindable] private var list_vis:XML; 
+			//for multiVar charting
+			
+			[Bindable] private var dateOfIssue:String  = " "; 
+			[Bindable] private var dateOfIssue_LST:String  = " "; 
+			[Bindable] private var basedOn:String  = " "; 
+			[Bindable] private var updatedOn:String  = " "; //me2016 
+			
+			[Bindable] private var str_typeOfChart:String;
+			[Bindable] private var grCode:int;
+			
+			[Bindable] private var str_urlReq:String;
+			[Bindable] private var XMLfolderPath:String;
+			
+			//multiChart Temperature..linearAxisRange
+			private var max_axisVal:Number;
+			private var min_axisVal:Number;
+			private var max_prcp:Number;
+			[Bindable]private var doesntNeedAxisRangeAdjust:Boolean;
+			[Bindable]private var isKindOfPrepitation:Boolean;
+			
+			
+			////AUG 24, 2013///////////////////////////////
+			private var currDate:Date;
+			private var is00UTC:Boolean;
+			private var isOddNum:Boolean; //dayOfWeek % 2
+			///////////////////////////////////
+			
+			[Bindable]public var isVSRT:Boolean=false;
+			[Bindable]public var isSHRT:Boolean=false;
+			[Bindable]public var isMEDM:Boolean=false;
+			
+			[Bindable]private var baseModelName:String;
+			
+			//쓰잘인데 이미지 저장할때 쓰게
+			private var str_yyyymmddhhmm:String;		
+			
+			public var vSpacing:Number = 10;
+			
+			/**
+			 * padding.. peak나 nadir 위아래로 레이블 올리기 위함이여
+			 * */
+			//needMoreGutterTop
+			public function getMaxVal(roundInterval:Boolean=false, needMoreGutterTop:Boolean=false, paddingLevel:Number=0):Number{
+				if(!roundInterval){
+					return max_axisVal;
+				}else{
+					if(needMoreGutterTop){
+						return max_axisVal + ((max_axisVal-min_axisVal)*0.3)				
+					}else{
+						var defaultPad:int = Constants.INTERVAL_TEMPERATURE + 1 ; // 5는 넘넓어
+//						var peakPlusLabelHeight:Number = max_axisVal+((max_axisVal-min_axisVal)/(defaultPad-paddingLevel));
+						var peakPlusLabelHeight:Number = max_axisVal+Constants.INTERVAL_TEMPERATURE;
+						return CommonUtil.getInstance().computeVerticalAxisMinMax(peakPlusLabelHeight, Constants.INTERVAL_TEMPERATURE);
+					}
+				}
+			}
+			
+			public function getMinVal(roundInterval:Boolean=false,bottomPadding:Number=0):Number{
+				if(!roundInterval){
+					return min_axisVal;
+				}else{
+					if(bottomPadding==18){
+						return CommonUtil.getInstance().computeVerticalAxisMinMax(min_axisVal, Constants.INTERVAL_TEMPERATURE,false);
+					}else{
+						var paddingLevel:int = Constants.INTERVAL_TEMPERATURE + 1;
+//						var nadirMinusLabelHeight:Number = min_axisVal-((max_axisVal-min_axisVal)/(paddingLevel-bottomPadding));
+						var nadirMinusLabelHeight:Number = min_axisVal ;//- Constants.INTERVAL_TEMPERATURE;
+						return CommonUtil.getInstance().computeVerticalAxisMinMax(nadirMinusLabelHeight, Constants.INTERVAL_TEMPERATURE ,false);
+					}
+				}
+			}
+			
+			public function getMaxPrcp(roundInterval:Boolean=false,needLabelGutter:Boolean=false):Number{
+				if(!roundInterval)
+					return max_prcp;
+				else
+					if(!needLabelGutter) return (max_prcp % Constants.INTERVAL_PRECIPITATION != 0)? Math.ceil(max_prcp/10) * 10 : max_prcp;
+					else return Math.ceil((max_prcp*1.2)/10) * 10 
+			}
+			
+			public var cbGroup:CheckBoxGroup2;
+			
+			/**
+			 * appendContextMenu() save a timeseries in .png
+			 * mouseWhellAccelerator() for IE8
+			 * */
+			private function creationCompleteHandler():void{
+				appendContextMenu();
+				mouseWheelAccelerator();				
+			}
+			
+			public function mouseWheelAccelerator():void{
+				systemManager.addEventListener("mouseWheel", bumpDelta, true);
+			}	
+			
+			public function bumpDelta(e:MouseEvent):void{
+				e.delta*=15;   //30s is toooooo fast
+			}
+			
+			private function appendContextMenu():void{
+				var menu:ContextMenu = new ContextMenu();
+				var mItem:ContextMenuItem = new ContextMenuItem('차트 이미지 저장');
+				mItem.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, mItemSelectHandler);
+				menu.customItems.push(mItem);
+				menu.hideBuiltInItems();
+				this.contentsBox.contextMenu = menu;
+			}
+			
+			private function mItemSelectHandler(e:ContextMenuEvent):void{
+				saveAnImageInPNG();
+			}
+			
+			
+			//my favorite
+			public function getSOConfiguration():void{
+				
+				defaultPageSetter = new LSOHandler("setSpecifiedStuffAsMain",true);
+				sObj_personalization_PYCH = new LSOHandler("userConfigured_PYCH");
+				
+				userDefined_grCode = (defaultPageSetter.getRegionCode()=='')? "8318" :defaultPageSetter.getRegionCode();	            
+				
+				if( !userDefined_grCode){
+					userDefined_grCode='8318';
+				}
+			}
+			
+			
+//			private function getComboDateList():ArrayCollection{
+//				if(isMultiSeries && !isVSRT){
+//					return CommonUtil.getInstance().ac_date_SHRT_MEDM;
+//				}else{
+//					return CommonUtil.getInstance().ac_date_VSRT
+//				}
+//			}
+			
+			/**
+			 * 
+			 * June 2016
+			 * JAVA ST.  .properties 네임리스트.
+			 * PHP, JAVA, FLEX 하나의 리소스 번들만 엑세스하도록 변경ㅎㅎ
+			 * 
+			 * */
+			private function init():void{
+				CommonUtil.getInstance().loadTimeseriesDataInfoResources("timeseriesChartData_PYEONGCHANG.properties");
+				CommonUtil.getInstance().loadBaseModelResources("PYCH_basedOn.properties");
+				getSOConfiguration();
+				loadPYCHStationMapper();
+//				initDropdownDateList(); call initDropdownDateList() in loadPYCHStationMapper EventCompleteHandler 
+			}
+			
+			private function initDropdownDateList():void{
+				//초단기, 단기-중기 ac 별도 구분 안해도 됨.
+//				CommonUtil.getInstance().getLastUpdateTime("lastUpdate.up2date",true);
+				CommonUtil.getInstance().getLastUpdateTime("lastUpdate.vsrt",true);
+				
+				
+//				CommonUtil.getInstance().getLastUpdateTime("lastUpdate.vsrt",true);
+				//2016.12.22. 초단기, 단기, 중기 최근자료생산일 중에 젤 최근날짜 사용하도록 변경 
+				//큐로더 싱글쓰레드로 구현하자
+				CommonUtil.getInstance().getMostRecnetDateTimeMan("latestStuff");
+			}
+			
+			
+			protected function clearSel_fcstRanges():void {
+				fcstRanges.selectedIndex = -1;
+			}
+			
+			private function fcstRangesChangeHandler():void{
+				Alert.show('fcstRangesChangeHandler()');
+				for(var i:int=0; i < fcstRanges.dataProvider.length; i++){
+					var button1:Button = Button(fcstRanges.getChildAt(i));
+					button1.setStyle("borderColor","black");
+					if(button1.selected){
+						button1.setStyle("color","white");
+						button1.styleName="fcstRangesSelected";
+					}else{
+						button1.setStyle("color","black");
+						button1.styleName="buttonBarNotSelected";
+					}
+				}
+				callLater(clearSel_fcstRanges); //꼼수의 향연ㅋㅋㅋㅋㅋㅋ
+			}
+			
+			protected function clearSel():void {
+				varSelector.selectedIndex = -1;
+			}
+			
+			private function varSelectorChangeHandler():void{
+				for(var i:int=0; i < varSelector.dataProvider.length; i++){
+					var button1:Button = Button(varSelector.getChildAt(i));
+					button1.setStyle("borderColor","black");
+					if(button1.selected){
+						button1.styleName="buttonBarSelected";
+					}else{
+						button1.styleName="buttonBarNotSelected";
+					}
+				}
+//				callLater(clearSel); //꼼수의 향연ㅋㅋㅋㅋㅋㅋ
+			}
+			
+			
+			private function buildKeyStringMan():void{
+				varSelectorChangeHandler();
+				var meKey:String = "";
+				var selectedDate:String = cb_date.selectedItem.data;
+				var restrictCode:String = cb_restrict.selectedItem.data;
+				if(varSelector.selectedIndex !=0){ //단일요소면
+					var varAbbr:String = varSelector.dataProvider[varSelector.selectedIndex].data;
+					meKey = 'SHRT.PYEONGCHANG ' + varAbbr + ' ' + selectedDate + ' ' + restrictCode;
+				}else{
+					//fcstRangesChangeHandler();
+					var fcstRange:String = fcstRanges.dataProvider[fcstRanges.selectedIndex].data;
+					meKey = fcstRange + '.PYEONGCHANG T1H ' + selectedDate + ' ' + restrictCode + ' isMulti';
+				}
+//				Alert.show(meKey);
+				initChart(meKey);
+			}
+			
+			private function timeCaclFunc(e:MouseEvent):void{
+				var targetId:String = e.currentTarget.id;
+				var timeStep:Number = Number(targetId.split('_')[1]);
+				
+				if(targetId.lastIndexOf('Before')!=-1){
+					if(cb_date.selectedIndex == cb_date.dataProvider.length-1) return;
+					if(cb_date.selectedIndex+timeStep > cb_date.dataProvider.length-1)
+						cb_date.selectedIndex = cb_date.dataProvider.length-1;
+					else
+						cb_date.selectedIndex = cb_date.selectedIndex +timeStep; 		
+				}else if(targetId.lastIndexOf('After')!=-1){
+					if(cb_date.selectedIndex == 0) return;
+					if(cb_date.selectedIndex-timeStep < 0)
+						cb_date.selectedIndex = 0
+					else
+						cb_date.selectedIndex = cb_date.selectedIndex -timeStep; 			
+				}else{
+					cb_date.selectedIndex = 0; 	
+				}
+				
+				
+//				if(targetId=='nHrsBefore_12'){
+//					if(cb_date.selectedIndex == cb_date.dataProvider.length-1) return;
+//					if(cb_date.selectedIndex+2 > cb_date.dataProvider.length-1)
+//						cb_date.selectedIndex = cb_date.dataProvider.length-1;
+//					else
+//						cb_date.selectedIndex = cb_date.selectedIndex +2; 					
+//				}else if(targetId=='nHrsBefore_6'){
+//					if(cb_date.selectedIndex == cb_date.dataProvider.length-1) return;
+//					cb_date.selectedIndex = cb_date.selectedIndex +1; 					
+//				}else if(targetId=='nHrsAfter_6'){
+//					if(cb_date.selectedIndex == 0) return;
+//					cb_date.selectedIndex = cb_date.selectedIndex -1; 					
+//				}else if(targetId=='nHrsAfter_12'){
+//					if(cb_date.selectedIndex == 0) return;
+//					if(cb_date.selectedIndex-2 < 0)
+//						cb_date.selectedIndex = 0
+//					else
+//						cb_date.selectedIndex = cb_date.selectedIndex -2; 					
+//				}else{
+//					cb_date.selectedIndex = 0; 					
+//				}
+				
+				buildKeyStringMan();
+			}
+			
+			
+			/**
+			 * Sep 02, 2013
+			 * 주요도시 멀티차트 추가 
+			 * SHRT 2013 08 30 12UTC 부터 과거 3일자료
+			 * MEDM 2013 08 23 00UTC 부터 과거 3일자료
+			 * */	
+			private function initApp(localTestTemporary:Boolean=false):void{
+				if(!localTestTemporary){
+					if (ExternalInterface.available) {
+						try {
+							ExternalInterface.addCallback("sendMsgToFlexApp", messageFromJS);
+							ExternalInterface.addCallback("getInitInfo", messageFromJS);
+							if (checkJavaScriptReady()) {
+								trace("check JS ready");
+							} else {
+								var readyTimer:Timer = new Timer(5000, 0);
+								readyTimer.addEventListener(TimerEvent.TIMER, timerHandler);
+								readyTimer.start();
+								
+							}
+						} catch (error:SecurityError) {
+							Alert.show("A Security Error occurred: " + error.message) ;
+						} catch (error:Error) {
+							Alert.show("An Error occurred: " + error.message);
+						}
+					} else {
+						Alert.show("External interface is not available for this container!!!!");
+					}			
+					trace("initializing app.....");
+					
+					
+				}else{
+
+					
+////////////////////////////////////////////// multiple Vars /////////////////////////////////////////////////////////				
+					
+//										initChart('VSRT.PYEONGCHANG T1H 201611150000 9902 isMulti');  //clear 
+										initChart('SHRT.PYEONGCHANG T3H 201611150000 9902 isMulti');  //clear 
+//										initChart('MEDM.PYEONGCHANG MMX 201611150000 9902 isMulti');  //clear 
+					
+					
+////////////////////////////////////////////// Very-SHRT /////////////////////////////////////////////////////////////					
+					
+										//line series
+//										initChart('VSRT.PYEONGCHANG T1H 201611150000 9901'); // oo 상단짤림
+//										initChart('VSRT.PYEONGCHANG VIS 201611150000 9901'); // oo 상단짤림
+//										initChart('VSRT.PYEONGCHANG REH 201611150000 9902'); // oo 얘 따로 만들어 VIS랑 동일함, 컬럼대신 라인으로
+										//column series
+//										initChart('VSRT.PYEONGCHANG RN1 201611150000 9901'); //oo 
+//										initChart('VSRT.PYEONGCHANG SN1 201611150000 9902'); //oo  값표출 ㄴㄴ
+										//graphic series
+//										initChart('VSRT.PYEONGCHANG PTY 201611150000 9901');  // oo
+//										initChart('VSRT.PYEONGCHANG SKY 201611150000 9901');  //ㅇㅇ
+//										initChart('VSRT.PYEONGCHANG WSD 201611150000 9901');  //ㅇㅇ
+					
+////////////////////////////////////////////// SHRT /////////////////////////////////////////////////////////////					
+
+										//line series
+//										initChart('SHRT.PYEONGCHANG T3H 201611150000 9901');  // ㅇㅇ (min max 없음. 배포하고 나중에)
+//										initChart('SHRT.PYEONGCHANG VIS 201611150000 9901');  // ㅇㅇ 
+//										initChart('SHRT.PYEONGCHANG REH 201611150000 9901');  // ㅇㅇ
+										//column series
+//										initChart('SHRT.PYEONGCHANG RN3 201611150000 9901');  // ㅇㅇ axis interal이 소수점이네 ㅡ,.ㅡ
+//										initChart('SHRT.PYEONGCHANG SN3 201611150000 9902');  // ㅇㅇ
+//										//////initChart////('SHRT.PYEONGCHANG POP 201611150000 9901');  // ㅇㅇ
+										//graphic series
+//										initChart('SHRT.PYEONGCHANG PTY 201611150000 9902');  // ㅇㅇ
+//										initChart('SHRT.PYEONGCHANG SKY 201611150000 9902');  // ㅇㅇ
+//										initChart('SHRT.PYEONGCHANG WSD 201611150000 9902');  // ㅇㅇ
+					
+					
+					
+////////////////////////////////////////////// MEDiuM-range /////////////////////////////////////////////////////////////					
+					
+//										initChart('MEDM.PYEONGCHANG MMX 201611150000 9901'); // ㄴㄴ seperateMinMaxFromSeries()수정필요;
+//										initChart('MEDM.PYEONGCHANG R12 201611150000 9901'); // ㅇㅇ 값표출 ㄴㄴ
+//										initChart('MEDM.PYEONGCHANG S12 201611150000 9901'); // ㅇㅇ 값표출 ㄴㄴ 		
+//										initChart('MEDM.PYEONGCHANG VIS 201611150000 9901'); // ㅇㅇ 값표출 ㄴㄴ   
+//										initChart('MEDM.PYEONGCHANG REH 201611150000 9901');  // ㅇㅇ 값표출 ㄴㄴ   
+//										initChart('MEDM.PYEONGCHANG SKY 201611150000 9901'); // ㅇㅇ
+//										initChart('MEDM.PYEONGCHANG PTY 201611150000 9901'); // ㅇㅇ 
+//										initChart('MEDM.PYEONGCHANG WSD 201611150000 9901'); // ㅇㅇ      표출모듈 단기꺼로 만들어ㅎ 
+										
+//					this.verticalScrollPolicy = "on";
+				}
+			}
+			
+			
+			private function checkJavaScriptReady():Boolean {
+				var isReady:Boolean = ExternalInterface.call("isReady");
+				return isReady;
+			}
+			
+			
+			private function timerHandler(event:TimerEvent):void {
+				trace("checking JavaScript status... interval:5000m Sec");
+				var isReady:Boolean = checkJavaScriptReady();
+				if (isReady) {
+					Timer(event.target).stop();
+				}
+			}
+			
+			/**
+			 * urlReq 호출해서 varible에 시리즈요소어레이 받아서 모델별로 거시기여 암튼 빨리ㅋㅋㅋㅋ 
+			 * 오미 젠장할 일곱시네 일곱시 아침 일곱시ㅋㅋㅋㅋㅋㅋ
+			 * */
+			[Bindable]private var str_msgFromJS:String;
+			
+			private function initChart(someInfo:String,viaPersonalizationSetting:Boolean=false):void{
+				messageFromJS(someInfo);
+			}
+			
+			[Bindable]private var grCodeNum:int;
+			[Bindable]private var currDateStr:String;
+			private var chartType:String;
+			//'SHRT.RDPS_MOS   POP   201603150000   5'
+			private function messageFromJS(value:String, viaPersonalizationSetting:Boolean=false):void { 
+				
+				removePreferencePanel();
+				//popupEIDialog(); //remove popup 
+				
+				str_msgFromJS = value;
+				
+				var receivedFileName:String;
+				
+				XMLfolderPath = CommonUtil.getInstance().getTimeseriesDataPath(value,'DIR');
+				baseModelName= CommonUtil.getInstance().getTimeseriesDataBaseModel(value); 
+				
+				
+				isVSRT = (value.indexOf("VSRT") != -1)? true:false; 
+				isSHRT = (value.indexOf("SHRT") != -1)? true:false; 
+				isMEDM = (value.indexOf("MEDM") != -1)? true:false; 
+//CommonUtil.getInstance().showAlertDialogOnScreenTop(baseModelName,'baseModelName');
+//CommonUtil.getInstance().showAlertDialogOnScreenTop(isVSRT + ' / ' + isSHRT + ' / ' + isMEDM,'isVSRT / isSHRT / isMEDM');
+				
+				
+				//이거 일단 여기 두는데 나중에 다른데로 꼭 빼라 시부엉
+				setUserConfiguredStations();
+				//이거 일단 여기 두는데 나중에 다른데로 꼭 빼라 시부엉
+				
+				//merged model, Dec 2013
+				//merged model, Dec 2013
+				//일단 걍 트루로 하고 개발
+				var params:Array = value.split(" ");
+				//AUG 24, 2013
+				var dStr:String = params[2].toString();
+				currDateStr = dStr;
+				
+				currDate = new Date(Number(dStr.substr(0,4)),Number(dStr.substr(4,2))-1,Number(dStr.substr(6,2)));
+				isOddNum = (currDate.getDay()%2 != 0)? true : false;
+				is00UTC = (dStr.substr(8,2)=='00')? true:false;	            
+				
+				if(params.length >=5){  			//multi vars   
+					isMultiSeries = true;
+					//					receivedFileName = params[0] + "_" + "ALL" + "." + params[2] + ".xml" ; //DFS_SHRT_STN_RDPS_NPPM,  ALL,  201106120000, grCode, isMulti  루프안에서 ALL을 변수명으로 리플레이스해서 로드하자
+					value = value.replace('T1H', 'ALL') ; //DFS_SHRT_STN_RDPS_NPPM,  ALL,  201106120000, grCode, isMulti  루프안에서 ALL을 변수명으로 리플레이스해서 로드하자
+					value = value.replace('T3H', 'ALL') ; //DFS_SHRT_STN_RDPS_NPPM,  ALL,  201106120000, grCode, isMulti  루프안에서 ALL을 변수명으로 리플레이스해서 로드하자
+					value = value.replace('MMX', 'ALL') ; //DFS_SHRT_STN_RDPS_NPPM,  ALL,  201106120000, grCode, isMulti  루프안에서 ALL을 변수명으로 리플레이스해서 로드하자
+					receivedFileName = value+'';
+					chartType = params[4];
+				}else if(params.length == 4){   //single var
+					isMultiSeries = false;
+					receivedFileName = CommonUtil.getInstance().getTimeseriesDataPath(value,'PRFX') + "." + params[2] + ".xml" ;
+					chartType = params[1];
+				}
+				
+				str_yyyymmddhhmm = params[2];
+				grCodeNum = params[3];
+				
+				
+				//30 Dec 2013
+//				if(isMultiSeries){
+//					if(cb_mergedModel.selected){
+//						cb_mergedModel.selected = false;
+//						isMergedModel = false;
+//					}
+//				}
+				//30 Dec 2013
+				
+				//adios
+				isMainStation = (grCodeNum==8318)? true : false;	
+				isUserConfigured = (grCodeNum==555)? true : false;	
+				//바인딩되어 있는 파일 변경 필요 없다면 ..같은날짜 같은차트 타입일 경우
+				//	            if(str_urlReq==receivedFileName){
+				//		            grCode = grCodeNum;
+				//		        	drawTimeseries();
+				//	            }else{ //초기화 할 때 str_urlReq
+				str_urlReq = receivedFileName;
+				grCode = grCodeNum;
+				str_typeOfChart = chartType;
+				LoadXML();
+				//	            }
+			}
+			
+			
+			private function setUserConfiguredStations():void{
+//				if(isMEDM){
+////					if(sObj_personalization_MEDM.getObjects()){
+////						configuredStations = sObj_personalization_MEDM.getObjects();
+////					}else{
+//						configuredStations.removeAll();
+////					}
+//					//SSPS					
+//				}else 
+				if(isPYEONGCHANG){
+					
+					if(sObj_personalization_PYCH.getObjects()){
+						configuredStations = sObj_personalization_PYCH.getObjects();	
+					}else{
+						configuredStations.removeAll();
+					}
+					
+				}else{
+//					if(sObj_personalization_SHRT.getObjects()){
+//						configuredStations = sObj_personalization_SHRT.getObjects();
+//					}else{
+						configuredStations.removeAll();
+//					}
+				}
+			}
+			
+			
+			private function loadPYCHStationMapper():void{
+				if(!PYCHStationMapper){
+					var loader:URLLoader = new URLLoader();
+					loader.dataFormat = URLLoaderDataFormat.TEXT;
+					loader.addEventListener(Event.COMPLETE, PYCHStationMapperLoaded);
+					loader.load(new URLRequest("PYCH_STATION_MAPPER.xml"));
+				}
+			}
+			
+			private function LoadXML():void{
+box_issuedDate_n_basedOn.visible =false;
+				if(isMultiSeries) 
+					LoadMultipleXML();
+				else
+					if(drawVSRTthruMEDM) 
+						CommonUtil.getInstance().loadXML_VSRT_trhu_MEDM(str_typeOfChart, currDateStr);
+					else
+						LoadSingleXML();
+			}
+			
+			[Bindable]public var mDictionary:Dictionary;
+			public function setExistModelData(existData:Dictionary):void{
+				if(mDictionary){
+					mDictionary = null;
+				}
+				mDictionary = existData;
+//				var baseXML:XML = CommonUtil.getInstance().getBaseXML(mDictionary,baseModelName,isMEDM); //doejeon Oct2015 BEST 추가
+				var baseXML:XML;
+				if(mDictionary['VSRT']) baseXML = new XML(mDictionary['VSRT']);
+				if(mDictionary['MEDM']) baseXML = new XML(mDictionary['MEDM']);
+				if(mDictionary['SHRT']) baseXML = new XML(mDictionary['SHRT']);
+				if(!baseXML){
+					CommonUtil.getInstance().showAlertDialogOnScreenTop("No data available.","An unexpected I/O error has occurred");
+					return;
+				}
+				
+				if(isMainStation)
+					xmlRoot = getMainStations(baseXML);
+				else if(isUserConfigured)
+					xmlRoot = getUserConfiguredStations(baseXML);
+				else
+					xmlRoot = baseXML;
+				
+//				basedOn =  getBasalModel();
+				changeGroupCodeAsConsecutiveIndex();
+				stations = xmlRoot.regionGroup[grCode];  //grCode 전역변수로 바인딩해서 차트 타입 바뀌어도 유지되게
+				
+//				mDictionary = sortDictionaryByKey(mDictionary);
+				var ac:ArrayCollection = new ArrayCollection();
+				if(mDictionary['VSRT']) ac.addItem( { key: "VSRT", xmlData:  reorderListByVariables(mDictionary['VSRT'])} ); 
+				if(mDictionary['SHRT']) ac.addItem( { key: "SHRT", xmlData:  reorderListByVariables(mDictionary['SHRT'])} ); 
+				if(mDictionary['MEDM']) ac.addItem( { key: "MEDM", xmlData:  reorderListByVariables(mDictionary['MEDM'])} ); 
+				sortItemsByName(ac);
+
+				(drawVSRTthruMEDM)? draw_VSRT_SHRT_MEDM_timeseries(ac) : drawSingleVarTimeseries(); 
+			}
+			
+			private function sortItemsByName(ac:ArrayCollection):void{
+				var srt:Sort = new Sort();
+				var sortField:SortField = new SortField(); 
+				sortField.name="key";
+				sortField.descending=true;
+				srt.fields = [sortField];
+				ac.sort = srt;
+				ac.refresh();
+			}
+			
+			private function sortDictionaryByKey(d:Array):Array{
+				var a:Array = new Array();
+				for (var dictionaryKey:Object in d){
+					a.push({key:dictionaryKey,value:d[dictionaryKey]});
+				}
+				a.sortOn("key",[Array.DESCENDING]);
+				return a;
+			}  
+			
+			
+			public function stripSlashes4MMX(arr:Array):ArrayCollection{
+				var newDp:ArrayCollection = new ArrayCollection();
+				for (var i:int=0; i<arr.length; i++){
+					var currObj:Object = arr[i];
+					var LST:String = currObj.lst.replace('/','');
+					var item:Object = new Object(); 
+					item.val = Number(currObj.val);
+					if(i%2==0){//min
+						item.lst = LST.substring(0,4)+'00';
+						newDp.addItem(item);
+					}else{//max
+						item.lst = LST.substring(0,4)+'12';
+						newDp.addItem(item);
+					}
+				}
+//				maxLine.dataProvider = newDp;
+				return newDp;
+			}
+			
+			
+			private function equivalent_xmlListToObjectArray(xmlList:XMLList):ArrayCollection{ //return array
+//				if(isTemperature && isMEDM){
+					var arr:Array = xmlListToObjectArray(xmlList,true);
+//				Alert.show(stripSlashes4MMX(arr).length+'',"equivalent_xmlListToObjectArray() stripSlashes4MMX()");
+					return stripSlashes4MMX(arr);
+//				}
+			}
+			
+			
+			private function buildSeriesIdentifier():void{
+//				if(isVSRT)
+			}
+//			private var rangeAbbr_4char:String='ABBR';
+			
+			private function doFxxkingStuff(rangeStr:String="unknown"):String{
+				var str2return:String=rangeStr;
+				if(rangeStr=='VSRT'){
+					if(isTemperature){
+						str2return+=".PYEONGCHANG.T1H";
+					}else if(isPrecipitation){
+						if(str_typeOfChart=="R12" ||str_typeOfChart=="RN3" || str_typeOfChart=="RN1"){
+							str2return+=".PYEONGCHANG.RN1";
+						}else if(str_typeOfChart=="S12" ||str_typeOfChart=="SN3" || str_typeOfChart=="SN1"){
+							str2return+=".PYEONGCHANG.SN1";
+						}
+					}else{
+						str2return+=".PYEONGCHANG."+str_typeOfChart.toUpperCase();
+					}
+				}else if(rangeStr=='SHRT'){
+					if(isTemperature){
+						str2return+=".PYEONGCHANG.T3H";
+					}else if(isPrecipitation){
+						if(str_typeOfChart=="R12" ||str_typeOfChart=="RN3" || str_typeOfChart=="RN1"){
+							str2return+=".PYEONGCHANG.RN3";
+						}else if(str_typeOfChart=="S12" ||str_typeOfChart=="SN3" || str_typeOfChart=="SN1"){
+							str2return+=".PYEONGCHANG.SN3";
+						}
+					}else{
+						str2return+=".PYEONGCHANG."+str_typeOfChart.toUpperCase();
+					}
+				}else if(rangeStr=='MEDM'){
+					if(isTemperature){
+						str2return+=".PYEONGCHANG.MMX";
+					}else if(isPrecipitation){
+						if(str_typeOfChart=="R12" ||str_typeOfChart=="RN3" || str_typeOfChart=="RN1"){
+							str2return+=".PYEONGCHANG.R12";
+						}else if(str_typeOfChart=="S12" ||str_typeOfChart=="SN3" || str_typeOfChart=="SN1"){
+							str2return+=".PYEONGCHANG.S12";
+						}
+					}else{
+						str2return+=".PYEONGCHANG."+str_typeOfChart.toUpperCase();
+					}
+				}else{
+					if(isMultiSeries){
+						
+						if(isVSRT) str2return = 'VSRT.PYEONGCHANG.MUL';
+						else if(isSHRT) str2return = 'SHRT.PYEONGCHANG.MUL';
+						else if(isMEDM) str2return = 'MEDM.PYEONGCHANG.MUL';
+					}
+				}
+				return str2return;
+			}
+			
+			private function draw_VSRT_SHRT_MEDM_timeseries(ac:ArrayCollection):void{
+				adjustChartVisibilityBeforeDrawing();
+				resetPeak_n_nadir4DrawTimeseries();
+				var is279hrs:Boolean = true;//only MEDM uses this var// 
+				chartArea.removeAllChildren();
+//				lbl_baseModel.alpha = 1;
+				
+//				for(var key:String in mDictionary){ //순서가 지맘대로임ㅋㅋㅋㅋ
+//				for(var obj:Object in ac){ //순서가 지맘대로임ㅋㅋㅋㅋ
+				for ( var x:int = 0; x < ac.length; ++x ){
+					var obj:Object = ac.getItemAt(x);
+					var djfXml:XML = new XML(obj.xmlData);	
+					stations = djfXml.regionGroup[grCode];
+					if(obj.key=='VSRT'){
+						isVSRT = true; isSHRT = false; isMEDM = false; //continue;
+					}else if(obj.key == 'SHRT'){
+						isVSRT = false; isSHRT = true; isMEDM = false; //continue;
+					}else if(obj.key == 'MEDM'){
+						isVSRT = false; isSHRT = false; isMEDM = true; //continue;
+					}
+					basedOn = CommonUtil.getInstance().getBasedOnStringMan(doFxxkingStuff(obj.key));
+					
+//					//////seekMinMaxVal_singleElement(stations);
+//					CommonUtil.getInstance().showAlertDialogOnScreenTop('isVSRT: ' + isVSRT + '\nisSHRT: '+isSHRT+'\nisMEDM: ' + isMEDM, obj.key.toString());
+					
+					var hr:HRule = new HRule();
+					hr.setStyle("strokeWidth",1);
+					hr.setStyle("strokeColor",0xEAEDED);
+					//					hr.setStyle("strokeColor",0xD5DBDB); //
+					hr.width=appWidth;
+//					if(x !=ac.length-1) {
+						var vSpacing = new Spacer();
+						vSpacing.height=5;
+						chartArea.addChild(vSpacing);
+						chartArea.addChild(hr);
+//					}
+					
+					
+					//  초단기예측 || 단기예측 || 중기예측
+					var lbl:Label = new Label();
+					lbl.setStyle("width","300");
+//					lbl.setStyle("height","20");
+					lbl.setStyle("fontSize",17);
+					lbl.setStyle("fontWeight","bold");
+					lbl.truncateToFit = true;
+					var fcstRangeKorStr:String = (isVSRT)? "초단기예측" : (isSHRT)? "단기예측" : "중기예측";
+					lbl.text = fcstRangeKorStr;
+					
+					var lblBox:HBox = new HBox();
+//					lblBox.height = 20;
+					lblBox.setStyle("verticalAlign","middle");
+					lblBox.setStyle("horizontalGap",0);
+					lblBox.addChild(lbl);
+					
+					chartArea.addChild(lblBox);
+					
+					
+					
+					// Issuued for ~   / Based On 
+					// Issuued for ~   / Based On 
+					// Issuued for ~   / Based On 
+					var boxContainer:HBox = new HBox();
+					boxContainer.width = appWidth;
+					boxContainer.height = 20;
+					boxContainer.setStyle("horizontalGap",0);
+					boxContainer.setStyle("verticalAlign","middle");
+					var box_issued4:HBox = new HBox();
+					var box_basedOn:HBox = new HBox();
+					box_issued4.width = appWidth/2;
+					box_basedOn.width = appWidth/2;
+					box_issued4.setStyle("horizontalAlign","left");
+					box_basedOn.setStyle("horizontalAlign","right");
+					boxContainer.addChild(box_issued4);
+					boxContainer.addChild(box_basedOn);
+					
+					var lbl_issued4 = new Label();
+					lbl_issued4.setStyle("width","100%");
+					lbl_issued4.setStyle("fontSize",18);
+					lbl_issued4.setStyle("fontWeight","bold");
+					lbl_issued4.truncateToFit = true;
+					lbl_issued4.text = " Issued for " + DateMgr.convertUTCStr2LST(djfXml.@issuedAt);  
+					box_issued4.addChild(lbl_issued4);
+					
+					var lbl_basedOn = new Label();
+					lbl_basedOn.setStyle("width","100%");
+					lbl_basedOn.setStyle("fontSize",16);
+					lbl_basedOn.setStyle("fontWeight","bold");
+					lbl_basedOn.truncateToFit = true;
+					lbl_basedOn.text = basedOn;
+					box_basedOn.addChild(lbl_basedOn);
+					
+					chartArea.addChild(boxContainer);
+					// Issuued for ~   / Based On 
+					// Issuued for ~   / Based On 
+					// Issuued for ~   / Based On 
+					
+					///////////////////////////////////////////////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////////////////////////////////////////////
+					var chart:* = getChartInstance();
+					//////////////////////////////
+					chartArea.addChild(chart);////
+					
+//					var hr:HRule = new HRule();
+//					hr.setStyle("strokeWidth",1);
+//					hr.setStyle("strokeColor",0xEAEDED);
+////					hr.setStyle("strokeColor",0xD5DBDB); //
+//					hr.width=appWidth;
+//					if(x !=ac.length-1) {
+//						var vSpacing = new Spacer();
+//						vSpacing.height=5;
+//						chartArea.addChild(vSpacing);
+//						chartArea.addChild(hr);
+//					}
+					
+					
+					//////////////////////////////
+					var seriesArray:Array=[];
+					for(var i:int = 0; i<stations.children().length(); i++){
+						if(i==0) {
+							chart.dataProvider = (isTemperature && isMEDM)?equivalent_xmlListToObjectArray(stations.stn[i].dataSet) : stations.stn[i].dataSet;
+//							chart.dataProvider =  stations.stn[i].dataSet;
+						}
+						var series:*= getSeriesType(i);
+//						series.id= 'sid_' + obj.key + '_' + str_typeOfChart + '_' + i;
+						series.id= 'identifier_'+ i;
+						series.yField=(isTemperature && isMEDM)? "val" : "@val"; 
+//						series.displayName= stations.stn[i].@stnName;
+						series.displayName= CommonUtil.getInstance().stripHyphensMan(stations.stn[i].@stnName);
+
+						series.dataProvider = (isTemperature && isMEDM)?equivalent_xmlListToObjectArray(stations.stn[i].dataSet) : stations.stn[i].dataSet;
+//						series.dataProvider = stations.stn[i].dataSet;
+						seriesArray.push(series);
+						
+						
+						if(isMEDM){
+//							if(str_typeOfChart=="MMX"){	
+							if(chart instanceof MEDM_MMX){	
+								if(i==0) {
+//									Alert.show(stations.stn[i].dataSet.toXMLString(),'is00UTC: ' + is00UTC)
+								}
+//								if(dateOfIssue.indexOf("12UTC")!=-1){ //12 UTC 
+								if(!is00UTC){ //12 UTC 
+									chart.set12UTC_gridLines(isOddNum,is279hrs); //June 15, 2016
+									chart.axis_hor.labelFunction = chart.defineLabel_12UTC; 
+								}else{ // 00 UTC
+									chart.axis_hor.labelFunction = chart.defineLabel_00UTC; 
+									chart.set00UTC_gridLines(isOddNum,is279hrs);
+								}
+//								//chart.minMaxArr = xmlListToObjectArray(stations.stn[i].dataSet,true);	
+//								//chart.seperateMinMaxFromSeries(is12UTC);
+//								chart.stripSlashes(); // use this function instead of sperateMinMaxFromSeries()
+							}else {  
+								if(! is00UTC){ //12 UTC
+									chart.set12UTC_gridLines(isOddNum,!isExistOnlyECMWF);									
+								}else{ //00 UTC
+									chart.axis_hor.labelFunction = chart.defineLabel_00UTC; 
+									chart.set00UTC_gridLines(isOddNum,is279hrs);								
+								}
+							}
+							chart.topAxisRenderer.setStyle("labelAlign","right");
+							chart.bottomAxisRenderer.setStyle("labelAlign","right");
+						}else{ // VSRT || SHRT 
+							chart.setAlternateFill(is00UTC,isOddNum,isExistOnlyKWRF);
+							chart.setHorizontalAxisLabelFunction(isVSRT);
+						}
+						chart.topAxisRenderer.setStyle("showLabels",true);
+//						chart.bottomAxisRenderer.setStyle("showLabels",true);
+					}
+					chart.series=seriesArray;
+					
+					
+					if(!doesntNeedAxisRangeAdjust){
+						if( isKindOfPrepitation ){
+							if(getMaxPrcp(false)==0){
+								chart.axis_ver.maximum = 1;
+								chart.axis_ver.interval = 1;
+							}else if(getMaxPrcp(false)<5){
+								chart.axis_ver.maximum = 6;
+								chart.axis_ver.interval = 1;
+							}else if(getMaxPrcp(false)<10){
+								chart.axis_ver.maximum = 12;
+								chart.axis_ver.interval = 2;
+							}else if(getMaxPrcp(false)<20){
+								chart.axis_ver.maximum = 25;
+								chart.axis_ver.interval = 5;
+							}else{
+								chart.axis_ver.interval=Constants.INTERVAL_PRECIPITATION;
+								chart.axis_ver.maximum = getMaxPrcp(true,true);
+							}											
+						}else{ // Temperature.. T3H n MMX
+							if(isTemperature){
+	//							var paddingTop:Number = (isMEDM)? 0: 4;
+	//							var paddingBottom:Number = (isMEDM)? 0 : -1;
+								var paddingTop:Number = 2;
+								var paddingBottom:Number = -1;
+								chart.axis_ver.maximum = getMaxVal(true,false,paddingTop);
+								chart.axis_ver.minimum = getMinVal(true,paddingBottom);
+								chart.axis_ver.interval = Constants.INTERVAL_TEMPERATURE;
+							}
+						}
+//						CommonUtil.getInstance().showAlertDialogOnScreenTop(getMinVal() + ' / ' + getMaxVal(), 'minMaxTemperature');
+//						CommonUtil.getInstance().showAlertDialogOnScreenTop(getMaxPrcp()+'', 'MaxPrecipitation');
+					}
+					
+//					lbl.setStyle("paddingLeft",chart.getStyle("gutterLeft")-3);	
+					lbl.setStyle("paddingLeft",+3);	
+					
+					if(str_typeOfChart=='SKY'){
+						chart.axis_ver.maximum= stations.children().length() + 0.9;
+						chart.height = stations.children().length() * 38;
+						if(stations.children().length()<=3) chart.height += 55; 
+						chart.setCloudAmount();
+					}else if(str_typeOfChart=='PTY'){
+						chart.axis_ver.maximum= stations.children().length();
+						chart.height = stations.children().length() * 44;
+						if(stations.children().length()<=3) chart.height += 50; 
+						chart.addPTYSymbol();
+					}else if(str_typeOfChart=='WSD'){
+						chart.axis_ver.maximum= stations.children().length() * 7;
+						chart.height = stations.children().length() * 55;
+						if(stations.children().length()<=3) chart.height += 38; 
+						chart.drawWindSymbol();
+					}
+					
+					//one station in regionGroup
+//					if(stations.children().length()<=3){
+//						chart.height += 35; // chart.height * 0.4;
+//					}
+//					else if(stations.children().length()==1){
+//						chart.height += chart.height * 0.25;
+//					}else if(i==(stations.children().length()-1)){
+//						chart.height += chart.height * 0.25;
+//					}
+					
+				}
+				
+				addCheckBoxLegendDynamicallyMan();
+				
+			}
+			
+			
+			
+			
+			/**
+			 * 
+			 * 
+			 * */
+			private function LoadSingleXML():void{
+				var loader:URLLoader = new URLLoader();
+				loader.dataFormat = URLLoaderDataFormat.TEXT;
+				loader.addEventListener(Event.COMPLETE, xmlLoaded);
+				loader.addEventListener(IOErrorEvent.IO_ERROR, xmlLoadFailed); 
+				trace("loadSingleXML() " + XMLfolderPath+str_urlReq);
+				loader.load(new URLRequest(XMLfolderPath+str_urlReq));
+			}
+			
+			
+			private function pad2(index:uint):String{
+				var idx:String = index+'';
+				if(idx.length < 2){
+					idx = '0'+idx;
+				}
+				return '_'+idx+'_';
+			}
+			
+			private function adjustChartVisibilityBeforeDrawing():void{
+				if(isUserConfigured &&configuredStations.length==0){ //personalization
+					openPersonalizationSettingDialog();
+					return;
+				}else if((isUserConfigured &&configuredStations.length > 0) || !isUserConfigured){
+					contentsBox.includeInLayout = true;
+					contentsBox.visible = true; 
+				}
+			}
+			
+			
+			private function peak_n_nadir_seeker(xmlRoot:XML, isTemperature:Boolean=true):void{
+				CommonUtil.getInstance().initPeakAndNadir(); // 얘가 여기 
+				for(var i:int = 0; i<stations.children().length(); i++){
+					if(isTemperature){
+						CommonUtil.getInstance().xmlListToObjectArray(xmlRoot.regionGroup[grCode].stn[i].dataSet , true);
+					}else{
+						CommonUtil.getInstance().xmlListToObjectArray(xmlRoot.regionGroup[grCode].stn[i].dataSet,false,true);
+					}
+				}
+			}
+			
+			
+			private function PYCHStationMapperLoaded(e:Event):void{
+				PYCHStationMapper = new XML(e.target.data);
+				var stationArr:ArrayCollection = new ArrayCollection();	
+//				var mainObj:Object = new Object();
+//				mainObj.label = "주요 지점";
+//				mainObj.data = "8318";
+//				stationArr.addItem(mainObj);
+				for(var i:int = 0; i < PYCHStationMapper.children().length(); i++){
+					var restrictName = PYCHStationMapper.regionGroup[i].@grName;
+					var restrictCode = PYCHStationMapper.regionGroup[i].@grCode;
+					stationArr.addItem({label: restrictName,  data:restrictCode});
+				}
+				var userConfiguredObj:Object = new Object();
+				userConfiguredObj.label = "관심 지점";
+				userConfiguredObj.data = "555";
+				stationArr.addItemAt(userConfiguredObj,1);
+					
+				ac_stnMapper = stationArr;
+				
+				initDropdownDateList();
+			}
+			
+			private function xmlLoaded(e:Event):void{
+				//				try{
+				if(isMainStation){
+					xmlRoot = getMainStations(new XML(e.target.data));
+					//						Alert.show(xmlRoot.toXMLString())
+				}else if(isUserConfigured){
+					xmlRoot = getUserConfiguredStations(new XML(e.target.data));
+				}else{
+					xmlRoot = new XML(e.target.data)
+				}
+				
+				//me2016
+				if(xmlRoot.hasOwnProperty('@updatedOn')){
+					updatedOn = xmlRoot.@updatedOn;
+				}
+				
+				dateOfIssue = xmlRoot.@issuedAt;
+				basedOn =   getBasalModel(); //me2016
+				changeGroupCodeAsConsecutiveIndex();
+				//adios
+				stations = xmlRoot.regionGroup[grCode];  //grCode 전역변수로 바인딩해서 차트 타입 바뀌어도 유지되게
+				(isMultiSeries)? drawTimeseries() : drawSingleVarTimeseries(); 
+			}
+			
+			/**
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * xmlRoot값 제대로 어싸인하기전에 이펑션 호출하면 인덱스 꼬임(단기중기메뉴전환간)
+			 * 
+			 * 
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 빠르게 메뉴 바꾸면 에러남
+			 * 
+			 * 
+			 * */
+			private function changeGroupCodeAsConsecutiveIndex():void{
+					if(grCode == 555){
+						
+					}else if(grCode == 8318){
+						
+					}else{
+						if(!isMainStation && !isUserConfigured){ // 20161212
+	//						trace("xmlRoot.regionGroup.(Number(@grCode)) ==== "+ XML(xmlRoot.regionGroup.(Number(@grCode) == grCode+'')).childIndex());
+							trace("grCode ==== " + grCode);
+							grCode = XML(xmlRoot.regionGroup.(Number(@grCode) == grCode+'')).childIndex();
+						}
+					}
+			}
+			
+			/**
+			 * 
+			 * str_urlReq = SHRT.RDPS_MOS T3H 201603150000 5 isMulti
+			 * 
+			 * */
+			private function LoadMultipleXML():void{
+				var multiLoader:URLMultiLoader = new URLMultiLoader();
+				//단기 종합차트
+				if(isVSRT){
+					multiLoader.addURLRequest("t1h",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","T1H"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("rn1",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","RN1"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("vis",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","VIS"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("sky",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SKY"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("reh",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","REH"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("pty",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","PTY"),'FULLPATH_EXT',true)));
+					multiLoader.addURLRequest("wsd",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","WSD"),'FULLPATH_EXT',true)));			
+					multiLoader.addURLRequest("sn1",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SN1"),'FULLPATH_EXT',true)));			
+				}else if(isSHRT){
+					//DEPRECATED  subtitute sn3 for sn6
+//					multiLoader.addURLRequest("sn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SN6"))));			
+					//DEPRECATED subtitute rn3 for rn6
+//					multiLoader.addURLRequest("rn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","RN6"))));			
+					/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					multiLoader.addURLRequest("sn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SN3"))));			
+					multiLoader.addURLRequest("rn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","RN3"))));			
+					/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					
+					multiLoader.addURLRequest("vis",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","VIS"))));			
+					multiLoader.addURLRequest("pop",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","POP"))));			
+					multiLoader.addURLRequest("t3h",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","T3H"))));			
+					multiLoader.addURLRequest("sky",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SKY"))));			
+					multiLoader.addURLRequest("reh",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","REH"))));			
+					multiLoader.addURLRequest("pty",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","PTY"))));
+					multiLoader.addURLRequest("wsd",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","WSD"))));			
+//					var req_POP:URLRequest =  new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","POP")));			
+//					multiLoader.addURLRequest("pop",req_POP); 
+					
+				}else if(isMEDM){
+					multiLoader.addURLRequest("pop",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","POP"))));			
+
+					multiLoader.addURLRequest("mmx",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","MMX"))));			
+					multiLoader.addURLRequest("rn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","R12"))));			
+					multiLoader.addURLRequest("sn3",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","S12"))));			
+					multiLoader.addURLRequest("sky",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","SKY"))));			
+					multiLoader.addURLRequest("pty",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","PTY"))));			
+					multiLoader.addURLRequest("vis",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","VIS"))));			
+					multiLoader.addURLRequest("reh",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","REH"))));			
+					multiLoader.addURLRequest("wsd",new URLRequest(CommonUtil.getInstance().getTimeseriesDataPath(str_urlReq.replace("ALL","WSD"))));			
+				}
+				multiLoader.addEventListener(Event.COMPLETE, multipleXMLLoadedAtOnce);
+				multiLoader.addEventListener(IOErrorEvent.IO_ERROR, xmlLoadFailed);
+				multiLoader.load();			
+			}	
+			
+			
+			//adios
+			private function nullifyAllVariables():void{
+				if(list_reh)list_reh = null;
+				if(list_pop)list_pop = null;
+				if(list_rn3)list_rn3 = null;
+				if(list_sn3)list_sn3 = null;
+				if(list_wsd)list_wsd = null;
+				if(list_sky)list_sky = null;
+				if(list_pty)list_pty = null;
+				if(list_t3h)list_t3h = null;
+				if(list_vis)list_vis = null;
+			}
+			
+			//nullifyAllVariables 
+			//nullifyAllVariables 
+			//nullifyAllVariables 
+			private function multipleXMLLoadedAtOnce(e:Event):void{
+				//adios				
+				nullifyAllVariables();
+				//adios				
+				var seriesData:Object = (e.target as URLMultiLoader).data;
+				if(isVSRT){
+					list_t3h = reorderListByVariables(new XML(seriesData['t1h'])); 
+					list_rn3 = reorderListByVariables(new XML(seriesData['rn1'])); 
+					list_vis = reorderListByVariables(new XML(seriesData['vis']));
+					list_sky = reorderListByVariables(new XML(seriesData['sky'])); 
+					list_reh = reorderListByVariables(new XML(seriesData['reh'])); 
+					list_pty = reorderListByVariables(new XML(seriesData['pty']));
+					list_wsd = reorderListByVariables(new XML(seriesData['wsd'])); 
+					list_sn3 = reorderListByVariables(new XML(seriesData['sn1'])); 
+				}else if(isSHRT){
+					list_pop = reorderListByVariables(new XML(seriesData['pop']));
+					list_t3h = reorderListByVariables(new XML(seriesData['t3h'])); 
+					list_rn3 = reorderListByVariables(new XML(seriesData['rn3'])); 
+					list_vis = reorderListByVariables(new XML(seriesData['vis']));
+					list_sky = reorderListByVariables(new XML(seriesData['sky'])); 
+					list_reh = reorderListByVariables(new XML(seriesData['reh'])); 
+					list_pty = reorderListByVariables(new XML(seriesData['pty']));
+					list_wsd = reorderListByVariables(new XML(seriesData['wsd'])); 
+					list_sn3 = reorderListByVariables(new XML(seriesData['sn3'])); 
+				}else if(isMEDM){
+					list_pop = reorderListByVariables(new XML(seriesData['pop']));
+					list_t3h = reorderListByVariables(new XML(seriesData['mmx']));
+					list_rn3 = reorderListByVariables(new XML(seriesData['rn3'])); 
+					list_sn3 = reorderListByVariables(new XML(seriesData['sn3'])); 
+					list_sky = reorderListByVariables(new XML(seriesData['sky'])); 
+					list_pty = reorderListByVariables(new XML(seriesData['pty']));
+					list_vis = reorderListByVariables(new XML(seriesData['vis']));
+					list_reh = reorderListByVariables(new XML(seriesData['reh'])); 
+					list_wsd = reorderListByVariables(new XML(seriesData['wsd'])); 
+				}
+				//adios
+				//그룹코드 인덱스변경시 xmlRoot로 찾음.
+				xmlRoot = list_t3h;
+				//me2016
+				if(xmlRoot.hasOwnProperty('@updatedOn')){
+					updatedOn = xmlRoot.@updatedOn;
+				}
+				
+				changeGroupCodeAsConsecutiveIndex();
+				
+				stations = list_t3h.regionGroup[grCode];
+				dateOfIssue = list_t3h.@issuedAt;
+				
+				basedOn = CommonUtil.getInstance().getBasedOnStringMan(doFxxkingStuff()); //getBasalModel(); //BEST_MERG 2016
+				////////////////
+				////////////////
+				drawTimeseries();
+				////////////////
+				////////////////
+			}
+			
+			
+			private function reorderListByVariables(obj:XML, isBestMulti:Boolean=false):XML{
+				
+				if(isMainStation){
+					return getMainStations(obj);
+				}else if(isUserConfigured){
+					return getUserConfiguredStations(obj);
+				}else{
+					return obj;
+				}
+			}
+			
+			//
+			// xml clone() 생성
+			// xml 원본 grCode=8318 인 지역그룹 삭제
+			// xml 복사본 grCode=8318 그룹내의 stnNo에 매칭되는  원본 XML station을 그룹[0]에 추가.
+			// grCode를 0으로 변경!!
+/**			private function getMainStations(xmlObj:XML):XML{
+				var xmlObjCopy:XML = xmlObj.copy();
+				grCode =  0 ;
+				xmlObj.regionGroup[0].@grName = (!isPYEONGCHANG)? '주요 도시' : '주요 지점';
+				if(isPYEONGCHANG){		
+					
+					var length_groupX:int = XML(xmlObjCopy.regionGroup.(@grCode=='8318')).children().length();
+//					var length_groupX:int = XML(xmlObjCopy.regionGroup[0]).children().length();
+					
+					for(var j:int=length_groupX-1; j >=0;j--){
+						delete xmlObj.regionGroup[0].stn[j];
+					}
+					
+					for(var i:uint=0; i<length_groupX; i++){
+						var stnCode:String = XML(xmlObjCopy.regionGroup.(@grCode=='8318').stn[i]).@stnNo;
+//						var stnCode:String = XML(xmlObjCopy.regionGroup[0].stn[i]).@stnNo;
+						xmlObj.regionGroup[0].stn[i] = xmlObj..stn.(@stnNo==stnCode);
+					}
+				}
+				return xmlObj;
+			}
+*/			  
+			// mapper에 주요지점 정의하면 XMLOutputter에서 데이터 생산하니까 그냥 그대로 쓰자 ㅎ
+			private function getMainStations(xmlObj:XML):XML{
+				grCode =  0 ;
+				return xmlObj;
+			}
+			
+			//기존 현업
+//			private function getMainStations(xmlObj:XML):XML{
+//				var mainStations:uint = 5;
+//				trace('getMainStations(xmlObj):return XML')
+////				grCode = (!isPYEONGCHANG)? 0 : 3501;
+//				var xmlObjCopy:XML = xmlObj.copy();
+//				grCode =  0 ;
+//				xmlObj.regionGroup[0].@grName = (!isPYEONGCHANG)? '주요 도시' : '주요 지점';
+//				if(isPYEONGCHANG){		
+//					var length_groupX:int = XML(xmlObj.regionGroup[0]).children().length();
+//					for(var j:int=length_groupX-1; j >=mainStations;j--){
+//						delete xmlObj.regionGroup[0].stn[j];
+//						trace('remove idx at ' + j)
+//					}
+//					xmlObj.regionGroup[0].stn[0] = xmlObj.regionGroup[0].stn[0] //알펜시아 스키점프125-출발
+//					xmlObj.regionGroup[0].stn[1] = xmlObj.regionGroup[1].stn[0] //알펜시아 슬라이딩-출발
+//					xmlObj.regionGroup[0].stn[2] = xmlObj.regionGroup[2].stn[0] //용평 알파인대회전-출발
+//					xmlObj.regionGroup[0].stn[3] = xmlObj.regionGroup[3].stn[0] //보광 크로스-출발
+//					xmlObj.regionGroup[0].stn[4] = xmlObj.regionGroup[4].stn[0] //정선 알파인활강-출발
+//				}
+//				return xmlObj;
+//			}
+			
+			private function getUserConfiguredStations(xmlObj:XML):XML{
+//				grCode = (!isPYEONGCHANG)? 0 : 3501;
+				grCode =  0;
+				xmlObj.regionGroup[0].@grName = (!isPYEONGCHANG)? '관심 지역' : '관심 지점';
+				var str:String='';
+				var length_groupX:int = XML(xmlObj.regionGroup[0]).children().length();
+				var xmlObjCopy:XML = xmlObj.copy()
+				for(var j:int=length_groupX-1; j >=0;j--){
+					str+= 'remove ['+ j + ']'+ XML(xmlObj.regionGroup[0].stn[j]).@stnName+ '!! \n';
+					delete xmlObj.regionGroup[0].stn[j];
+				}
+				for(var i:int=0; i<configuredStations.length; i++){
+					var groupNum:uint = configuredStations[i].grCode;
+					var stnNum:String = configuredStations[i].stnCode;
+					if(isMEDM && !isPYEONGCHANG){ //adios~ 개인화저장할때 스테이션코드만 저장하는게 아니라 지역코드도 같이함 중기는 인덱스로 조지면 안되고 그룹넘버로 뒤져야함!@!!!!!
+						xmlObj.regionGroup[0].stn[i] = xmlObjCopy.regionGroup.(@grCode==groupNum+'').stn.(@stnNo==stnNum); //본청 서울 
+					}else if(isPYEONGCHANG){ //adios~ 개인화저장할때 스테이션코드만 저장하는게 아니라 지역코드도 같이함 중기는 인덱스로 조지면 안되고 그룹넘버로 뒤져야함!@!!!!!
+						xmlObj.regionGroup[0].stn[i] = xmlObjCopy.regionGroup.(Number(@grCode)==groupNum).stn.(@stnNo==stnNum); //본청 서울 
+					}else{
+						xmlObj.regionGroup[0].stn[i] = xmlObjCopy.regionGroup[groupNum].stn.(@stnNo==stnNum); //본청 서울 
+					}
+				}
+				return xmlObj;
+			}
+			
+			
+			private function setSelectedItemAsMainStation():void{
+				//var grCodeStr:String = grCodeNum.toString();
+				var currItem:Object = new Object();
+				currItem.isMEDM = isMEDM;
+				currItem.isPYEONGCHANG = isPYEONGCHANG;
+				currItem.baseModel = baseModelName;//.substr(0,4);
+				currItem.regionCode = (!isPYEONGCHANG)?grCodeNum.toString() : iPad4(grCodeNum,4);
+				defaultPageSetter.storeRegionCode(currItem,cb_setAsMain.selected);
+			}
+			
+			public function iPad4(regionCodeNum:int, padDigit:int):String {
+				if(regionCodeNum == 8318 || regionCodeNum==555){
+					return regionCodeNum+"";
+				}else{
+					var ret:String = ""+regionCodeNum;
+					while( ret.length < padDigit )
+						ret="0" + ret;
+					return ret;
+				}
+			}
+			
+			private function xmlLoadFailed(e:Event):void{
+				var cornerGutter:Number = 20; //haha
+				var topRightCorner:Alert =Alert.show("해당 XML 파일이 존재하지 않습니다. ","Failed to load timeseries XML data.");
+				topRightCorner.width = 270;
+				PopUpManager.centerPopUp(topRightCorner);
+				topRightCorner.x = this.width - topRightCorner.width - cornerGutter;
+				topRightCorner.y = 0;
+			}	
+			
+			
+			private function sliceXMLList(list:XMLList, beginIdx:int, endIdx:int):XMLList{
+				var newXMLList:XMLList = new XMLList();
+				var currIdx:int=0;
+				for(var i:int = beginIdx; i<=endIdx; i++){
+					newXMLList[currIdx++] =  XMLList[i];
+				}	
+				return newXMLList;
+			}
+			
+			/**
+			 * Sep 02, 2013
+			 * getMainStations()추가 
+			 * 
+			 * */
+			
+			private function nullifyPeakAndNadir():void{
+				max_axisVal = NaN;
+				min_axisVal = NaN;
+				max_prcp = NaN;
+			}
+			
+			private function resetPeak_n_nadir4DrawTimeseries():void{
+				//set NaN
+				nullifyPeakAndNadir();
+				if(isMultiSeries){
+					for(var i:int = 0; i<stations.children().length(); i++){
+						xmlListToObjectArray(list_t3h.regionGroup[grCode].stn[i].dataSet , true);
+						if(list_rn3) xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);
+						if(list_sn3) xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);
+					}
+				}else{
+					isTemperature = false;
+					isPrecipitation= false;
+					if(drawVSRTthruMEDM){
+						
+						if(str_typeOfChart=="T1H"||str_typeOfChart=="T3H"||str_typeOfChart=="MMX"){
+							isTemperature = true;
+						}else if(str_typeOfChart=="RN1"||str_typeOfChart=="RN3"||str_typeOfChart=="R12"||str_typeOfChart=="SN1"||str_typeOfChart=="SN3"||str_typeOfChart=="S12"){
+							isPrecipitation = true;
+						}
+						if(isTemperature){
+							if(mDictionary['VSRT']) seekMinMaxVal_singleElement( XML(mDictionary['VSRT'].regionGroup[grCode]) ) ;
+							if(mDictionary['SHRT']) seekMinMaxVal_singleElement( XML(mDictionary['SHRT'].regionGroup[grCode]) ) ;
+							if(mDictionary['MEDM']) seekMinMaxVal_singleElement( XML(mDictionary['MEDM'].regionGroup[grCode]) ) ;
+	//						seekMinMaxVal_singleElement(stations);
+						}else if(isPrecipitation){
+							if(mDictionary['VSRT']) seekMinMaxVal_singleElement(XML(mDictionary['VSRT'].regionGroup[grCode])) ;
+							if(mDictionary['SHRT']) seekMinMaxVal_singleElement(XML(mDictionary['SHRT'].regionGroup[grCode])) ;
+							if(mDictionary['MEDM']) seekMinMaxVal_singleElement(XML(mDictionary['MEDM'].regionGroup[grCode])) ;
+//							seekMinMaxVal_singleElement(stations);
+						}else{
+							doesntNeedAxisRangeAdjust = true;
+						}
+					}else{
+						seekMinMaxVal_singleElement(stations);
+						stations = xmlRoot.regionGroup[grCode]; 
+					}
+				}
+			} 
+			
+			
+			
+			/**
+			 * 
+			 * checkboxLegendItem도 동적으로 생성해야함!!!
+			 * */
+			private function drawSingleVarTimeseries():void{
+				trace("drawSingleVarTimeseries() begin:: ")
+				adjustChartVisibilityBeforeDrawing();
+				resetPeak_n_nadir4DrawTimeseries();
+				var is279hrs:Boolean = true;//only MEDM uses this var// 
+				chartArea.removeAllChildren();
+				
+				var chart:* = getChartInstance();
+				chartArea.addChild(chart);
+				
+				var seriesArray:Array=[];
+				//var stationNames:Array=[];
+				for(var i:int = 0; i<stations.children().length(); i++){
+					if(i==0) {
+						chart.dataProvider = stations.stn[i].dataSet;
+					}
+					var series:*= getSeriesType(i);
+					
+					series.yField="@val" 
+//					series.displayName= stations.stn[i].@stnName;
+					series.displayName= CommonUtil.getInstance().stripHyphensMan(stations.stn[i].@stnName);
+					
+					series.dataProvider = stations.stn[i].dataSet;
+					seriesArray.push(series);
+					
+					
+					if(isMEDM){
+						if(str_typeOfChart=="MMX"){
+							if(dateOfIssue.indexOf("12UTC")!=-1){ //12 UTC
+								chart.set12UTC_gridLines(isOddNum,(isMergedModel)? !isExistOnlyECMWF : is279hrs); //June 15, 2016
+								chart.axis_hor.labelFunction = chart.defineLabel_00UTC; 
+							}else{ // 00 UTC
+								chart.axis_hor.labelFunction = chart.defineLabel_00UTC; 
+								chart.set00UTC_gridLines(isOddNum,is279hrs);
+							}
+							
+							var is12UTC:Boolean = (dateOfIssue.indexOf("12UTC")!=-1)? true : false;
+							
+							chart.minMaxArr = xmlListToObjectArray(stations.stn[i].dataSet);	
+							chart.seperateMinMaxFromSeries(is12UTC);
+							chart.axis_ver.maximum = getMaxVal(true)
+							chart.axis_ver.minimum = getMinVal(true)
+								
+						}else {  
+							if(! is00UTC){ //12 UTC
+								chart.set12UTC_gridLines(isOddNum,!isExistOnlyECMWF);									
+							}else{ //00 UTC
+								chart.axis_hor.labelFunction = chart.defineLabel_00UTC; 
+								chart.set00UTC_gridLines(isOddNum,is279hrs);								
+							}
+						}
+						chart.topAxisRenderer.setStyle("labelAlign","right");
+						chart.bottomAxisRenderer.setStyle("labelAlign","right");
+					}else{ // VSRT || SHRT 
+						chart.setAlternateFill(is00UTC,isOddNum,isExistOnlyKWRF);
+					}
+					chart.topAxisRenderer.setStyle("showLabels",true);
+					chart.bottomAxisRenderer.setStyle("showLabels",true);
+				}
+				//////////////////////////
+				chart.series=seriesArray;
+				//////////////////////////
+				if(str_typeOfChart=='SKY'){
+					chart.axis_ver.maximum= stations.children().length() + 0.9;
+					chart.height = stations.children().length() * 38;
+					chart.setCloudAmount();
+				}else if(str_typeOfChart=='PTY'){
+					chart.axis_ver.maximum= stations.children().length();
+					chart.height = stations.children().length() * 44;
+					chart.addPTYSymbol();
+				}else if(str_typeOfChart=='WSD'){
+					chart.axis_ver.maximum= stations.children().length() * 7;
+					chart.height = stations.children().length() * 55;
+					chart.drawWindSymbol();
+				}
+				//리젠드 체크박스 선택 at load
+//				addCheckBoxLegendWithPrevStates();
+			}
+			
+			
+			
+			/**
+			 * 얘는 종합장만 처리하게끔 수정
+			 * */
+			private function drawTimeseries():void{
+				adjustChartVisibilityBeforeDrawing(); //
+				resetPeak_n_nadir4DrawTimeseries();
+				var is279hrs:Boolean = true;// ((baseModelName=='GDPS'|| baseModelName=='BEST') && isMEDM)? true : false; //doeJeon Oct2015
+				chartArea.removeAllChildren();
+				for(var i:int = 0; i<stations.children().length(); i++){
+					var lbl:Label = new Label();
+					lbl.setStyle("width","300");
+					lbl.setStyle("height","20");
+					lbl.setStyle("fontSize",15);
+					lbl.setStyle("fontWeight","bold");
+					lbl.truncateToFit = true;
+					var lbl_stnName:String = stations.stn[i].@stnName;
+					lbl_stnName = CommonUtil.getInstance().stripHyphensMan(lbl_stnName);
+//					var pattern:RegExp = /-/g;
+//					lbl_stnName = lbl_stnName.replace(pattern," ");
+//					if(lbl_stnName.indexOf("-")!=-1){
+//						lbl_stnName = lbl_stnName.replace("-"," ");
+//					}
+					lbl.text = (lbl_stnName+ " (" + stations.stn[i].@stnNo + ")" );
+					
+					var lblBox:HBox = new HBox();
+					lblBox.height = 20;
+					//					lblBox.setStyle("borderStyle","outset");
+					lblBox.setStyle("verticalAlign","middle");
+					lblBox.setStyle("horizontalGap",0);
+					lblBox.addChild(lbl);
+					
+					var chart:* = (isMEDM && isMultiSeries)? new QYUNA_MEDM_multiVars():getChartInstance();
+					
+					/////////////////////////////////////////////////////////////////////
+					if((isVSRT||isSHRT)&& isMultiSeries){
+						if(isVSRT)chart = new QYUNA_VSRT_multiVars();
+						else if(isSHRT)chart = new QYUNA_SHRT_multiVars();
+					} 
+					
+					if(isMultiSeries){
+						if(isVSRT){
+							QYUNA_VSRT_multiVars(chart).t3hLine.dataProvider = xmlListToObjectArray(list_t3h.regionGroup[grCode].stn[i].dataSet );
+							QYUNA_VSRT_multiVars(chart).axis_ver.maximum= getMaxVal(true,false,4);
+							QYUNA_VSRT_multiVars(chart).axis_ver.minimum = getMinVal(true,-1);
+							QYUNA_VSRT_multiVars(chart).axis_ver.interval = Constants.INTERVAL_TEMPERATURE;
+							
+							QYUNA_VSRT_multiVars(chart).visLine.dataProvider = xmlListToObjectArray(list_vis.regionGroup[grCode].stn[i].dataSet);
+							QYUNA_VSRT_multiVars(chart).rehColumn.dataProvider = xmlListToObjectArray(list_reh.regionGroup[grCode].stn[i].dataSet);
+							//6hrs 누적 에어리어 시리즈에서 3시간으로 변경. => 다시 1시간 컬럼바로 변경(중기처럼!!!)  
+//							QYUNA_VSRT_multiVars(chart).rn3Column.dataProvider = xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,true,false,true); //6시간 강수
+//							QYUNA_VSRT_multiVars(chart).sn3Column.dataProvider = xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,true,false,true);//6시간 강수이므로 첫번째 데이터 0 필요없삼
+							QYUNA_VSRT_multiVars(chart).rn3Column.dataProvider = xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true); //6시간 강수
+							QYUNA_VSRT_multiVars(chart).sn3Column.dataProvider = xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);//6시간 강수이므로 첫번째 데이터 0 필요없삼
+							
+							QYUNA_VSRT_multiVars(chart).axis_ver_mMetres.maximum = getMaxPrcp(true);
+							QYUNA_VSRT_multiVars(chart).axis_ver_mMetres.interval = Constants.INTERVAL_PRECIPITATION;
+							QYUNA_VSRT_multiVars(chart).setAlternateFill(is00UTC,isOddNum,true); //AUG, 2013
+						
+						}else if(isSHRT){
+							QYUNA_SHRT_multiVars(chart).t3hLine.dataProvider = xmlListToObjectArray(list_t3h.regionGroup[grCode].stn[i].dataSet );
+							QYUNA_SHRT_multiVars(chart).axis_ver.maximum= getMaxVal(true,false,4);
+							QYUNA_SHRT_multiVars(chart).axis_ver.minimum = getMinVal(true,-1);
+							QYUNA_SHRT_multiVars(chart).axis_ver.interval = Constants.INTERVAL_TEMPERATURE;
+							
+							QYUNA_SHRT_multiVars(chart).popColumn.dataProvider = xmlListToObjectArray(list_pop.regionGroup[grCode].stn[i].dataSet);
+							QYUNA_SHRT_multiVars(chart).visLine.dataProvider = xmlListToObjectArray(list_vis.regionGroup[grCode].stn[i].dataSet);
+							QYUNA_SHRT_multiVars(chart).rehColumn.dataProvider = xmlListToObjectArray(list_reh.regionGroup[grCode].stn[i].dataSet);
+							//6hrs 누적 에어리어 시리즈에서 3시간으로 변경. => 다시 1시간 컬럼바로 변경(중기처럼!!!)  
+//							QYUNA_SHRT_multiVars(chart).rn3Column.dataProvider = xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,true,false,true); //6시간 강수
+//							QYUNA_SHRT_multiVars(chart).sn3Column.dataProvider = xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,true,false,true);//6시간 강수이므로 첫번째 데이터 0 필요없삼
+							QYUNA_SHRT_multiVars(chart).rn3Column.dataProvider = xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true); //6시간 강수
+							QYUNA_SHRT_multiVars(chart).sn3Column.dataProvider = xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);//6시간 강수이므로 첫번째 데이터 0 필요없삼
+							
+							QYUNA_SHRT_multiVars(chart).axis_ver_mMetres.maximum = getMaxPrcp(true);
+							QYUNA_SHRT_multiVars(chart).axis_ver_mMetres.interval = Constants.INTERVAL_PRECIPITATION;
+							QYUNA_SHRT_multiVars(chart).setAlternateFill(is00UTC,isOddNum); //AUG, 2013
+						
+							
+						}else if(isMEDM){ 
+							////////////////////////////주간 종합 차트 /////////////////////////////////////
+							var is12UTC:Boolean = (dateOfIssue.indexOf("12UTC")!=-1)? true : false;
+//							QYUNA_MEDM_multiVars(chart).minMaxArr = xmlListToObjectArray(list_t3h.regionGroup[grCode].stn[i].dataSet,true);	
+//							QYUNA_MEDM_multiVars(chart).isolatesMinMaxSeries(is12UTC);
+							QYUNA_MEDM_multiVars(chart).minMaxArr = xmlListToObjectArray(list_t3h.regionGroup[grCode].stn[i].dataSet,true);	
+							QYUNA_MEDM_multiVars(chart).stripSlashes();
+							QYUNA_MEDM_multiVars(chart).axis_ver.interval =Constants.INTERVAL_TEMPERATURE;
+							/*							
+							하단 내부펑션으로 대체
+							*/
+							//adios
+							if(!is12UTC){ 
+								QYUNA_MEDM_multiVars(chart).set00UTC_gridLines(isOddNum,is279hrs);
+							}else{ // 12 UTC
+								QYUNA_MEDM_multiVars(chart).set12UTC_gridLines(isOddNum,is279hrs);
+							}
+							QYUNA_MEDM_multiVars(chart).axis_ver.maximum = getMaxVal(true) ;
+							QYUNA_MEDM_multiVars(chart).axis_ver.minimum = getMinVal(true);
+							
+							//xmlListToObjectArray(3번째 파라미터 수정 ㅡ,.ㅡ  true --> false  얘가 데이터 첫번째값 0으로 강제로 바꿈.. 주간 차팅은 인터폴레이션 필요없음 컬럼차트임!!!) Apr 2013
+							QYUNA_MEDM_multiVars(chart).rn3Column.dataProvider = xmlListToObjectArray(list_rn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);
+							QYUNA_MEDM_multiVars(chart).sn3Column.dataProvider = xmlListToObjectArray(list_sn3.regionGroup[grCode].stn[i].dataSet,false,false,false,true);
+							//adios
+							QYUNA_MEDM_multiVars(chart).axis_ver_mMetres.maximum = getMaxPrcp(true);
+							QYUNA_MEDM_multiVars(chart).axis_ver_mMetres.interval = Constants.INTERVAL_PRECIPITATION;
+							////////////////////////////주간 종합 차트 /////////////////////////////////////
+							
+							QYUNA_MEDM_multiVars(chart).visLine.dataProvider = xmlListToObjectArray(list_vis.regionGroup[grCode].stn[i].dataSet);
+							QYUNA_MEDM_multiVars(chart).rehColumn.dataProvider = xmlListToObjectArray(list_reh.regionGroup[grCode].stn[i].dataSet);
+							
+							QYUNA_MEDM_multiVars(chart).popColumn.dataProvider = xmlListToObjectArray(list_pop.regionGroup[grCode].stn[i].dataSet);
+							
+						}
+						
+						//Precipitation TYpe + CLOUD COVER
+						//Precipitation TYpe + CLOUD COVER
+						//Precipitation TYpe + CLOUD COVER
+						var prcp;
+						if(!isMEDM){
+							prcp = new PrcpTypeNCloud();
+						}else{
+							prcp= new PrcpTypeNCloud_MEDM();
+						}
+						prcp.dataProvider = xmlListToObjectArray(list_pty.regionGroup[grCode].stn[i].dataSet);
+						prcp.axis_hor_bottom.dataProvider = xmlListToObjectArray(list_sky.regionGroup[grCode].stn[i].dataSet);
+						prcp.addPTYSymbol();
+						
+						// wind
+						// wind
+						// wind
+						var wind:WSD = new WSD();
+						wind.dataProvider = xmlListToObjectArray(list_wsd.regionGroup[grCode].stn[i].dataSet,false);
+						
+						
+						if(isMEDM){
+							prcp.canvas.removeAllChildren();
+							prcp.addPTYSymbol(true);
+//							prcp.setStyle("gutterRight",35);
+							
+							prcp.topAxisRenderer.setStyle("labelAlign","right");
+							prcp.bottomAxisRenderer.setStyle("labelAlign","right");
+							
+//prcp.topAxisRenderer.setStyle("canDropLabels","false");
+							
+							var is12UTC:Boolean = (dateOfIssue.indexOf("12UTC")!=-1)? true : false;
+							
+							if(!is12UTC){ //00 UTC 이면 ..    0425, 2013  수정   12랑 00이랑 체인지여
+								prcp.set00UTC_gridLines(isOddNum,is279hrs);
+								prcp.axis_hor.labelFunction = prcp.defineLabel_00UTC; 
+//								prcp.topAxisRenderer.setStyle("labelAlign","right");
+//								prcp.bottomAxisRenderer.setStyle("labelAlign","right");
+								wind.set00UTC_gridLines(isOddNum,is279hrs);
+								wind.axis_hor.labelFunction = prcp.defineLabel_00UTC; 
+								wind.bottomAxisRenderer.setStyle("labelAlign","right");
+							}else{ //12 UTC
+								prcp.set12UTC_gridLines(isOddNum,is279hrs);
+//								prcp.topAxisRenderer.setStyle("labelAlign","right");
+//								prcp.bottomAxisRenderer.setStyle("labelAlign","right");
+								wind.set12UTC_gridLines(isOddNum,is279hrs);
+								wind.topAxisRenderer.setStyle("labelAlign","right");
+							}
+							
+						}else{
+							prcp.setAlternateFill(is00UTC,isOddNum,isVSRT);
+							wind.setAlternateFill(is00UTC,isOddNum,isVSRT);
+						}
+						
+					}
+					
+					// set top n bottom lable visiblity  + calc gutterTop(bottom)
+					// set top n bottom lable visiblity  + calc gutterTop(bottom)
+					// set top n bottom lable visiblity  + calc gutterTop(bottom)
+					//is Multi
+					if(isMultiSeries){
+						prcp.setStyle("gutterLeft",70);
+						wind.setStyle("gutterLeft",70);
+						
+						if(stations.children().length()==1){
+							prcp.topAxisRenderer.setStyle("showLabels",true);
+							prcp.setStyle("gutterTop",25);// like a cirrus
+							prcp.topAxisRenderer.setStyle("labelGap",-10);
+							prcp.height+= 25;//prcp.getStyle("gutterTop");
+							
+							chart.bottomAxisRenderer.setStyle("showLabels",false);
+							chart.height+=45;
+								
+//							wind.bottomAxisRenderer.setStyle("showLabels",true);
+//							wind.bottomAxisRenderer.setStyle("labelGap",-30);
+//							wind.setStyle("gutterBottom", 58);
+//							wind.height+= 55;//wind.getStyle("gutterBottom");
+							
+							////멀티 첨이랑 끝
+							////첨이랑 끝
+						}else if(i==0 || i%2==0){
+							prcp.topAxisRenderer.setStyle("showLabels",true);
+							prcp.setStyle("gutterTop",25);// like a cirrus
+							prcp.topAxisRenderer.setStyle("labelGap",-10);
+							prcp.height+= 25;//prcp.getStyle("gutterTop");
+						}else if(stations.children().length()==2 && i==(stations.children().length()-1)){
+							prcp.topAxisRenderer.setStyle("showLabels",true);
+							prcp.setStyle("gutterTop",25);// like a cirrus
+							prcp.topAxisRenderer.setStyle("labelGap",-10);
+							prcp.height+= 25;//prcp.getStyle("gutterTop");
+//							wind.bottomAxisRenderer.setStyle("showLabels",true);
+//							wind.bottomAxisRenderer.setStyle("labelGap",-30);
+//							wind.setStyle("gutterBottom", 58);
+//							wind.height+= 55;//wind.getStyle("gutterBottom");
+						}
+						chart.setStyle("paddingTop",-13);// like a cirrus
+//						if(!isMEDM){
+							wind.setStyle("paddingTop",-13); //Mar2014
+//						}
+						////첨이랑 끝
+						////첨이랑 끝
+						
+						// set top n bottom lable visiblity  + calc gutterTop(bottom)
+						// set top n bottom lable visiblity  + calc gutterTop(bottom)
+						// set top n bottom lable visiblity  + calc gutterTop(bottom)
+						
+						//single var
+					}
+					
+					
+					if(isMultiSeries){
+						if(isPYEONGCHANG){
+							chartArea.addChild(lblBox);
+						}else{
+							chartArea.addChild(lbl);
+						}
+						
+						chartArea.addChild(prcp);
+						chartArea.addChild(chart);
+//						if(!isMEDM){
+							chartArea.addChild(wind);
+//						}
+						lbl.setStyle("paddingLeft",chart.getStyle("gutterLeft")-3);		
+					}
+					
+				}
+				
+				box_issuedDate_n_basedOn.visible = true;
+				//리젠드 체크박스 선택 at load
+				addCheckBoxLegendWithPrevStates();
+			}
+//		
+			
+			private function checkWhetherVeticalTicksOnWeightChartAreProperlyAligned(typeStr:String):Boolean{
+				return (typeStr=="T3H" || typeStr=="SKY" || typeStr=="REH")? false : true
+			}
+			
+			
+			private function selectSeriesAllorNone(chart:Object, have2remove:Boolean):void{
+				if(have2remove){
+					if(chart.hasOwnProperty("canvas_max")) chart.canvas_max.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_min")) chart.canvas_min.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_t3h")) chart.canvas_t3h.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_reh")) chart.canvas_reh.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_pop")) chart.canvas_pop.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_r12")) chart.canvas_r12.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_s12")) chart.canvas_s12.removeAllChildren();	
+					if(chart.hasOwnProperty("canvas_vis")) chart.canvas_vis.removeAllChildren();	
+				}
+			}
+			
+			
+			public function DJFShowDataTipMan(seriesId:String,  isVisible:Boolean):void{
+//				CommonUtil.getInstance().showAlertDialogOnScreenTop(isVSRT + ' / ' + isSHRT + ' / ' + isMEDM + '\nstr_typeOfChart is: '+str_typeOfChart,'isVSRT/isSHRT/isMEDM [DJFShowDataTipMan()]');
+				for each(var obj:DisplayObject in this.chartArea.getChildren()){
+					if(obj instanceof ChartBase){
+						var chart:* = obj;	
+//						if(chart instanceof DFS_MMX_Merged){
+//							var currModelStr:String; // = (currItem=='cb_gdps')? 'gdps' : 'ecmw' ;
+//							switch(seriesId){
+////								case "cb_best" : currModelStr = 'best' ; break;
+////								case "cb_gdps" : currModelStr = 'gdps' ; break;
+////								case "cb_ecmw" : currModelStr = 'ecmw' ; break;
+////								case "cb_epsg" : currModelStr = 'epsg' ; break;
+//							}
+//							chart.showMinMaxLabels(currModelStr,isVisible);
+//							chart.showMinMaxLabels(seriesId,isVisible);
+//						}else{
+//							chart.addAnnotationElements(getSeriesByID(chart,currItem), isVisible);
+							chart.addAnnotationElements(seriesId, isVisible);
+//						}					
+					}
+				}
+			}	
+			
+			public function dynamicallyChangeSeriesRenderer2(currItem:String,  isVisible:Boolean):void{
+				trace('dynamicallyChangeSeriesRenderer2(currItem, isVisible)  ' + currItem + ' / ' + isVisible)
+				if(isMultiSeries){
+					var str:String='';
+					for each(var obj:DisplayObject in this.chartArea.getChildren()){
+						var multi:*;
+						if(obj is QYUNA_SHRT_multiVars){  
+							multi = QYUNA_SHRT_multiVars(obj);
+							
+							if(currItem=='cb_all'){
+								selectSeriesAllorNone(multi, true)
+								if(isVisible){
+									addAnnotationElements_T3H(QYUNA_SHRT_multiVars(multi).t3hLine, multi);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rehColumn, multi);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).popColumn, multi);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).visLine, multi);
+//									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rn3Column, multi ,true);
+//									addAnnotationElements(QYUNA_SHRT_multiVars(multi).sn3Column, multi ,true);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rn3Column, multi);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).sn3Column, multi);
+								}
+								
+							}else if(currItem=='cb_t3h'){
+								addAnnotationElements_T3H(QYUNA_SHRT_multiVars(multi).t3hLine, multi, isVisible);
+							}else if(currItem=='cb_reh'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rehColumn, multi);
+								}else{
+									multi.canvas_reh.removeAllChildren();
+								}
+							}else if(currItem=='cb_vis'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).visLine, multi);
+								}else{
+									multi.canvas_vis.removeAllChildren();
+								}	
+							}else if(currItem=='cb_pop'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).popColumn, multi);
+								}else{
+									multi.canvas_pop.removeAllChildren();
+								}	
+							}else if(currItem=='cb_r12'){
+								if(isVisible){
+//									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rn3Column, multi, true);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).rn3Column, multi);
+								}else{
+									multi.canvas_r12.removeAllChildren();
+								}
+							}else if(currItem=='cb_s12'){
+								if(isVisible){
+//									addAnnotationElements(QYUNA_SHRT_multiVars(multi).sn3Column, multi, true);
+									addAnnotationElements(QYUNA_SHRT_multiVars(multi).sn3Column, multi);
+								}else{
+									multi.canvas_s12.removeAllChildren();
+								}
+							}
+							
+						}else if(obj is QYUNA_VSRT_multiVars){
+							multi = QYUNA_VSRT_multiVars(obj);
+							
+							if(currItem=='cb_all'){
+								selectSeriesAllorNone(multi, true)
+								if(isVisible){
+									addAnnotationElements_T3H(QYUNA_VSRT_multiVars(multi).t3hLine, multi);
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rehColumn, multi);
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).visLine, multi);
+//									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rn3Column, multi ,true);
+//									addAnnotationElements(QYUNA_VSRT_multiVars(multi).sn3Column, multi ,true);
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rn3Column, multi );
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).sn3Column, multi );
+								}
+								
+							}else if(currItem=='cb_t3h'){
+								addAnnotationElements_T3H(QYUNA_VSRT_multiVars(multi).t3hLine, multi, isVisible);
+							}else if(currItem=='cb_reh'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rehColumn, multi);
+								}else{
+									multi.canvas_reh.removeAllChildren();
+								}
+							}else if(currItem=='cb_vis'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).visLine, multi);
+								}else{
+									multi.canvas_vis.removeAllChildren();
+								}	
+							}else if(currItem=='cb_r12'){
+								if(isVisible){
+//									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rn3Column, multi, true);
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).rn3Column, multi);
+								}else{
+									multi.canvas_r12.removeAllChildren();
+								}
+							}else if(currItem=='cb_s12'){
+								if(isVisible){
+//									addAnnotationElements(QYUNA_VSRT_multiVars(multi).sn3Column, multi, true);
+									addAnnotationElements(QYUNA_VSRT_multiVars(multi).sn3Column, multi);
+								}else{
+									multi.canvas_s12.removeAllChildren();
+								}
+							}
+							
+						}else if(obj is QYUNA_MEDM_multiVars){
+							multi = QYUNA_MEDM_multiVars(obj);
+							if(currItem=='cb_all'){
+								trace('hi there')
+								selectSeriesAllorNone(multi, true)
+								if(isVisible){
+//									addAnnotationElements(QYUNA_MEDM_multiVars(multi).minLine, multi, false,  QYUNA_MEDM_multiVars(multi).rn3Column);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).maxLine, multi, false,  QYUNA_MEDM_multiVars(multi).rn3Column);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).popColumn, multi);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).rn3Column, multi);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).sn3Column, multi);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).visLine, multi);
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).rehColumn, multi);
+								}
+								
+								
+							}else if(currItem=='cb_pop'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).popColumn, multi);
+								}else{
+									multi.canvas_pop.removeAllChildren();
+								}		
+								
+							}else if(currItem=='cb_reh'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).rehColumn, multi);
+								}else{
+									multi.canvas_reh.removeAllChildren();
+								}
+							}else if(currItem=='cb_vis'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).visLine, multi);
+								}else{
+									multi.canvas_vis.removeAllChildren();
+								}	
+							}else if(currItem=='cb_max'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).maxLine, multi, false,  QYUNA_MEDM_multiVars(multi).rn3Column);
+								}else{
+									multi.canvas_max.removeAllChildren();
+								}
+							}else if(currItem=='cb_min'){
+								if(isVisible){
+//									addAnnotationElements(QYUNA_MEDM_multiVars(multi).minLine, multi, false,  QYUNA_MEDM_multiVars(multi).rn3Column);
+								}else{
+									multi.canvas_min.removeAllChildren();
+								}
+							}else if(currItem=='cb_r12'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).rn3Column, multi);
+								}else{
+									multi.canvas_r12.removeAllChildren();
+								}
+							}else if(currItem=='cb_s12'){
+								if(isVisible){
+									addAnnotationElements(QYUNA_MEDM_multiVars(multi).sn3Column, multi);
+								}else{
+									multi.canvas_s12.removeAllChildren();
+								}
+							}
+							
+						}
+					}
+				}else{
+//					CommonUtil.getInstance().showAlertDialogOnScreenTop(isVSRT + ' / ' + isSHRT + ' / ' + isMEDM + '\nstr_typeOfChart is: '+str_typeOfChart,'isVSRT / isSHRT / isMEDM');
+				}
+			}
+			
+			
+			
+			/**
+			 * 단기 중기 구분되어있는 애들  pop sky pty ㅣㅇ런애들 화깅ㄴ
+			 * */
+			private var isTemperature:Boolean=false;
+			private var isPrecipitation:Boolean=false;
+			
+			private function getChartInstance():*{
+				var chart:*;
+				if(str_typeOfChart=="T1H"||str_typeOfChart=="T3H"||str_typeOfChart=="MMX"){
+//					chart = (!isMEDM)? new DFS_T3H() : new DFS_MMX_Merged();
+					chart = (!isMEDM)? new SHRT_T3H() : new MEDM_MMX();
+				}else if(str_typeOfChart=="RN1"||str_typeOfChart=="RN3"||str_typeOfChart=="R12"){
+					chart = (!isMEDM)? new SHRT_RN3() : new MEDM_R12();
+				}else if(str_typeOfChart=="SN1"||str_typeOfChart=="SN3"||str_typeOfChart=="S12"){
+					chart = (!isMEDM)? new SHRT_SN3() : new MEDM_S12();
+				}else if(str_typeOfChart=="VIS"){
+					chart = (!isMEDM)? new SHRT_VIS() : new MEDM_VIS();
+				}else if(str_typeOfChart=="REH"){
+					chart = (!isMEDM)? new SHRT_REH() : new MEDM_REH();
+				}else if(str_typeOfChart=="SKY"){
+					chart = (!isMEDM)? new SHRT_SKY():new MEDM_SKY();
+				}else if(str_typeOfChart=="PTY"){
+					chart = (!isMEDM)?new SHRT_PTY():new MEDM_PTY();
+				}else if(str_typeOfChart=="WSD"){
+					chart = (!isMEDM)?new SHRT_WSD() : new MEDM_WSD();
+				}else if(str_typeOfChart="POP"){
+					chart = (!isMEDM)? new SHRT_POP() : new MEDM_POP();
+				}
+				return chart;
+			}
+			
+			private function getSeriesType(indexNum:int):*{
+				var series:*;
+				if(str_typeOfChart=="VIS" || str_typeOfChart=="T3H" ||str_typeOfChart=="T1H"|| str_typeOfChart=="MMX" ||str_typeOfChart=="REH"){
+					series = new LineSeries();
+					series.setStyle("lineStroke", new Stroke(CommonUtil.getInstance().seriesColorArr[indexNum].color,1,1));
+					series.setStyle("stroke", new Stroke(CommonUtil.getInstance().seriesColorArr[indexNum].color, 2, 0.7 ));  //circleitem line color
+					series.setStyle("fill", 0xFFFFFF); 					//circleitem fill color
+					series.setStyle("radius", 3); 
+					series.setStyle("adjustedRadius", 2); 
+					series.setStyle("itemRenderer", new ClassFactory(CircleItemRenderer)); 
+				}else if(str_typeOfChart=="PTY" ||str_typeOfChart=="SKY" ||str_typeOfChart=="WSD" ){	
+					series = new LineSeries();
+					series.visible = false;
+				}else{
+					series = new ColumnSeries();
+					series.setStyle("fill", CommonUtil.getInstance().seriesColorArr[indexNum].color);
+					series.setStyle("columnWidthRatioadius", 1); 
+//					series.setStyle("itemRenderer", new ClassFactory(ColumnRenderer4MergedModel	)); 
+				}
+				return series;
+			}
+			
+			
+			private function iPad2(num:Number):String{
+				return (num < 10)? '0'+num : num+'';
+			}
+			
+			
+			private function seekMinMaxVal_singleElement(currList:XML):void{
+				if(str_typeOfChart!='VIS' && str_typeOfChart!='T1H' && str_typeOfChart!='T3H' && str_typeOfChart!='MMX' && str_typeOfChart!='RN3' && str_typeOfChart!='SN3' && str_typeOfChart!='RN6' && str_typeOfChart!='SN6' && str_typeOfChart!='R12' && str_typeOfChart!='S12' && str_typeOfChart!='RN1' && str_typeOfChart!='SN1'){
+					//Alert.show(str_typeOfChart,'seekMinMaxVal_singleElement()')
+					doesntNeedAxisRangeAdjust = true;
+					return ;
+				}else{
+					doesntNeedAxisRangeAdjust = false;
+					isKindOfPrepitation = (str_typeOfChart=='T1H' ||str_typeOfChart=='T3H' || str_typeOfChart=='MMX')? false : true;
+				}
+				trace("seekMinMaxVal_singleElement() isKindOfPrepitation: " + isKindOfPrepitation)
+				var arr_4assignMaxMin:Array = new Array();
+				for each(var element:XML in currList..@val){
+					arr_4assignMaxMin.push(Number(element));
+				}
+				var maxVal:Number =  Math.max.apply(null, arr_4assignMaxMin)
+				var minVal:Number =   Math.min.apply(null, arr_4assignMaxMin)
+				if(!isNaN(maxVal) && !isNaN(minVal) && !isKindOfPrepitation){ // != Infinity  && minVal != Infinity
+					assignMaxMin(maxVal, minVal);
+				}else if(!isNaN(maxVal) && !isNaN(minVal) && isKindOfPrepitation){
+					assignMaxPrcp(maxVal);
+				}
+			}
+			
+			
+			//isKindOfPrcp 추가 Mar 2014  강수 적설 맥스값 뽑아서 지점간 축 맥스 민 인터벌 모두 동일하게 
+			public  function xmlListToObjectArray(xmlList:XMLList, isTemperature:Boolean = false, is6Hrs_accumulated=false, isSN6inPMOS:Boolean=false,isKindOfPrcp:Boolean=false):Array{
+				//trace("[is6Hrs_accumulated]"+is6Hrs_accumulated +'\n[isSN6inPMOS]'+isSN6inPMOS)
+//				trace("b4 sliceXMLList() : " + xmlList.length())
+//				if(isVSRT) xmlList = sliceXMLList(xmlList,0,28);
+//				trace("afetr sliceXMLList() : " + xmlList.length())
+				var arr:Array = new Array();
+				var arr_4assignMaxMin:Array = new Array();
+				var cnt:Number = 0; // 0~20 .. 0일 떄 미싱밸류 들어오면 에어리어 시리즈 인터폴레이션 땜에 nodeValue=0 할당
+				for each(var xml:XML in xmlList){
+					var childs:XMLList = xml.attributes(); 
+					var obj:Object = new Object();
+					for each(var child:XML in childs){
+						var nodeName:String = child.name().toString();
+						var nodeValue:Number =  Number(child.(nodeName));//R12, S12 에어리어 시리즈 인터폴레이션 땜에 데이터를 뉴메릭으로 랩핑
+						var nodeVal_str:String = child.(nodeName).toString();
+						obj[nodeName] =(nodeName=='lst')? nodeVal_str:nodeValue;			            	
+						
+						//멀티차트 기온 민맥스 및 최고 강수 뽑기					
+						if((isTemperature || isKindOfPrcp) && nodeName=='val'){
+							arr_4assignMaxMin.push(nodeValue);
+						}
+						//멀티차트 기온 민맥스 뽑기					
+					}
+//					if(!isVSRT){
+						if(is6Hrs_accumulated && cnt==0){
+							var pseudoData_pre:Object = new Object();
+							pseudoData_pre.lst = (obj.lst).substring(0,2) + iPad2(Number((obj.lst).substring(2,4)) -3);
+							pseudoData_pre.val = 0;
+							arr.push(new ObjectProxy(pseudoData_pre));
+						}
+//					}
+					arr.push(new ObjectProxy(obj));
+					//////May 22, 2013//////////////////////////////////////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					//PMOS 12시간 신적설에서 6시간으로 변경됨. 단일 요소 신적설은  데이터 첨이랑 끝에 가라 데이터 삽입
+					//종합 단일 에어리어 시리즈는  lst 밸류(첫번째데이터 인터폴레이션땜에) 명시해야 지만 마지막 데이터는 걍 lst 말고 val만 마이너스 밸류 때려넣었음. baseAtZero=true 라서 마이너스 밸류는 표출 X
+					if(is6Hrs_accumulated && cnt==xmlList.length()-1 && isSN6inPMOS){
+						var pseudoData_sur:Object = new Object();
+						//			        	pseudoData_sur.lst = (obj.lst).substring(0,2) + iPad2(Number((obj.lst).substring(2,4)) +1);
+						pseudoData_sur.val = -1;
+						//			        	Alert.show(pseudoData_sur.lst +' / '+pseudoData_sur.val);
+						arr.push(new ObjectProxy(pseudoData_sur));
+					}
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					cnt++;
+				}
+				//멀티차트 기온 민맥스 뽑기					
+				if(isTemperature){
+					var maxVal:Number =  Math.max.apply(null, arr_4assignMaxMin)
+					var minVal:Number =   Math.min.apply(null, arr_4assignMaxMin)
+					//			    	Infinity
+					if(maxVal != Infinity  && minVal != Infinity){
+						assignMaxMin(maxVal, minVal);
+					}else{
+					}
+				}
+				//멀티차트 기온 민맥스 뽑기					
+				
+				if(isKindOfPrcp){
+					var maxPrcp:Number =  Math.max.apply(null, arr_4assignMaxMin);
+					if(maxPrcp != Infinity){
+						assignMaxPrcp(maxPrcp);
+					}else{
+					}
+				}
+				
+				return arr;
+			}			
+			
+			public  function xmlListToObjectArray_VIS(xmlList:XMLList):Array{
+				var arr:Array = new Array();
+				var arr_4assignMaxMin:Array = new Array();
+				for each(var xml:XML in xmlList){
+					var childs:XMLList = xml.attributes(); 
+					var obj:Object = new Object();
+					for each(var child:XML in childs){
+						var nodeName:String = child.name().toString();
+						var nodeValue:Number =  Number(child.(nodeName));//R12, S12 에어리어 시리즈 인터폴레이션 땜에 데이터를 뉴메릭으로 랩핑
+						var nodeVal_str:String = child.(nodeName).toString();
+						obj[nodeName] =(nodeName=='lst')? nodeVal_str:nodeValue;			            	
+						if(nodeName=='val'){
+							var visibilityLevel:Number = 0;
+							if(nodeValue < 0.5){
+								visibilityLevel = 1;
+							}else if(0.5 <= nodeValue && nodeValue < 1.0){
+								visibilityLevel = 2;
+							}else if(1.0 <= nodeValue && nodeValue < 5.0){
+								visibilityLevel = 3;
+							}else if(5.0 <= nodeValue && nodeValue < 10.0 ){
+								visibilityLevel = 4;
+							}else if (10 <=	 nodeValue){
+								visibilityLevel = 5;
+							}
+							obj[nodeName] = visibilityLevel;
+						}
+					}
+					
+					arr.push(new ObjectProxy(obj));
+				}
+				return arr;
+			}
+			
+			
+			private function assignMaxMin(max:Number, min:Number){
+				if(isNaN(max_axisVal) && isNaN(min_axisVal)){
+					max_axisVal = max;
+					min_axisVal = min;
+				}else{
+					if(max > max_axisVal){
+						max_axisVal = max;
+					}
+					if(min < min_axisVal){
+						min_axisVal = min;
+					}
+				}
+			}
+			
+			private function assignMaxPrcp(prcp:Number):void{
+				trace('assignMaxPrcp()' + prcp)
+				if(isNaN(max_prcp)){
+					max_prcp = prcp;
+				}else{
+					if(prcp > max_prcp){
+						max_prcp = prcp;
+					}
+				}
+			}
+			
+			
+			private function saveAnImageInPNG():void {
+				var fileRef:FileReference = new FileReference();
+//				fileRef.save(ByteArrayUtil.getByteArrayFrom(contentsBox), baseModelName + '_' + str_typeOfChart + '_' + lbl_region.text + '_' + str_yyyymmddhhmm + ".png" );
+				fileRef.save(ByteArrayUtil.getByteArrayFrom(contentsBox), 'PyeongChang2018_' + str_typeOfChart + '_' + lbl_region.text + '_' + str_yyyymmddhhmm + ".png" );
+			}
+			
+			
+			public static function computeGutterSize(chart:CartesianChart): int {
+				var labels:Array = chart.horizontalAxis.getLabels(0).labels;
+				var maxWidth:int = 100;
+				var font:String = chart.getStyle("fontFamily");
+				var size:int = chart.getStyle("fontSize") + 4;
+				var textField:TextField = new TextField ();
+				textField.defaultTextFormat = new TextFormat(font, size, null, true);
+				for each (var axisLabel:AxisLabel in labels) {
+					textField.text = axisLabel.text;
+					var metrics:TextLineMetrics = textField.getLineMetrics(0);
+					var textWidth: int = metrics.width;
+					if (textWidth > maxWidth) {
+						maxWidth = textWidth;
+					}
+				}
+				return maxWidth;
+			}
+			
+			
+			private function legendCheckBox_changeHandler(e:Event):void{
+				for each(var obj:DisplayObject in legendBox.getChildren()){
+					var cb:CheckBox = obj as CheckBox;
+					if(cb.id != e.currentTarget.id){
+						cb.selected = false;
+					}
+				}
+				dynamicallyChangeSeriesRenderer2(e.currentTarget.id, e.currentTarget.selected);
+			}
+			
+			/**
+			 * May 5, 2013
+			 * 주간 종합 차트의 경우 기온빼고는 다 누적이라고 그러고 00/12UTC 모두 기온은 데이터 하나씩 더 있음
+			 * 가라로 GDPS 최저/최고 기온은 신적설 LST 받아서 그 위치에 올리게 수정 했는데 소스 정리좀 하자 ㅡ,.ㅡ 
+			 * addAnnotationElements 호출하는 부분(selectAllorNone이랑 최저,최고 선택하는 	부분 바꿨쌈)
+			 * 끝에 파람 하나 추가됨  addAnnotationElements(QYUNA_MEDM_multiVars(multi).maxLine, multi, false,  QYUNA_MEDM_multiVars(multi).rn3Column);
+			 * is12Hrs도 날려 쓰지도 않는구만 ㅡ,.ㅡ 
+			 * */
+			private function addAnnotationElements(seriesData:Series, chartObj:Object,  is6Hrs:Boolean = false, seriesData2:Series=null):void{
+				var whichSeries:Series = seriesData ;
+				var isFirstAttempt:Boolean = is6Hrs;
+				var cnt:Number=0;
+				if( whichSeries.dataProvider != null){
+					for each(var item:Object in whichSeries.dataProvider){
+						if(isFirstAttempt){
+							isFirstAttempt = false;
+							continue;
+						}	
+						if(whichSeries.id=="maxLine" ||whichSeries.id=="minLine"){
+							var gdpsItem:Object = seriesData2.dataProvider[cnt];
+							addLabelsToColumn(gdpsItem.lst, item.val, chartObj,whichSeries);
+							cnt+=1;
+						}else{
+							addLabelsToColumn(item.lst, item.val, chartObj,whichSeries);
+						}
+					}
+				}
+			}
+			
+			
+			
+			private function addAnnotationElements_T3H(seriesData:Series, chartObj:Object, addElement:Boolean=true):void{
+				
+				if(!addElement){
+					chartObj.canvas_t3h.removeAllChildren();
+					return;
+				}
+				var whichSeries:Series = seriesData ;
+				var count:int = 1;
+				if(whichSeries.dataProvider != null){
+					for each(var item:Object in whichSeries.dataProvider){
+						if(item.hasOwnProperty("max")){
+							//AUG 2013 코멘트처리
+							//							Alert.show('item.hasOwnProperty(max)');
+							//date of issue HH==12 이면 마지막 맥스값은 표출  X
+							//								if(count<21){
+							addLabelsToColumn_T3H(chartObj,item.lst, item.val, "max", item.max );
+							//								}
+							addLabelsToColumn_T3H(chartObj,item.lst, item.val);
+						}else if(item.hasOwnProperty("min")){
+							addLabelsToColumn_T3H(chartObj,item.lst, item.val, "min", item.min);
+						}else{
+							addLabelsToColumn_T3H(chartObj,item.lst, item.val);
+						}
+						count++;
+					}
+				}
+			}
+			
+			//params lst:String, val:Number, minMaxFlag:String, minMaxVal:Number
+			private function addLabelsToColumn_T3H(...params):void{
+				var chartObj:Object = params[0];
+				var lst:String = params[1];
+				var val:Number = params[2];					
+				var lbl:Label = new Label();
+				lbl.width = 40; lbl.height = 20;
+				lbl.setStyle("fontSize","12");
+				lbl.setStyle("textAlign","center");
+				lbl.setStyle("paddingTop",-20);
+				
+				var currFormat:NumberFormatter = new NumberFormatter();
+				currFormat.precision = 1;
+				currFormat.rounding = "nearest";
+				
+				lbl.text =currFormat.format(val)+'' ;
+				lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+				chartObj.canvas_t3h.verticalAxis = chartObj.axis_ver;
+				chartObj.canvas_t3h.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+				
+				if(params.length > 3){ // ㅣlegnth==5
+					var _minMax:TextField = new TextField();
+					var flag:String = params[3];
+					var minMaxVal:String = params[4];
+					var textColor:uint = (flag=="max")? 0xFF0000 : 0x0055EE;
+					_minMax.text = currFormat.format(minMaxVal);
+					_minMax.textColor = textColor;
+					_minMax.autoSize = TextFieldAutoSize.CENTER;
+					var tfStyle:TextFormat = new TextFormat(); 
+					tfStyle.size = 12;
+					tfStyle.bold = true;
+					tfStyle.font = "Verdana";
+					_minMax.setTextFormat(tfStyle);
+					
+					_minMax.x = 0; 
+					_minMax.y = 0;
+					
+					var mySprite:Sprite = new Sprite();
+					mySprite.graphics.lineStyle(1,0x000000,.3); //invisible border
+					mySprite.graphics.beginFill(0xFFFFFF,0.8);
+					mySprite.graphics.drawRect(0,0,_minMax.width,_minMax.height);
+					
+					mySprite.y = -35;
+					
+					mySprite.addChild(_minMax);
+					var uic:UIComponent = new UIComponent();
+					uic.addChild(mySprite); 
+					
+					chartObj.canvas_t3h.addDataChild(uic, new CartesianCanvasValue(lst,-(mySprite.width / 2)), val);
+					
+				}
+			}
+			
+			private function addLabelsToColumn(lst:String, val:Number, instance:Object, whichSeries:Series):void{
+				// lineSeries REH, T3H.
+				// If no axis is specified, the  canvas uses the primary axes of the chart as its bounds.
+				var lbl:Label = new Label();
+				
+				lbl.setActualSize(lbl.getExplicitOrMeasuredWidth(),lbl.getExplicitOrMeasuredHeight());	
+				lbl.width = 40; lbl.height = 20;
+				lbl.truncateToFit = true;
+				lbl.setStyle("fontSize","12");
+				lbl.setStyle("fontWeight","normal");
+				lbl.setStyle("textAlign","center");
+				lbl.setStyle("paddingTop",-20);
+				//				instance.canvas.in
+				//labelPrecison =1 로 
+				var currFormat:NumberFormatter = new NumberFormatter();
+				currFormat.rounding = "nearest";
+				
+				if(whichSeries.id =="rehColumn"){
+					currFormat.precision = 0; ///
+					lbl.text = currFormat.format(val);
+					instance.canvas_reh.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+				}else if(whichSeries.id =="popColumn"){
+					currFormat.precision = 0; ///
+					lbl.text = currFormat.format(val);
+					instance.canvas_pop.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+				}else if(whichSeries.id =="visLine"){
+					currFormat.precision = 1; ///
+					lbl.text = currFormat.format(val);
+					if(val > 12.5){
+						lbl.setStyle("color","#222222");
+					}
+					instance.canvas_vis.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), (val>12.5 )? 12.5 : val);
+				}else if(whichSeries.id =="rn3Column"){	
+					currFormat.precision = 1; ///
+					currFormat.rounding ="none"; 
+					lbl.text = currFormat.format(val);
+					instance.canvas_r12.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+				}else if(whichSeries.id =="sn3Column"){	
+					currFormat.precision = 1; ///
+					currFormat.rounding ="none"; 
+					lbl.text = currFormat.format(val);
+					instance.canvas_s12.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width / 2)), val);
+					//GDPS Multi(PMOS2)
+				}else if(whichSeries.id =="maxLine"){
+					currFormat.precision = 1; ///
+					//						trace(val+' vs '+lbl.text)
+					lbl.text = currFormat.format(val);
+					//						trace('[formattedVal] '+currFormat.format(val))
+					instance.canvas_max.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width/2)), val);
+				}else if(whichSeries.id =="minLine"){
+					lbl.setStyle("paddingTop",0);
+					currFormat.precision = 1; ///
+					lbl.text = currFormat.format(val);
+					instance.canvas_min.addDataChild(lbl, new CartesianCanvasValue(lst,-(lbl.width/2)), val);
+					//,수평높이,레이블수직높이값
+				}
+				
+			}
+			
+			[Bindable]
+			public var _legendItem_prevSelection:String='none';
+			
+			private function addCheckBoxLegendDynamicallyMan():void{
+				legendBox.removeAllChildren();
+				
+				if(str_typeOfChart=="SKY" || str_typeOfChart=="PTY" || str_typeOfChart=="WSD" )return;
+				
+//				var legendItemContainer:HBox = new HBox();
+				var legendItemContainer:DJFBox = new DJFBox();
+//				legendItemContainer.width = appWidth-300;
+				legendItemContainer.setStyle("verticalGap",0);
+				legendItemContainer.setStyle("horizontalAlign","right");
+				
+				var cb_master:ImageCheckBox = new ImageCheckBox();
+				cb_master.id="cb_all";
+				cb_master.visible=false;
+				legendItemContainer.addChild(cb_master);
+				var cbArray:Array = new Array();
+				
+				for(var i:int=0; i<stations.children().length();i++){
+					var cb:ImageCheckBox = new ImageCheckBox();
+					cb.id = 'identifier_'+ i;
+//					cb.label = stations.stn[i].@stnName+ " (" + stations.stn[i].@stnNo + ")" ;
+//					cb.label = stations.stn[i].@stnName;
+					cb.label = CommonUtil.getInstance().stripHyphensMan(stations.stn[i].@stnName);
+					
+//					if(_legendItem_prevSelection){
+//						cb.selected = (cb.id==_legendItem_prevSelection)? true : false;
+//					}else if(_legendItem_prevSelection=='none' && i==0){
+//						cb.selected;
+//					}
+					cb.selected = (i==0)?true:false; //이벤트리스너안걸려있나봄 수동으로 이벤트 빠이아 ==>DJFShowDataTipMan('identifier_0', true);
+					cb.labelPlacement="right";
+					cb.setStyle("paddingLeft",0);
+					cb.setStyle("horizontalGap",1);
+					var hexColor:uint = CommonUtil.getInstance().seriesColorArr[i].color;
+					var filledRect:LegendItem_filledRect = new LegendItem_filledRect(hexColor);
+					cb.imageSource =  CommonUtil.getInstance().spriteToBitmap(filledRect);
+					cbArray.push(cb);
+					
+					legendItemContainer.addChild(cb);
+				}
+					
+				var checkBoxGroup =  new CBGroup_PYEONGCHANG(cb_master, cbArray);
+				legendBox.addChild(legendItemContainer);	
+				
+				DJFShowDataTipMan('identifier_0', true);
+			
+			}
+			
+			
+			private function addCheckBoxLegendWithPrevStates():void{
+				legendBox.removeAllChildren();
+				
+				var baseModel_selected:Array;
+				var box:HBox;
+				
+				if(isMultiSeries){
+					if(isVSRT){
+						box = new  CB_PYEONCGHANG_VSRT();
+						baseModel_selected = [false,true,false,false,false,false]; //5(+1 master)
+					}else if(isSHRT){
+						box = new  CB_PYEONCGHANG_SHRT();
+						baseModel_selected = [false,true,false,false,false,false,false]; //6(+1 master)
+					}else if(isMEDM){ 
+						box = new  CB_PYEONGCHANG_MEDM();
+						baseModel_selected = [false,true,false,false,false,false,false]; //6(+1 master)
+					}
+					
+					legendBox.addChild(box);
+					
+					var cbArray:Array = new Array();
+					var cb_all:ImageCheckBox;
+					
+					for(var i:int=0; i<baseModel_selected.length; i++){
+						var cb:ImageCheckBox = box.getChildAt(i) as ImageCheckBox;
+						if(i==0){
+							cb_all = cb;
+						}else{
+							cb.selected = baseModel_selected[i];
+							cbArray.push(cb);
+							//set properties..	
+						}
+					}
+					
+					cbGroup =  new CheckBoxGroup2(cb_all, cbArray);
+					
+					if(isMEDM){
+						dynamicallyChangeSeriesRenderer2('cb_max', true);						
+						dynamicallyChangeSeriesRenderer2('cb_min', true);						
+					}else{
+						dynamicallyChangeSeriesRenderer2('cb_t3h', true);						
+					}
+					//Jan 2014	
+				}	
+			}
+			
+			
+			[Embed(source="asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/temp_legend.png")]
+			public static const legendSource:Class;
+			
+			[Embed(source="asset/DFS/timeSeries/meteogram/symbol/LegendSymbolItem/legend_ensemble2.png")]
+			public var Legend_ensemble:Class;
+			
+			private function removePreferencePanel():void{
+				if(justBox.getChildren().length > 0){
+					justBox.removeAllChildren();	  					
+				}
+			}
+			private function openPersonalizationSettingDialog():void{
+				removePreferencePanel();				
+				
+				contentsBox.includeInLayout = false;
+				contentsBox.visible = false; 
+				chartArea.removeAllChildren();
+				var preferencesPanel:notConfiguredYet = new notConfiguredYet();
+				preferencesPanel.loadStationInfo(isMEDM,isPYEONGCHANG);
+				preferencesPanel.addEventListener(notConfiguredYet.configuredStationChanged,applyChanges_personalizationSettings); 
+				justBox.addChild(preferencesPanel);
+			}
+			
+			private function applyChanges_personalizationSettings(e:Event):void{
+				removePreferencePanel();
+				messageFromJS(str_msgFromJS,true);
+			}
+			
+			
+			private function getVisibility():Boolean{
+				return (isUserConfigured && configuredStations.length==0)? true : false;
+			}
+			
+			
+			private function checkWhetherMergedModelCheckboxIsCheckedOrNot():void{
+//				ExternalInterface.call("checkWhetherMergedModelCheckboxIsCheckedOrNot",cb_mergedModel.selected);				
+			}
+			
+			
+			private function getBasalModel():String{
+				return CommonUtil.getInstance().getBasalModelStr(isMultiSeries, isMEDM, baseModelName, str_typeOfChart);
+			}
+		]]>
+		
+		
+	</mx:Script>
+	
+	
+		<!--
+			fillColors: red, haloOrange, haloGreen, haloBlue;
+			fillColors: red, haloOrange ;
+			skin: ClassReference("mx.skins.ProgrammaticSkin");
+			themeColor: red; focus || hover
+	
+	upSkin: ClassReference(null);
+	overSkin: ClassReference(null);
+	downSkin: ClassReference(null);
+	disabledSkin: ClassReference(null);
+	selectedUpSkin:ClassReference(null);
+	selectedOverSkin: ClassReference(null);
+	selectedDownSkin: ClassReference(null);
+	selectedDisabledSkin: ClassReference(null);
+	
+	#ADC900
+	
+	fillColors: #ADC900, #ADC900,#ADC900, #ADC900;
+	fillAlphas:1,1,1,1;
+	color:#ffffff;
+	textRollOverColor:#ffffff;
+		-->
+	<mx:Style>
+		
+		.fcstRangesSelected {
+			fillColors: #ADC900, #ADC900,#ADC900, #ADC900;
+			fillAlphas:1,1,1,1;
+			color:#ffffff;
+			textRollOverColor:#ffffff;
+		}
+		
+		.buttonBarSelected {
+			fillColors: #FEBC00, #FEBC00,#FEBC00, #FEBC00;
+			fillAlphas:1,1,1,1;
+			selectedUpSkin:ClassReference(null);
+			selectedOverSkin: ClassReference(null);
+			selectedDownSkin: ClassReference(null);
+			selectedDisabledSkin: ClassReference(null);
+		}
+		
+		.buttonBarNotSelected {
+			fillColors: #FFFFFF, #FFFFFF,#FFFFFF, #FFFFFF;
+			textRollOverColor:#677AFB;
+			
+		}
+		
+		.noFxxkingCorderRadius {
+			cornerRadius: 0;
+		}
+		
+		.fcstRangeSet{
+			cornerRadius: 0;
+		}
+		
+		Button{
+			cornerRadius: 0;
+			fontSize:12px;
+		}	
+		ComboBox{
+			cornerRadius: 0;
+			fontSize:12px;
+			fontWeight:normal;
+		}
+		
+		.dateControlPanelStyle{
+			fontSize:12px;
+		}
+		
+	</mx:Style>
+<!--	
+	<mx:ApplicationControlBar height="77"  width="{appWidth+20}">
+-->		
+		<mx:VBox id="navigationContainer" width="{appWidth}" 
+				 verticalGap="5" paddingBottom="7" 
+				 borderStyle="none" borderColor="#eeeeee" borderThickness="1">
+			<mx:HBox width="100%" horizontalAlign="left" horizontalGap="5" verticalAlign="middle" paddingBottom="5"
+>
+				<mx:Image source="{CI_KMA}"/>
+				<mx:Label text="2018년 동계올림픽 경기장예보가이던스" fontSize="17" fontWeight="bold" color="#333333"/>
+			</mx:HBox>
+			<mx:ToggleButtonBar id="varSelector" width="100%" direction="horizontal" fontSize="12" 
+								buttonWidth="135"  focusEnabled="false" 
+								horizontalGap="3" autoLayout="true" buttonStyleName="noFxxkingCorderRadius" 
+								selectedIndex="0" itemClick="buildKeyStringMan()"> 
+				<!--
+				itemClick="{Alert.show(buttonBar.selectedIndex+'')}"
+				focusRect=""
+				-->
+				<mx:ArrayCollection> 
+					<mx:Object label="종합" data="T3H" />
+					<mx:Object label="기온" data="T3H" />
+					<mx:Object label="바람" data="WSD" />
+					<mx:Object label="시정" data="VIS" />
+					<mx:Object label="강수량" data="RN3" />
+					<mx:Object label="신적설" data="SN3" />
+					<mx:Object label="강수확률" data="POP" />
+					<mx:Object label="강수형태" data="PTY" />
+					<mx:Object label="하늘상태" data="SKY" />
+					<mx:Object label="상대습도" data="REH" />
+				</mx:ArrayCollection> 
+			</mx:ToggleButtonBar>
+			
+			<mx:HBox width="100%">
+				<mx:HBox id="datePicker" width="50%" 
+					horizontalAlign="left" paddingLeft="2" horizontalGap="3">
+					<mx:Button id="btn_now" label="Now"  fontWeight="normal" click="timeCaclFunc(event)"/>
+					<!--
+					<mx:VRule width="1" height="24"/>
+					-->
+					<mx:Spacer width="7"/>
+					<mx:Button id="nHrsBefore_12" label="-12h" fontWeight="normal" click="timeCaclFunc(event)"/> <!--width="55" -->
+					<mx:Button id="nHrsBefore_6" label="-6h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Button id="nHrsBefore_3" label="-3h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Button id="nHrsBefore_1" label="-1h" fontWeight="normal" click="timeCaclFunc(event)"/>
+				<!--
+				-->
+					<mx:Spacer width="2"/>
+					<mx:ComboBox id="cb_date" 
+						dataProvider="{CommonUtil.getInstance().ac_date_VSRT}" 
+						change="buildKeyStringMan()"
+				 		rowCount="14" selectedIndex="0" width="220" 
+						/>
+				<!--
+						dataProvider="{(isMultiSeries &amp;&amp; !isVSRT)? CommonUtil.getInstance().ac_date_SHRT_MEDM : CommonUtil.getInstance().ac_date_VSRT}" 
+				-->
+					<mx:Spacer width="2"/>
+					<mx:Button id="nHrsAfter_1" label="+1h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Button id="nHrsAfter_3" label="+3h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Button id="nHrsAfter_6" label="+6h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Button id="nHrsAfter_12" label="+12h" fontWeight="normal" click="timeCaclFunc(event)"/>
+					<mx:Spacer width="7"/>
+					<mx:ComboBox id="cb_restrict" selectedIndex="0" width="180" 
+						dataProvider="{ac_stnMapper}" rowCount="{ac_stnMapper.length}" 
+						change="buildKeyStringMan()">
+						<!--
+						
+						<mx:ArrayCollection> 
+							<mx:Object label="주요 지점" data="8318" />
+							<mx:Object label="관심 지점" data="555" />
+							<mx:Object label="알펜시아(점프)" data="9901" />
+							<mx:Object label="알펜시아(종합)" data="9902" />
+							<mx:Object label="용평(알파인)" data="9903" />
+							<mx:Object label="보광" data="9904" />
+							<mx:Object label="정선(대회전)" data="9905" />
+						</mx:ArrayCollection> 
+						-->
+					</mx:ComboBox>
+				</mx:HBox>
+				<mx:HBox id="modelSelectorBox" width="50%" horizontalAlign="right" paddingRight="2">
+					<mx:ToggleButtonBar id="fcstRanges" width="270"  direction="horizontal" fontSize="12" itemClick="buildKeyStringMan()"
+										visible="{(varSelector.selectedIndex==0)?true:false}"
+										buttonWidth="90"  focusEnabled="false" 
+										horizontalGap="0" autoLayout="true" 
+										buttonStyleName="fcstRangeSet" 
+										selectedIndex="0" > 
+						<mx:ArrayCollection> 
+							<mx:Object label="초단기" data="VSRT" />
+							<mx:Object label="단기" data="SHRT" />
+							<mx:Object label="중기" data="MEDM" />
+						</mx:ArrayCollection> 
+					</mx:ToggleButtonBar>
+				</mx:HBox>
+			</mx:HBox>
+		</mx:VBox>
+<!--
+	</mx:ApplicationControlBar>
+-->	
+	
+	<mx:Spacer height="10"/>
+	
+	<mx:VBox id="vBox" width="{appWidth}" height="100%" verticalScrollPolicy="off"  
+			 borderStyle="none" borderColor="#ff00ff" borderThickness="2"
+			 backgroundColor="0xFFFFFF"  verticalGap="0" 
+			>
+		<!--
+		<preferences:notConfiguredYet id="notYet" redrawConfiguredStations="{messageFromJS(str_msgFromJS,true)}"
+		visible="false" includeInLayout="false"/>
+		-->
+		<mx:VBox id="justBox" width="100%"/>
+		
+		<mx:VBox width="100%" id="contentsBox" verticalGap="0">
+			<mx:HBox width="100%" verticalAlign="top">
+				<mx:HBox width="50%" verticalAlign="top">
+					<mx:HBox width="100%" horizontalAlign="left" verticalAlign="top">
+						<mx:Label id="lbl_region" text="{stations.@grName}" fontSize="18" fontWeight="bold" />
+						<mx:Spacer width="10"/>
+						<!-- 평창올림픽 지점그룹에는 애트리뷰트 usePersonalizationSetting=false 주고 막아 
+						visible="{&amp;&amp;!isPYEONGCHANG}" includeInLayout="{lbl_region.visible}"
+						-->
+						<mx:CheckBox id="cb_setAsMain"  label="시작 페이지로" labelPlacement="right" fontSize="12"
+									 click="{setSelectedItemAsMainStation();}"  visible="false" includeInLayout="false"
+									 selected="{(defaultPageSetter.getRegionCode()==((!isPYEONGCHANG)? grCodeNum.toString() : iPad4(grCodeNum,4)) &amp;&amp; defaultPageSetter.getBaseModel()==baseModelName &amp;&amp; defaultPageSetter.getIsMEDM()==isMEDM.toString())?true:false}"/>
+						<!-- visible="{isMultiSeries}" includeInLayout="{lbl_region.visible}"-->
+						<mx:HBox horizontalAlign="center" verticalAlign="middle" horizontalGap="2">
+							<mx:Image id="btn_setting" width="28" height="24" source="{btn_settings}" 
+									  includeInLayout="{true}" 
+									  visible="{isUserConfigured}" 
+									  useHandCursor="true" buttonMode="true" mouseChildren="false" 
+									  click="openPersonalizationSettingDialog()"/>
+							<mx:Label text="관심지점 설정" fontSize="12"
+									  includeInLayout="{true}" 
+									  visible="{isUserConfigured}" 
+									  useHandCursor="true" buttonMode="true" mouseChildren="false" 
+									  click="openPersonalizationSettingDialog()"/>	
+						</mx:HBox>
+							<!-- visible="{isUserConfigured &amp;&amp; isMultiSeries }" -->
+						<!--
+						-->   	
+					</mx:HBox>
+				</mx:HBox>
+				<mx:HBox id="legendBox" width="50%" horizontalAlign="right"/>
+				<!--
+				<mx:HBox id="legendBox" width="50%"  visible="{isMultiSeries}" includeInLayout="{isMultiSeries}" borderStyle="none"/>
+				<mx:HBox id="legendBox_temp" width="50%"  visible="{legendBox_temp.includeInLayout}" includeInLayout="{isMergedModel  &amp;&amp; cb_mergedModel.visible}"
+				horizontalAlign="right" borderStyle="none"/>
+				-->
+			</mx:HBox>
+			<mx:HBox id="box_issuedDate_n_basedOn" width="100%" includeInLayout="{isMultiSeries}" visible="{box_issuedDate_n_basedOn.includeInLayout}">
+				<mx:Label  text="Issued for {DateMgr.convertUTCStr2LST(dateOfIssue)}" width="50%" fontSize="18" fontWeight="bold" /> 
+				<!--
+				<mx:HBox width="50%" horizontalAlign="right" verticalAlign="middle">
+					<mx:CheckBox id="cb_mergedModel"  label="모델 비교" labelPlacement="right" fontSize="12" 
+								 click="{drawMergedModelOrNot();}" 
+								 visible="{!isMultiSeries &amp;&amp; baseModelName!='SSPS'}" includeInLayout="{true}"
+								 selected="{(isMergedModel)?true:false}"
+								 />
+					<mx:Label  id="lbl_baseModel" textAlign="right" text="{basedOn}" fontSize="18" fontWeight="bold" includeInLayout="{lbl_region.visible}"/> 
+				</mx:HBox>
+				-->
+				<mx:HBox width="50%" horizontalAlign="right" verticalAlign="middle">
+					<mx:Label id="lbl_baseModel" textAlign="right" text="{basedOn}" fontSize="18" fontWeight="bold" includeInLayout="{isMultiSeries}" visible="{lbl_baseModel.includeInLayout}"/> 
+				</mx:HBox>
+			</mx:HBox>
+			<!--Update On HH:mm LST-->
+			<!--
+			<mx:HBox id="updatedOnContainer" width="1100" paddingBottom="-5"  horizontalAlign="right">
+				<mx:Label id="updateOnLabel" text="" width="100%" textAlign="right" fontSize="16" fontWeight="bold" /> 
+			</mx:HBox>
+			-->
+			<!--Update On HH:mm LST-->
+			
+			<mx:HBox width="100%">
+				<mx:VBox id="chartArea" width="100%" />
+			</mx:HBox>
+		</mx:VBox>
+	</mx:VBox>
+	
+	
+</mx:Application>

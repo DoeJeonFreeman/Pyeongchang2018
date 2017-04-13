@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<REH issuedAt="18UTC 11 Dec 2016" basedOn=" ">
+ <regionGroup grCode="9901" grName="알펜시아">
+  <stn stnName="스키점프125-출발" stnNo="2572">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="스키점프125-점프" stnNo="2555">
+   <dataSet lst="1204" val="58.8" />
+   <dataSet lst="1205" val="47.8" />
+   <dataSet lst="1206" val="30.0" />
+   <dataSet lst="1207" val="19.1" />
+   <dataSet lst="1208" val="18.7" />
+   <dataSet lst="1209" val="18.7" />
+   <dataSet lst="1210" val="17.6" />
+   <dataSet lst="1211" val="16.5" />
+   <dataSet lst="1212" val="18.4" />
+   <dataSet lst="1213" val="20.0" />
+   <dataSet lst="1214" val="20.7" />
+   <dataSet lst="1215" val="26.0" />
+   <dataSet lst="1216" val="33.6" />
+   <dataSet lst="1217" val="38.4" />
+   <dataSet lst="1218" val="36.0" />
+   <dataSet lst="1219" val="41.8" />
+   <dataSet lst="1220" val="46.6" />
+   <dataSet lst="1221" val="53.7" />
+   <dataSet lst="1222" val="62.0" />
+   <dataSet lst="1223" val="66.7" />
+   <dataSet lst="1300" val="70.4" />
+   <dataSet lst="1301" val="70.5" />
+   <dataSet lst="1302" val="69.5" />
+   <dataSet lst="1303" val="68.8" />
+  </stn>
+  <stn stnName="스키점프98-출발" stnNo="2573">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="스키점프98점프" stnNo="2574">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="스키점프-착지" stnNo="2575">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+   <dataSet lst="1210" />
+   <dataSet lst="1211" />
+   <dataSet lst="1212" />
+   <dataSet lst="1213" />
+   <dataSet lst="1214" />
+   <dataSet lst="1215" />
+   <dataSet lst="1216" />
+   <dataSet lst="1217" />
+   <dataSet lst="1218" />
+   <dataSet lst="1219" />
+   <dataSet lst="1220" />
+   <dataSet lst="1221" />
+   <dataSet lst="1222" />
+   <dataSet lst="1223" />
+   <dataSet lst="1300" />
+   <dataSet lst="1301" />
+   <dataSet lst="1302" />
+   <dataSet lst="1303" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9902" grName="알펜시아">
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="슬라이딩-중간" stnNo="2576">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="슬라이딩-도착" stnNo="2554">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="1204" val="58.8" />
+   <dataSet lst="1205" val="47.8" />
+   <dataSet lst="1206" val="30.0" />
+   <dataSet lst="1207" val="19.1" />
+   <dataSet lst="1208" val="18.7" />
+   <dataSet lst="1209" val="18.7" />
+   <dataSet lst="1210" val="17.6" />
+   <dataSet lst="1211" val="16.5" />
+   <dataSet lst="1212" val="18.4" />
+   <dataSet lst="1213" val="20.0" />
+   <dataSet lst="1214" val="20.7" />
+   <dataSet lst="1215" val="26.0" />
+   <dataSet lst="1216" val="33.6" />
+   <dataSet lst="1217" val="38.4" />
+   <dataSet lst="1218" val="36.0" />
+   <dataSet lst="1219" val="41.8" />
+   <dataSet lst="1220" val="46.6" />
+   <dataSet lst="1221" val="53.7" />
+   <dataSet lst="1222" val="62.0" />
+   <dataSet lst="1223" val="66.7" />
+   <dataSet lst="1300" val="70.4" />
+   <dataSet lst="1301" val="70.5" />
+   <dataSet lst="1302" val="69.5" />
+   <dataSet lst="1303" val="68.8" />
+  </stn>
+  <stn stnName="바이애슬론-중간" stnNo="2558">
+   <dataSet lst="1204" val="58.8" />
+   <dataSet lst="1205" val="47.8" />
+   <dataSet lst="1206" val="30.0" />
+   <dataSet lst="1207" val="19.1" />
+   <dataSet lst="1208" val="18.7" />
+   <dataSet lst="1209" val="18.7" />
+   <dataSet lst="1210" val="17.6" />
+   <dataSet lst="1211" val="16.5" />
+   <dataSet lst="1212" val="18.4" />
+   <dataSet lst="1213" val="20.0" />
+   <dataSet lst="1214" val="20.7" />
+   <dataSet lst="1215" val="26.0" />
+   <dataSet lst="1216" val="33.6" />
+   <dataSet lst="1217" val="38.4" />
+   <dataSet lst="1218" val="36.0" />
+   <dataSet lst="1219" val="41.8" />
+   <dataSet lst="1220" val="46.6" />
+   <dataSet lst="1221" val="53.7" />
+   <dataSet lst="1222" val="62.0" />
+   <dataSet lst="1223" val="66.7" />
+   <dataSet lst="1300" val="70.4" />
+   <dataSet lst="1301" val="70.5" />
+   <dataSet lst="1302" val="69.5" />
+   <dataSet lst="1303" val="68.8" />
+  </stn>
+  <stn stnName="크로스컨트리-출발" stnNo="2577">
+   <dataSet lst="1204" val="58.8" />
+   <dataSet lst="1205" val="47.8" />
+   <dataSet lst="1206" val="30.0" />
+   <dataSet lst="1207" val="19.1" />
+   <dataSet lst="1208" val="18.7" />
+   <dataSet lst="1209" val="18.7" />
+   <dataSet lst="1210" val="17.6" />
+   <dataSet lst="1211" val="16.5" />
+   <dataSet lst="1212" val="18.4" />
+   <dataSet lst="1213" val="20.0" />
+   <dataSet lst="1214" val="20.7" />
+   <dataSet lst="1215" val="26.0" />
+   <dataSet lst="1216" val="33.6" />
+   <dataSet lst="1217" val="38.4" />
+   <dataSet lst="1218" val="36.0" />
+   <dataSet lst="1219" val="41.8" />
+   <dataSet lst="1220" val="46.6" />
+   <dataSet lst="1221" val="53.7" />
+   <dataSet lst="1222" val="62.0" />
+   <dataSet lst="1223" val="66.7" />
+   <dataSet lst="1300" val="70.4" />
+   <dataSet lst="1301" val="70.5" />
+   <dataSet lst="1302" val="69.5" />
+   <dataSet lst="1303" val="68.8" />
+  </stn>
+  <stn stnName="크로스컨트리-중간" stnNo="2559">
+   <dataSet lst="1204" val="65.1" />
+   <dataSet lst="1205" val="51.0" />
+   <dataSet lst="1206" val="36.2" />
+   <dataSet lst="1207" val="22.4" />
+   <dataSet lst="1208" val="18.1" />
+   <dataSet lst="1209" val="18.8" />
+   <dataSet lst="1210" val="18.0" />
+   <dataSet lst="1211" val="16.3" />
+   <dataSet lst="1212" val="18.6" />
+   <dataSet lst="1213" val="22.6" />
+   <dataSet lst="1214" val="22.2" />
+   <dataSet lst="1215" val="27.7" />
+   <dataSet lst="1216" val="34.3" />
+   <dataSet lst="1217" val="34.9" />
+   <dataSet lst="1218" val="36.6" />
+   <dataSet lst="1219" val="44.3" />
+   <dataSet lst="1220" val="48.1" />
+   <dataSet lst="1221" val="54.2" />
+   <dataSet lst="1222" val="60.0" />
+   <dataSet lst="1223" val="64.7" />
+   <dataSet lst="1300" val="67.9" />
+   <dataSet lst="1301" val="67.6" />
+   <dataSet lst="1302" val="67.0" />
+   <dataSet lst="1303" val="66.3" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9903" grName="용평">
+  <stn stnName="알파인대회전-출발" stnNo="2560">
+   <dataSet lst="1204" val="29.4" />
+   <dataSet lst="1205" val="20.2" />
+   <dataSet lst="1206" val="14.1" />
+   <dataSet lst="1207" val="10.8" />
+   <dataSet lst="1208" val="9.3" />
+   <dataSet lst="1209" val="10.7" />
+   <dataSet lst="1210" val="9.9" />
+   <dataSet lst="1211" val="10.9" />
+   <dataSet lst="1212" val="13.1" />
+   <dataSet lst="1213" val="17.6" />
+   <dataSet lst="1214" val="15.1" />
+   <dataSet lst="1215" val="19.6" />
+   <dataSet lst="1216" val="24.5" />
+   <dataSet lst="1217" val="28.9" />
+   <dataSet lst="1218" val="36.3" />
+   <dataSet lst="1219" val="45.1" />
+   <dataSet lst="1220" val="51.9" />
+   <dataSet lst="1221" val="53.9" />
+   <dataSet lst="1222" val="57.3" />
+   <dataSet lst="1223" val="62.2" />
+   <dataSet lst="1300" val="64.6" />
+   <dataSet lst="1301" val="63.3" />
+   <dataSet lst="1302" val="62.6" />
+   <dataSet lst="1303" val="64.4" />
+  </stn>
+  <stn stnName="알파인대회전-중간1" stnNo="2578">
+   <dataSet lst="1204" val="34.1" />
+   <dataSet lst="1205" val="23.0" />
+   <dataSet lst="1206" val="16.4" />
+   <dataSet lst="1207" val="12.1" />
+   <dataSet lst="1208" val="10.0" />
+   <dataSet lst="1209" val="11.5" />
+   <dataSet lst="1210" val="10.5" />
+   <dataSet lst="1211" val="11.6" />
+   <dataSet lst="1212" val="14.2" />
+   <dataSet lst="1213" val="19.2" />
+   <dataSet lst="1214" val="16.2" />
+   <dataSet lst="1215" val="21.8" />
+   <dataSet lst="1216" val="26.7" />
+   <dataSet lst="1217" val="30.2" />
+   <dataSet lst="1218" val="35.7" />
+   <dataSet lst="1219" val="44.2" />
+   <dataSet lst="1220" val="50.4" />
+   <dataSet lst="1221" val="53.8" />
+   <dataSet lst="1222" val="56.9" />
+   <dataSet lst="1223" val="61.5" />
+   <dataSet lst="1300" val="64.2" />
+   <dataSet lst="1301" val="63.2" />
+   <dataSet lst="1302" val="62.6" />
+   <dataSet lst="1303" val="63.7" />
+  </stn>
+  <stn stnName="알파인대회전-중간2" stnNo="2579">
+   <dataSet lst="1204" val="34.9" />
+   <dataSet lst="1205" val="22.9" />
+   <dataSet lst="1206" val="16.3" />
+   <dataSet lst="1207" val="12.1" />
+   <dataSet lst="1208" val="9.4" />
+   <dataSet lst="1209" val="11.2" />
+   <dataSet lst="1210" val="10.4" />
+   <dataSet lst="1211" val="11.4" />
+   <dataSet lst="1212" val="13.9" />
+   <dataSet lst="1213" val="19.0" />
+   <dataSet lst="1214" val="17.0" />
+   <dataSet lst="1215" val="22.0" />
+   <dataSet lst="1216" val="26.3" />
+   <dataSet lst="1217" val="31.7" />
+   <dataSet lst="1218" val="36.4" />
+   <dataSet lst="1219" val="45.7" />
+   <dataSet lst="1220" val="51.8" />
+   <dataSet lst="1221" val="53.6" />
+   <dataSet lst="1222" val="56.6" />
+   <dataSet lst="1223" val="60.9" />
+   <dataSet lst="1300" val="63.7" />
+   <dataSet lst="1301" val="63.0" />
+   <dataSet lst="1302" val="62.8" />
+   <dataSet lst="1303" val="63.5" />
+  </stn>
+  <stn stnName="알파인대회전-도착" stnNo="2561">
+   <dataSet lst="1204" val="34.1" />
+   <dataSet lst="1205" val="23.0" />
+   <dataSet lst="1206" val="16.4" />
+   <dataSet lst="1207" val="12.1" />
+   <dataSet lst="1208" val="10.0" />
+   <dataSet lst="1209" val="11.5" />
+   <dataSet lst="1210" val="10.5" />
+   <dataSet lst="1211" val="11.6" />
+   <dataSet lst="1212" val="14.2" />
+   <dataSet lst="1213" val="19.2" />
+   <dataSet lst="1214" val="16.2" />
+   <dataSet lst="1215" val="21.8" />
+   <dataSet lst="1216" val="26.7" />
+   <dataSet lst="1217" val="30.2" />
+   <dataSet lst="1218" val="35.7" />
+   <dataSet lst="1219" val="44.2" />
+   <dataSet lst="1220" val="50.4" />
+   <dataSet lst="1221" val="53.8" />
+   <dataSet lst="1222" val="56.9" />
+   <dataSet lst="1223" val="61.5" />
+   <dataSet lst="1300" val="64.2" />
+   <dataSet lst="1301" val="63.2" />
+   <dataSet lst="1302" val="62.6" />
+   <dataSet lst="1303" val="63.7" />
+  </stn>
+  <stn stnName="용평" stnNo="318">
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+   <dataSet lst="1210" />
+   <dataSet lst="1211" />
+   <dataSet lst="1212" />
+   <dataSet lst="1213" />
+   <dataSet lst="1214" />
+   <dataSet lst="1215" />
+   <dataSet lst="1216" />
+   <dataSet lst="1217" />
+   <dataSet lst="1218" />
+   <dataSet lst="1219" />
+   <dataSet lst="1220" />
+   <dataSet lst="1221" />
+   <dataSet lst="1222" />
+   <dataSet lst="1223" />
+   <dataSet lst="1300" />
+   <dataSet lst="1301" />
+   <dataSet lst="1302" />
+   <dataSet lst="1303" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9904" grName="보광">
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="1204" val="34.9" />
+   <dataSet lst="1205" val="26.4" />
+   <dataSet lst="1206" val="19.3" />
+   <dataSet lst="1207" val="15.0" />
+   <dataSet lst="1208" val="15.6" />
+   <dataSet lst="1209" val="17.3" />
+   <dataSet lst="1210" val="18.9" />
+   <dataSet lst="1211" val="18.5" />
+   <dataSet lst="1212" val="18.4" />
+   <dataSet lst="1213" val="23.8" />
+   <dataSet lst="1214" val="30.1" />
+   <dataSet lst="1215" val="31.1" />
+   <dataSet lst="1216" val="30.0" />
+   <dataSet lst="1217" val="48.4" />
+   <dataSet lst="1218" val="62.1" />
+   <dataSet lst="1219" val="68.1" />
+   <dataSet lst="1220" val="66.2" />
+   <dataSet lst="1221" val="69.2" />
+   <dataSet lst="1222" val="70.1" />
+   <dataSet lst="1223" val="67.5" />
+   <dataSet lst="1300" val="66.7" />
+   <dataSet lst="1301" val="65.1" />
+   <dataSet lst="1302" val="59.4" />
+   <dataSet lst="1303" val="62.6" />
+  </stn>
+  <stn stnName="크로스-도착" stnNo="2581">
+   <dataSet lst="1204" val="58.9" />
+   <dataSet lst="1205" val="35.1" />
+   <dataSet lst="1206" val="38.1" />
+   <dataSet lst="1207" val="44.9" />
+   <dataSet lst="1208" val="65.8" />
+   <dataSet lst="1209" val="65.1" />
+   <dataSet lst="1210" val="45.5" />
+   <dataSet lst="1211" val="43.2" />
+   <dataSet lst="1212" val="21.6" />
+   <dataSet lst="1213" val="21.8" />
+   <dataSet lst="1214" val="28.2" />
+   <dataSet lst="1215" val="28.5" />
+   <dataSet lst="1216" val="31.2" />
+   <dataSet lst="1217" val="57.0" />
+   <dataSet lst="1218" val="69.0" />
+   <dataSet lst="1219" val="83.1" />
+   <dataSet lst="1220" val="71.2" />
+   <dataSet lst="1221" val="71.5" />
+   <dataSet lst="1222" val="71.9" />
+   <dataSet lst="1223" val="73.4" />
+   <dataSet lst="1300" val="71.1" />
+   <dataSet lst="1301" val="69.1" />
+   <dataSet lst="1302" val="63.3" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="슬로프스타일-출발" stnNo="2588">
+   <dataSet lst="1204" val="62.8" />
+   <dataSet lst="1205" val="33.5" />
+   <dataSet lst="1206" val="29.8" />
+   <dataSet lst="1207" val="30.8" />
+   <dataSet lst="1208" val="32.7" />
+   <dataSet lst="1209" val="34.8" />
+   <dataSet lst="1210" val="28.1" />
+   <dataSet lst="1211" val="25.2" />
+   <dataSet lst="1212" val="17.7" />
+   <dataSet lst="1213" val="23.3" />
+   <dataSet lst="1214" val="31.8" />
+   <dataSet lst="1215" val="32.6" />
+   <dataSet lst="1216" val="29.9" />
+   <dataSet lst="1217" val="44.5" />
+   <dataSet lst="1218" val="63.1" />
+   <dataSet lst="1219" val="74.4" />
+   <dataSet lst="1220" val="67.9" />
+   <dataSet lst="1221" val="67.5" />
+   <dataSet lst="1222" val="69.5" />
+   <dataSet lst="1223" val="68.9" />
+   <dataSet lst="1300" val="66.6" />
+   <dataSet lst="1301" val="63.1" />
+   <dataSet lst="1302" val="57.7" />
+   <dataSet lst="1303" val="59.5" />
+  </stn>
+  <stn stnName="슬로프스타일-도착" stnNo="2583">
+   <dataSet lst="1204" val="58.9" />
+   <dataSet lst="1205" val="35.1" />
+   <dataSet lst="1206" val="38.1" />
+   <dataSet lst="1207" val="44.9" />
+   <dataSet lst="1208" val="65.8" />
+   <dataSet lst="1209" val="65.1" />
+   <dataSet lst="1210" val="45.5" />
+   <dataSet lst="1211" val="43.2" />
+   <dataSet lst="1212" val="21.6" />
+   <dataSet lst="1213" val="21.8" />
+   <dataSet lst="1214" val="28.2" />
+   <dataSet lst="1215" val="28.5" />
+   <dataSet lst="1216" val="31.2" />
+   <dataSet lst="1217" val="57.0" />
+   <dataSet lst="1218" val="69.0" />
+   <dataSet lst="1219" val="83.1" />
+   <dataSet lst="1220" val="71.2" />
+   <dataSet lst="1221" val="71.5" />
+   <dataSet lst="1222" val="71.9" />
+   <dataSet lst="1223" val="73.4" />
+   <dataSet lst="1300" val="71.1" />
+   <dataSet lst="1301" val="69.1" />
+   <dataSet lst="1302" val="63.3" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="모글-출발" stnNo="2582">
+   <dataSet lst="1204" val="58.9" />
+   <dataSet lst="1205" val="35.1" />
+   <dataSet lst="1206" val="38.1" />
+   <dataSet lst="1207" val="44.9" />
+   <dataSet lst="1208" val="65.8" />
+   <dataSet lst="1209" val="65.1" />
+   <dataSet lst="1210" val="45.5" />
+   <dataSet lst="1211" val="43.2" />
+   <dataSet lst="1212" val="21.6" />
+   <dataSet lst="1213" val="21.8" />
+   <dataSet lst="1214" val="28.2" />
+   <dataSet lst="1215" val="28.5" />
+   <dataSet lst="1216" val="31.2" />
+   <dataSet lst="1217" val="57.0" />
+   <dataSet lst="1218" val="69.0" />
+   <dataSet lst="1219" val="83.1" />
+   <dataSet lst="1220" val="71.2" />
+   <dataSet lst="1221" val="71.5" />
+   <dataSet lst="1222" val="71.9" />
+   <dataSet lst="1223" val="73.4" />
+   <dataSet lst="1300" val="71.1" />
+   <dataSet lst="1301" val="69.1" />
+   <dataSet lst="1302" val="63.3" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="면온" stnNo="660">
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+   <dataSet lst="1210" />
+   <dataSet lst="1211" />
+   <dataSet lst="1212" />
+   <dataSet lst="1213" />
+   <dataSet lst="1214" />
+   <dataSet lst="1215" />
+   <dataSet lst="1216" />
+   <dataSet lst="1217" />
+   <dataSet lst="1218" />
+   <dataSet lst="1219" />
+   <dataSet lst="1220" />
+   <dataSet lst="1221" />
+   <dataSet lst="1222" />
+   <dataSet lst="1223" />
+   <dataSet lst="1300" />
+   <dataSet lst="1301" />
+   <dataSet lst="1302" />
+   <dataSet lst="1303" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9905" grName="정선">
+  <stn stnName="알파인활강-출발" stnNo="2584">
+   <dataSet lst="1204" val="18.8" />
+   <dataSet lst="1205" val="23.0" />
+   <dataSet lst="1206" val="18.1" />
+   <dataSet lst="1207" val="14.7" />
+   <dataSet lst="1208" val="14.6" />
+   <dataSet lst="1209" val="16.5" />
+   <dataSet lst="1210" val="16.2" />
+   <dataSet lst="1211" val="16.2" />
+   <dataSet lst="1212" val="15.4" />
+   <dataSet lst="1213" val="15.8" />
+   <dataSet lst="1214" val="19.6" />
+   <dataSet lst="1215" val="24.6" />
+   <dataSet lst="1216" val="28.3" />
+   <dataSet lst="1217" val="29.1" />
+   <dataSet lst="1218" val="38.0" />
+   <dataSet lst="1219" val="43.1" />
+   <dataSet lst="1220" val="53.0" />
+   <dataSet lst="1221" val="53.4" />
+   <dataSet lst="1222" val="53.0" />
+   <dataSet lst="1223" val="58.6" />
+   <dataSet lst="1300" val="60.8" />
+   <dataSet lst="1301" val="62.6" />
+   <dataSet lst="1302" val="61.4" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="알파인활강-중간" stnNo="2586">
+   <dataSet lst="1204" val="18.8" />
+   <dataSet lst="1205" val="23.0" />
+   <dataSet lst="1206" val="18.1" />
+   <dataSet lst="1207" val="14.7" />
+   <dataSet lst="1208" val="14.6" />
+   <dataSet lst="1209" val="16.5" />
+   <dataSet lst="1210" val="16.2" />
+   <dataSet lst="1211" val="16.2" />
+   <dataSet lst="1212" val="15.4" />
+   <dataSet lst="1213" val="15.8" />
+   <dataSet lst="1214" val="19.6" />
+   <dataSet lst="1215" val="24.6" />
+   <dataSet lst="1216" val="28.3" />
+   <dataSet lst="1217" val="29.1" />
+   <dataSet lst="1218" val="38.0" />
+   <dataSet lst="1219" val="43.1" />
+   <dataSet lst="1220" val="53.0" />
+   <dataSet lst="1221" val="53.4" />
+   <dataSet lst="1222" val="53.0" />
+   <dataSet lst="1223" val="58.6" />
+   <dataSet lst="1300" val="60.8" />
+   <dataSet lst="1301" val="62.6" />
+   <dataSet lst="1302" val="61.4" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="알파인활강-도착" stnNo="2587">
+   <dataSet lst="1204" val="37.7" />
+   <dataSet lst="1205" val="54.0" />
+   <dataSet lst="1206" val="39.8" />
+   <dataSet lst="1207" val="26.5" />
+   <dataSet lst="1208" val="35.6" />
+   <dataSet lst="1209" val="30.2" />
+   <dataSet lst="1210" val="30.7" />
+   <dataSet lst="1211" val="33.9" />
+   <dataSet lst="1212" val="34.4" />
+   <dataSet lst="1213" val="30.6" />
+   <dataSet lst="1214" val="41.4" />
+   <dataSet lst="1215" val="51.0" />
+   <dataSet lst="1216" val="52.1" />
+   <dataSet lst="1217" val="30.3" />
+   <dataSet lst="1218" val="28.6" />
+   <dataSet lst="1219" val="47.3" />
+   <dataSet lst="1220" val="56.1" />
+   <dataSet lst="1221" val="52.7" />
+   <dataSet lst="1222" val="53.0" />
+   <dataSet lst="1223" val="57.8" />
+   <dataSet lst="1300" val="59.5" />
+   <dataSet lst="1301" val="58.8" />
+   <dataSet lst="1302" val="57.6" />
+   <dataSet lst="1303" val="60.7" />
+  </stn>
+  <stn stnName="알파인슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="1204" val="18.8" />
+   <dataSet lst="1205" val="23.0" />
+   <dataSet lst="1206" val="18.1" />
+   <dataSet lst="1207" val="14.7" />
+   <dataSet lst="1208" val="14.6" />
+   <dataSet lst="1209" val="16.5" />
+   <dataSet lst="1210" val="16.2" />
+   <dataSet lst="1211" val="16.2" />
+   <dataSet lst="1212" val="15.4" />
+   <dataSet lst="1213" val="15.8" />
+   <dataSet lst="1214" val="19.6" />
+   <dataSet lst="1215" val="24.6" />
+   <dataSet lst="1216" val="28.3" />
+   <dataSet lst="1217" val="29.1" />
+   <dataSet lst="1218" val="38.0" />
+   <dataSet lst="1219" val="43.1" />
+   <dataSet lst="1220" val="53.0" />
+   <dataSet lst="1221" val="53.4" />
+   <dataSet lst="1222" val="53.0" />
+   <dataSet lst="1223" val="58.6" />
+   <dataSet lst="1300" val="60.8" />
+   <dataSet lst="1301" val="62.6" />
+   <dataSet lst="1302" val="61.4" />
+   <dataSet lst="1303" val="66.4" />
+  </stn>
+  <stn stnName="정선경기장하부" stnNo="2571">
+   <dataSet lst="1204" val="51.8" />
+   <dataSet lst="1205" val="53.5" />
+   <dataSet lst="1206" val="48.5" />
+   <dataSet lst="1207" val="51.6" />
+   <dataSet lst="1208" val="41.9" />
+   <dataSet lst="1209" val="42.5" />
+   <dataSet lst="1210" val="39.4" />
+   <dataSet lst="1211" val="36.1" />
+   <dataSet lst="1212" val="37.3" />
+   <dataSet lst="1213" val="36.3" />
+   <dataSet lst="1214" val="37.8" />
+   <dataSet lst="1215" val="39.5" />
+   <dataSet lst="1216" val="53.5" />
+   <dataSet lst="1217" val="51.4" />
+   <dataSet lst="1218" val="53.8" />
+   <dataSet lst="1219" val="50.0" />
+   <dataSet lst="1220" val="62.6" />
+   <dataSet lst="1221" val="65.5" />
+   <dataSet lst="1222" val="57.1" />
+   <dataSet lst="1223" val="61.4" />
+   <dataSet lst="1300" val="62.5" />
+   <dataSet lst="1301" val="64.1" />
+   <dataSet lst="1302" val="63.2" />
+   <dataSet lst="1303" val="61.1" />
+  </stn>
+ </regionGroup>
+</REH>
+

@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SN1 issuedAt="00UTC 19 Dec 2016" basedOn=" ">
+ <regionGroup grCode="8318" grName="주요지점">
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9901" grName="알펜시아 센터(스키점프)">
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="스키점프-K125-출발" stnNo="2572">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="스키점프-K125-점프" stnNo="2555">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="스키점프-K98-출발" stnNo="2573">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="스키점프-K98점프" stnNo="2574">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="스키점프-착지" stnNo="2575">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9902" grName="알펜시아 센터(종합)">
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="바이애슬론-중간" stnNo="2558">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="크로스컨트리-출발" stnNo="2577">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="크로스컨트리-중간" stnNo="2559">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬라이딩-중간" stnNo="2576">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬라이딩-도착" stnNo="2554">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9903" grName="용평 알파인 경기장">
+  <stn stnName="발왕산" stnNo="2552">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="알파인-대회전-출발" stnNo="2560">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-대회전-중간1" stnNo="2578">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-대회전-중간2" stnNo="2579">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-대회전-도착" stnNo="2561">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9904" grName="정선 알파인 경기장">
+  <stn stnName="가리왕산" stnNo="2900">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="알파인-활강-출발" stnNo="2584">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-활강-중간" stnNo="2586">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="알파인-활강-도착" stnNo="2587">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="정선경기장-하부" stnNo="2571">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9905" grName="보광 스노 경기장">
+  <stn stnName="태기산" stnNo="2570">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="크로스-도착" stnNo="2581">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬로프스타일-출발" stnNo="2588">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="모글-출발" stnNo="2582">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+  <stn stnName="슬로프스타일-도착" stnNo="2583">
+   <dataSet lst="1910" val="0.0" />
+   <dataSet lst="1911" val="0.0" />
+   <dataSet lst="1912" val="0.0" />
+   <dataSet lst="1913" val="0.0" />
+   <dataSet lst="1914" val="0.0" />
+   <dataSet lst="1915" val="0.0" />
+   <dataSet lst="1916" val="0.0" />
+   <dataSet lst="1917" val="0.0" />
+   <dataSet lst="1918" val="0.0" />
+   <dataSet lst="1919" val="0.0" />
+   <dataSet lst="1920" val="0.0" />
+   <dataSet lst="1921" val="0.0" />
+   <dataSet lst="1922" val="0.0" />
+   <dataSet lst="1923" val="0.0" />
+   <dataSet lst="2000" val="0.0" />
+   <dataSet lst="2001" val="0.0" />
+   <dataSet lst="2002" val="0.0" />
+   <dataSet lst="2003" val="0.0" />
+   <dataSet lst="2004" val="0.0" />
+   <dataSet lst="2005" val="0.0" />
+   <dataSet lst="2006" val="0.0" />
+   <dataSet lst="2007" val="0.0" />
+   <dataSet lst="2008" val="0.0" />
+   <dataSet lst="2009" val="0.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9906" grName="평창 올림픽 스타디움">
+  <stn stnName="평창-올림픽-스타디움" stnNo="100">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+  <stn stnName="강릉" stnNo="105">
+   <dataSet lst="1910" />
+   <dataSet lst="1911" />
+   <dataSet lst="1912" />
+   <dataSet lst="1913" />
+   <dataSet lst="1914" />
+   <dataSet lst="1915" />
+   <dataSet lst="1916" />
+   <dataSet lst="1917" />
+   <dataSet lst="1918" />
+   <dataSet lst="1919" />
+   <dataSet lst="1920" />
+   <dataSet lst="1921" />
+   <dataSet lst="1922" />
+   <dataSet lst="1923" />
+   <dataSet lst="2000" />
+   <dataSet lst="2001" />
+   <dataSet lst="2002" />
+   <dataSet lst="2003" />
+   <dataSet lst="2004" />
+   <dataSet lst="2005" />
+   <dataSet lst="2006" />
+   <dataSet lst="2007" />
+   <dataSet lst="2008" />
+   <dataSet lst="2009" />
+  </stn>
+ </regionGroup>
+</SN1>
+

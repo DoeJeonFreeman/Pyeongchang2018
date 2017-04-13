@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CheckBox xmlns:mx="http://www.adobe.com/2006/mxml"
+ click="onClick()" width="100%" height="100%" labelPlacement="right">
+	<mx:Script>
+		<![CDATA[
+			import components.events.CheckBoxEvent;
+			
+			  private var _xmlItem:XML;    //holds the current item xml node
+			  
+			  //Sets the state of the checkbox to the value of the selected attribute
+			  //If there is no selected attribute, create on and set it to false
+			  override public function set data(oItem:Object):void
+			  {
+			    _xmlItem = XML(oItem);
+			    var bSelected:Boolean = false;
+			    var attrSelected:XML = _xmlItem.@selected[0];    //get the selected attribute
+			    this.label = _xmlItem.@grName;
+			    if (attrSelected)  {                              //if it exists
+			      bSelected = (attrSelected == "true");          //set the local var accordingly
+			    }
+			    else {                                            //else create the attribute ans set it to false
+			      _xmlItem.@selected = "false";
+			      bSelected = false;                              //set the local var to false
+			    }
+			    this.selected = bSelected;                        //set the checkbox state to the local var
+			  }//set data
+			  
+			  //This is never used???
+			  override public function get data():Object
+			  {
+//			    return this.selected;
+//			    return _xmlItem.@grCode;
+			    return _xmlItem;
+			  }//
+			
+			  //called by click of the checkbox
+			 private function onClick():void
+			 {
+			    _xmlItem.@selected = String(this.selected);  //set the checkbox state into the dataProvider
+			    dispatchEvent(   new CheckBoxEvent(CheckBoxEvent.EVT_STN_SELECTED, _xmlItem, true)        );
+//			    dispatchEvent(   new CheckBoxEvent(CheckBoxEvent.EVT_STN_SELECTED, true)        );
+			 }
+		  
+		]]>
+	</mx:Script>
+ 
+</mx:CheckBox>

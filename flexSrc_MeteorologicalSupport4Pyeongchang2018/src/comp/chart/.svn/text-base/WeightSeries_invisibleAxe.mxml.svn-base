@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="20" 
+	gutterLeft="30"  gutterRight="30"
+	>
+	
+	<!--
+	initialize="init()"
+	
+	<mx:Style>
+		ToolTip {
+			background-color: #a2a1c5;
+			color: #9c0606;
+			font-weight:bold;
+			padding-bottom:15;
+			padding-left:15;
+			padding-right:15;
+			padding-top:15;
+			corner-radius:8;
+		}
+	</mx:Style>
+	
+	-->
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.collections.ArrayCollection;
+			import mx.collections.Sort;
+			import mx.collections.SortField;
+			import mx.controls.Label;
+			import mx.controls.ToolTip;
+			import mx.core.UIComponent;
+			import mx.formatters.NumberFormatter;
+			import mx.graphics.SolidColor;
+			import mx.managers.ToolTipManager;
+			
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.graphic.CloudAmount_ensemble;
+			import comp.chart.graphic.PrecipitationType_ensemble;
+			import comp.chart.graphic.WeightInfoCustomTooltip;
+			import comp.chart.graphic.WeightPieRenderer;
+			import comp.chart.graphic.WeightRenderer;
+			import comp.chart.graphic.WindSymbol2_arrow;
+			
+			import components.util.SmoothImage;
+
+			
+			[Bindable]private var listData_pty:ArrayCollection;		
+			
+			//애는 REH처럼 데이터랑 그리드랑 겹치는거 ㅎㅎ REH꺼 카피해와뜸ㅋㅋㅋ
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even_KWRF:Class;
+			
+			
+			
+			
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_00UTC_odd.png')] private var me_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_00UTC_even.png')] private var me_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_12UTC_odd.png')] private var me_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/rn3/SHRT_12UTC_even.png')] private var me_12UTC_even:Class;
+			
+			
+			
+			
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isVerticalTickAligned:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						if(isVerticalTickAligned){
+							return new me_00UTC_odd();						
+						}else{
+							return new bg_00UTC_odd();						
+						}
+					}else{
+						if(isVerticalTickAligned){
+							return new me_12UTC_odd();						
+						}else{
+							return new bg_12UTC_odd();						
+						}	
+					}
+				}else{
+					if(is00UTC){
+						if(isVerticalTickAligned){
+							return new me_00UTC_even();						
+						}else{
+							return new bg_00UTC_even();						
+						}	
+					}else{
+						if(isVerticalTickAligned){
+							return new me_12UTC_even();						
+						}else{
+							return new bg_12UTC_even();						
+						}
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isVerticalTickAligned:Boolean):void{
+				trace('isVerticalTickAligned::' + isVerticalTickAligned)
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isVerticalTickAligned);
+				bgImg.alpha = 0.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","none");
+				gridLine.setStyle("verticalTickAligned",isVerticalTickAligned);
+//				gridLine.setStyle("verticalTickAligned",false);
+//				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+
+//			private function init():void{
+//				callLater(drawWindSymbol);
+//			}
+		
+			
+			//default
+			public function setWeightGraphics(arr_pty:Array):void{
+				listData_pty =  new ArrayCollection(arr_pty);
+				ptySeries.dataProvider = listData_pty;
+				if(listData_pty) drawPrecipitationType();
+			}
+			
+			
+			
+			private function replacePTYGraphicWithImage(isVisible:Boolean):void{
+				canvas_pty.removeAllChildren();
+				drawPrecipitationType(isVisible);
+			}
+			
+			
+			
+			private function getModelSequence(modelStr:String):uint{
+				var seqNum:uint=0;
+				if(modelStr.indexOf("RDPS_PMOS") != -1){
+					seqNum = 1;
+				}else if(modelStr.indexOf("GDPS_PMOS") != -1){
+					seqNum = 2;
+				}else if(modelStr.indexOf("EPSG_PMOS") != -1){
+					seqNum = 3;
+				}else if(modelStr.indexOf("ECMW_PMOS") != -1){
+					seqNum = 4;
+				}else if(modelStr.indexOf("RDPS_NPPM") != -1){
+					seqNum = 5;
+				}else if(modelStr.indexOf("GDPS_NPPM") != -1){
+					seqNum = 6;
+				}else if(modelStr.indexOf("EPSG_NPPM") != -1){
+					seqNum = 7;
+				}else if(modelStr.indexOf("ECMW_NPPM") != -1){
+					seqNum = 8;
+				}else if(modelStr.indexOf("SSPS") != -1){
+					seqNum = 9;
+				}else{
+					seqNum = 999;
+				}
+				
+					return seqNum;
+			}
+			
+			
+//			public function getPTYFillColour(item:Object):String{
+//				var whichType:String = item.type;
+//				var colour:String;
+//				if(whichType == "RDPS_PMOS"){        //orangeYellow	 		RDPS_PMOS
+//					colour = '#fbbc05';
+//				}else if(whichType == "ECMW_PMOS"){ //ecmBlue             	ECMW_PMOS
+//					colour = '#329AE1';
+//				}else if(whichType == "RDPS_NPPM"){   //light green		    RDPS_NPPM
+//					colour = '#41C01C';	
+//				}else if(whichType == "GDPS_NPPM"){ //MOSS green(O.D)		GDPS_NPPM
+//					colour = '#1D9657';
+//				}else if(whichType == "ECMW_NPPM"){ //blue				    ECMW_NPPM
+//					colour = '#2D6FE8';
+//				}else{
+//					colour = '#f27c38';
+//				}
+//				return colour;		
+//			}
+			
+			
+			
+		
+			
+			
+			
+			public function getPTYFillColour(item:Object):String{
+				var whichType:String = item.type;
+				var colour:String;
+				if(whichType == "RDPS_PMOS"){       
+					colour = '#f28d52'; // green
+				}else if(whichType == "GDPS_PMOS"){ // purple grey		 
+					colour = '#56da89';
+				}else if(whichType == "EPSG_PMOS"){ // mandarin~
+					colour = '#de443a';
+				}else if(whichType == "ECMW_PMOS"){  //sea blue?
+					colour = '#2d97da';//'#2aacbb';
+				}else if(whichType == "RDPS_NPPM"){  
+					colour = '#f2b263'; //light green
+				}else if(whichType == "GDPS_NPPM"){ 
+					colour = '#a5d575';//'#a7f092';
+				}else if(whichType == "EPSG_NPPM"){  
+					colour = '#d96762';
+				}else if(whichType == "ECMW_NPPM"){ 
+					colour = '#73cbe9';
+				}else{
+					colour = '#03a696';				//pale-blue green
+				}
+				return colour+'';		
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			private function getPTYGraphicTooltip(ptyObj:Object):String{
+				ToolTipManager.toolTipClass = WeightInfoCustomTooltip;
+				var tooltipStr:String = '';
+				
+				if(ptyObj.weight){
+					
+//					tooltipStr = ptyObj.weight;
+				
+					var weightArr:Array = ptyObj.weight.split(" ");
+					var meArr:ArrayCollection = new ArrayCollection();
+					for each(var w:String in weightArr){
+						var splendid:Array = w.split(":"); 
+						meArr.addItem({type:splendid[0], percentage:splendid[1], seq:getModelSequence(splendid[0])});
+					}
+					var sortField:SortField = new SortField();
+//					sortField.name = "percentage";
+//					sortField.descending = true;
+					sortField.name = "seq";
+					sortField.descending = false;
+					sortField.numeric = true;
+					var numericDataSort:Sort = new Sort();
+					numericDataSort.fields = [sortField];
+					meArr.sort = numericDataSort;
+					meArr.refresh();
+					
+					if(ptyObj.hasOwnProperty('lst')){
+						var dateTimeStr:String = ptyObj.lst;
+						dateTimeStr = dateTimeStr.substring(0,2)+"일 " + dateTimeStr.substring(2,4) + "시"; 
+						tooltipStr += '<b>'+dateTimeStr + '</b><br>병합예보가이던스 가중치<br>'; 
+					}
+					
+					for each(var itm:Object in meArr){
+						var colStr:String = getPTYFillColour(itm)+'';
+						var whichModel:String  = itm.type;
+						whichModel = whichModel.split('_')[0] + '(' + whichModel.split('_')[1] + ')';
+//						colStr = colStr.replace('0x', '#');
+//						tooltipStr += "<font color='" + colStr + "'>"+itm.type + ": " + itm.percentage + "%<br>";
+						tooltipStr += "<font color='" + colStr + "'>"+whichModel + ": " + itm.percentage + "%<br>";
+//						tooltipStr += "<font color='0x000000'>"+itm.type + ": " + itm.percentage + "%<br>";
+//						tooltipStr += "<font color='0x000000'>"+whichModel + ": " + itm.percentage + "%<br>";
+					}
+					
+				}
+				
+				
+				return tooltipStr;
+			}
+			
+			
+			public var meTip:ToolTip;
+
+			public function meCreateBigTip():void{
+				var s:String ="haha";
+				meTip=ToolTipManager.createToolTip(s,10,10) as ToolTip;
+				meTip.setStyle("backgroundColor",0xFFCC00);
+				meTip.width=300;
+				meTip.height=40;
+			}
+			
+			public function destroyBigTip():void{
+				ToolTipManager.destroyToolTip(meTip);
+			}
+			
+			
+			//PTY default graphics
+			private function drawPrecipitationType(isAlternitive:Boolean=false):void{
+				if(ptySeries.dataProvider != null){
+					for each(var item:Object in ptySeries.dataProvider){
+						var str_kst:String = item.lst;
+						if(isAlternitive){//legend checkbox checked
+//							var symbolImg:SmoothImage = new SmoothImage();
+//							symbolImg.width = 30;
+//							symbolImg.height = 30;
+//							if(getHighestOne_pty(item)=="noData" || getHighestOne_pty(item)=="clear"){continue;}
+//							var isRain:Boolean = false;
+//							switch(getHighestOne_pty(item)){
+//								case  "rain"  : symbolImg.source = rain ; isRain=true; break;
+//								case  "sleet" : symbolImg.source = sleet; break;
+//								case  "snow": 	symbolImg.source = snow; break;
+//							}
+//							canvas_pty.addDataChild(symbolImg, new CartesianCanvasValue(str_kst,-(symbolImg.width / 2)), new CartesianCanvasValue((isRain)?12.5 : 13, 0));
+							
+						}else{//lenged cb unchecked (default)
+//							var ptyRenderer:WeightPieRenderer = new WeightPieRenderer(item);
+							var ptyRenderer:WeightRenderer = new WeightRenderer(item);
+							var uic:UIComponent = new UIComponent();
+							uic.toolTip = getPTYGraphicTooltip(item);
+//							uic.addEventListener(MouseEvent.ROLL_OVER, "meCreateBigTip");
+//							uic.addEventListener(MouseEvent.ROLL_OUT, "destroyBigTip");
+							uic.addChild(ptyRenderer);
+//							canvas_pty.addDataChild(uic, str_kst, new CartesianCanvasValue(10,0))
+							canvas_pty.addDataChild(uic, new CartesianCanvasValue(str_kst,+1), new CartesianCanvasValue(6,0))
+						}
+					}
+				}
+			}
+			
+			
+			
+			private function getClaerPercentage(ptyObj:Object):Number{
+				return (100 - (ptyObj.rain + ptyObj.sleet + ptyObj.snow));
+			}
+			
+			
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+				var str:String =(cat=="3") ?  "WEIGHT" : "";
+				return str;
+			}
+			
+			
+			private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				// Return the customized categoryField value:
+				var lbl_LST:String = cat.toString();
+				if(cat.toString().length == 4){
+					if(Number(cat.toString().substring(2,4))%6 !=0){
+						lbl_LST= '';
+					}
+				} 
+				return lbl_LST;
+			}
+			
+  		
+]]>
+	</mx:Script>
+	
+	
+
+	
+	
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+			<mx:CartesianDataCanvas id="canvas_pty" includeInRanges="true" />
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines 
+            	direction="none" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            	
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<!--verticalAxisTitleAlignment="flippedVertical"-->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"   
+				showLabels="false"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+			/> 
+			<mx:AxisRenderer id="axis_right" placement="right" 
+				minorTickPlacement="none"  canDropLabels="false"
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+				showLabels="true"
+				fontSize="10"
+				labelAlign="top"
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"
+			top	axisStroke="{ChartStyleAssets.axisStroke}"
+		-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+	           	axis="{axis_hor}"/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="horLabelFunc"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" labelFunction="defineVerticalLabel" 
+		    	interval="3" minimum="1"  maximum="10" baseAtZero="false"/>
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:LineSeries id="ptySeries" 
+				xField="lst" visible="true"  dataProvider="{listData_pty}"
+			/>
+		</mx:series>
+		
+</mx:CartesianChart>	    	
+	    	

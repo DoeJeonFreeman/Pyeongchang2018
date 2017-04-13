@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" implements="mx.core.IToolTip" 
+		   backgroundColor="0xFFFFFF"
+		   borderColor="black" borderStyle="solid" >
+	<mx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			import mx.events.ToolTipEvent;
+			
+			[Bindable]
+			public var bodyText:String = "";
+			
+			[Bindable]
+			public var title:String = "";
+			
+			/** 
+			 * Function to create a good looking tooltip.
+			 */
+			public static function createTooltip(event:ToolTipEvent):void {
+				
+				// create the instance of the new tooltip
+				var ptt:EnsemblePTYCustomTooltip = new EnsemblePTYCustomTooltip();
+				
+				// get the default tooltip text and split the text at the ';'
+				var comp:UIComponent = event.currentTarget as UIComponent;
+				var texts:Array = comp.toolTip.split(";");
+				
+				
+				if (texts.length== 2) {
+					// if there was a ; in the tooltip use the text before the ; as title
+					// the rest as body.
+					ptt.title = texts[0];
+					ptt.bodyText = texts[1];
+					
+				} else {
+					// No title given, use the complete text as body
+					ptt.bodyText = comp.toolTip;
+				}
+				
+				// link the tooltip to the event so it can be used.
+				event.toolTip = ptt;
+			}
+			
+			// Needs to be implemented for the IToolTip interface.
+			public var _text:String;
+			
+			public function get text():String { 
+				return _text; 
+			} 
+			public function set text(value:String):void {
+				_text = value;
+			} 
+		]]>
+	</mx:Script>
+	
+	<mx:VBox>
+		<mx:Text text="{title}" fontWeight="bold" color="#000000"/>
+		<mx:Text text="{bodyText}" id="area" color="#000000"/>
+	</mx:VBox>

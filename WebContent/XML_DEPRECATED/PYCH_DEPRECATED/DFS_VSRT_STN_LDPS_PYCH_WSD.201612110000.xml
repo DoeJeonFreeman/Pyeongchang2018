@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WSD issuedAt="00UTC 11 Dec 2016" basedOn=" ">
+ <regionGroup grCode="9901" grName="알펜시아">
+  <stn stnName="스키점프125-출발" stnNo="2572">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="스키점프125-점프" stnNo="2555">
+   <dataSet lst="1110" ws="1.2" wd="228" />
+   <dataSet lst="1111" ws="1.0" wd="349" />
+   <dataSet lst="1112" ws="1.4" wd="343" />
+   <dataSet lst="1113" ws="1.4" wd="335" />
+   <dataSet lst="1114" ws="0.9" wd="302" />
+   <dataSet lst="1115" ws="0.7" wd="214" />
+   <dataSet lst="1116" ws="0.9" wd="193" />
+   <dataSet lst="1117" ws="2.1" wd="188" />
+   <dataSet lst="1118" ws="2.5" wd="194" />
+   <dataSet lst="1119" ws="2.5" wd="185" />
+   <dataSet lst="1120" ws="2.5" wd="189" />
+   <dataSet lst="1121" ws="2.7" wd="190" />
+   <dataSet lst="1122" ws="3.2" wd="184" />
+   <dataSet lst="1123" ws="3.7" wd="188" />
+   <dataSet lst="1200" ws="3.9" wd="187" />
+   <dataSet lst="1201" ws="4.1" wd="186" />
+   <dataSet lst="1202" ws="4.4" wd="180" />
+   <dataSet lst="1203" ws="5.0" wd="181" />
+   <dataSet lst="1204" ws="4.8" wd="176" />
+   <dataSet lst="1205" ws="4.9" wd="176" />
+   <dataSet lst="1206" ws="5.0" wd="179" />
+   <dataSet lst="1207" ws="4.7" wd="184" />
+   <dataSet lst="1208" ws="5.0" wd="186" />
+   <dataSet lst="1209" ws="4.7" wd="182" />
+  </stn>
+  <stn stnName="스키점프98-출발" stnNo="2573">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="스키점프98점프" stnNo="2574">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="스키점프-착지" stnNo="2575">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="1110" />
+   <dataSet lst="1111" />
+   <dataSet lst="1112" />
+   <dataSet lst="1113" />
+   <dataSet lst="1114" />
+   <dataSet lst="1115" />
+   <dataSet lst="1116" />
+   <dataSet lst="1117" />
+   <dataSet lst="1118" />
+   <dataSet lst="1119" />
+   <dataSet lst="1120" />
+   <dataSet lst="1121" />
+   <dataSet lst="1122" />
+   <dataSet lst="1123" />
+   <dataSet lst="1200" />
+   <dataSet lst="1201" />
+   <dataSet lst="1202" />
+   <dataSet lst="1203" />
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9902" grName="알펜시아">
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="슬라이딩-중간" stnNo="2576">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="슬라이딩-도착" stnNo="2554">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="1110" ws="1.2" wd="228" />
+   <dataSet lst="1111" ws="1.0" wd="349" />
+   <dataSet lst="1112" ws="1.4" wd="343" />
+   <dataSet lst="1113" ws="1.4" wd="335" />
+   <dataSet lst="1114" ws="0.9" wd="302" />
+   <dataSet lst="1115" ws="0.7" wd="214" />
+   <dataSet lst="1116" ws="0.9" wd="193" />
+   <dataSet lst="1117" ws="2.1" wd="188" />
+   <dataSet lst="1118" ws="2.5" wd="194" />
+   <dataSet lst="1119" ws="2.5" wd="185" />
+   <dataSet lst="1120" ws="2.5" wd="189" />
+   <dataSet lst="1121" ws="2.7" wd="190" />
+   <dataSet lst="1122" ws="3.2" wd="184" />
+   <dataSet lst="1123" ws="3.7" wd="188" />
+   <dataSet lst="1200" ws="3.9" wd="187" />
+   <dataSet lst="1201" ws="4.1" wd="186" />
+   <dataSet lst="1202" ws="4.4" wd="180" />
+   <dataSet lst="1203" ws="5.0" wd="181" />
+   <dataSet lst="1204" ws="4.8" wd="176" />
+   <dataSet lst="1205" ws="4.9" wd="176" />
+   <dataSet lst="1206" ws="5.0" wd="179" />
+   <dataSet lst="1207" ws="4.7" wd="184" />
+   <dataSet lst="1208" ws="5.0" wd="186" />
+   <dataSet lst="1209" ws="4.7" wd="182" />
+  </stn>
+  <stn stnName="바이애슬론-중간" stnNo="2558">
+   <dataSet lst="1110" ws="1.2" wd="228" />
+   <dataSet lst="1111" ws="1.0" wd="349" />
+   <dataSet lst="1112" ws="1.4" wd="343" />
+   <dataSet lst="1113" ws="1.4" wd="335" />
+   <dataSet lst="1114" ws="0.9" wd="302" />
+   <dataSet lst="1115" ws="0.7" wd="214" />
+   <dataSet lst="1116" ws="0.9" wd="193" />
+   <dataSet lst="1117" ws="2.1" wd="188" />
+   <dataSet lst="1118" ws="2.5" wd="194" />
+   <dataSet lst="1119" ws="2.5" wd="185" />
+   <dataSet lst="1120" ws="2.5" wd="189" />
+   <dataSet lst="1121" ws="2.7" wd="190" />
+   <dataSet lst="1122" ws="3.2" wd="184" />
+   <dataSet lst="1123" ws="3.7" wd="188" />
+   <dataSet lst="1200" ws="3.9" wd="187" />
+   <dataSet lst="1201" ws="4.1" wd="186" />
+   <dataSet lst="1202" ws="4.4" wd="180" />
+   <dataSet lst="1203" ws="5.0" wd="181" />
+   <dataSet lst="1204" ws="4.8" wd="176" />
+   <dataSet lst="1205" ws="4.9" wd="176" />
+   <dataSet lst="1206" ws="5.0" wd="179" />
+   <dataSet lst="1207" ws="4.7" wd="184" />
+   <dataSet lst="1208" ws="5.0" wd="186" />
+   <dataSet lst="1209" ws="4.7" wd="182" />
+  </stn>
+  <stn stnName="크로스컨트리-출발" stnNo="2577">
+   <dataSet lst="1110" ws="1.2" wd="228" />
+   <dataSet lst="1111" ws="1.0" wd="349" />
+   <dataSet lst="1112" ws="1.4" wd="343" />
+   <dataSet lst="1113" ws="1.4" wd="335" />
+   <dataSet lst="1114" ws="0.9" wd="302" />
+   <dataSet lst="1115" ws="0.7" wd="214" />
+   <dataSet lst="1116" ws="0.9" wd="193" />
+   <dataSet lst="1117" ws="2.1" wd="188" />
+   <dataSet lst="1118" ws="2.5" wd="194" />
+   <dataSet lst="1119" ws="2.5" wd="185" />
+   <dataSet lst="1120" ws="2.5" wd="189" />
+   <dataSet lst="1121" ws="2.7" wd="190" />
+   <dataSet lst="1122" ws="3.2" wd="184" />
+   <dataSet lst="1123" ws="3.7" wd="188" />
+   <dataSet lst="1200" ws="3.9" wd="187" />
+   <dataSet lst="1201" ws="4.1" wd="186" />
+   <dataSet lst="1202" ws="4.4" wd="180" />
+   <dataSet lst="1203" ws="5.0" wd="181" />
+   <dataSet lst="1204" ws="4.8" wd="176" />
+   <dataSet lst="1205" ws="4.9" wd="176" />
+   <dataSet lst="1206" ws="5.0" wd="179" />
+   <dataSet lst="1207" ws="4.7" wd="184" />
+   <dataSet lst="1208" ws="5.0" wd="186" />
+   <dataSet lst="1209" ws="4.7" wd="182" />
+  </stn>
+  <stn stnName="크로스컨트리-중간" stnNo="2559">
+   <dataSet lst="1110" ws="0.6" wd="198" />
+   <dataSet lst="1111" ws="0.7" wd="27" />
+   <dataSet lst="1112" ws="1.4" wd="335" />
+   <dataSet lst="1113" ws="1.3" wd="328" />
+   <dataSet lst="1114" ws="0.5" wd="259" />
+   <dataSet lst="1115" ws="1.3" wd="180" />
+   <dataSet lst="1116" ws="0.5" wd="202" />
+   <dataSet lst="1117" ws="2.0" wd="180" />
+   <dataSet lst="1118" ws="2.3" wd="190" />
+   <dataSet lst="1119" ws="2.5" wd="178" />
+   <dataSet lst="1120" ws="2.6" wd="182" />
+   <dataSet lst="1121" ws="2.8" wd="184" />
+   <dataSet lst="1122" ws="3.0" wd="176" />
+   <dataSet lst="1123" ws="3.3" wd="180" />
+   <dataSet lst="1200" ws="3.5" wd="178" />
+   <dataSet lst="1201" ws="3.5" wd="175" />
+   <dataSet lst="1202" ws="3.7" wd="169" />
+   <dataSet lst="1203" ws="4.2" wd="175" />
+   <dataSet lst="1204" ws="4.3" wd="171" />
+   <dataSet lst="1205" ws="4.5" wd="174" />
+   <dataSet lst="1206" ws="4.7" wd="178" />
+   <dataSet lst="1207" ws="4.4" wd="180" />
+   <dataSet lst="1208" ws="4.8" wd="181" />
+   <dataSet lst="1209" ws="4.5" wd="176" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9903" grName="용평">
+  <stn stnName="알파인대회전-출발" stnNo="2560">
+   <dataSet lst="1110" ws="1.6" wd="50" />
+   <dataSet lst="1111" ws="2.1" wd="352" />
+   <dataSet lst="1112" ws="2.4" wd="324" />
+   <dataSet lst="1113" ws="1.5" wd="312" />
+   <dataSet lst="1114" ws="1.8" wd="283" />
+   <dataSet lst="1115" ws="2.3" wd="275" />
+   <dataSet lst="1116" ws="2.9" wd="282" />
+   <dataSet lst="1117" ws="2.5" wd="252" />
+   <dataSet lst="1118" ws="2.8" wd="253" />
+   <dataSet lst="1119" ws="4.4" wd="254" />
+   <dataSet lst="1120" ws="4.3" wd="251" />
+   <dataSet lst="1121" ws="3.3" wd="237" />
+   <dataSet lst="1122" ws="4.3" wd="244" />
+   <dataSet lst="1123" ws="4.5" wd="222" />
+   <dataSet lst="1200" ws="4.6" wd="226" />
+   <dataSet lst="1201" ws="5.2" wd="226" />
+   <dataSet lst="1202" ws="5.0" wd="221" />
+   <dataSet lst="1203" ws="5.4" wd="215" />
+   <dataSet lst="1204" ws="6.1" wd="207" />
+   <dataSet lst="1205" ws="6.2" wd="206" />
+   <dataSet lst="1206" ws="6.2" wd="204" />
+   <dataSet lst="1207" ws="5.7" wd="203" />
+   <dataSet lst="1208" ws="5.7" wd="202" />
+   <dataSet lst="1209" ws="5.7" wd="203" />
+  </stn>
+  <stn stnName="알파인대회전-중간1" stnNo="2578">
+   <dataSet lst="1110" ws="1.4" wd="45" />
+   <dataSet lst="1111" ws="1.5" wd="360" />
+   <dataSet lst="1112" ws="1.8" wd="322" />
+   <dataSet lst="1113" ws="1.2" wd="305" />
+   <dataSet lst="1114" ws="1.9" wd="286" />
+   <dataSet lst="1115" ws="2.5" wd="277" />
+   <dataSet lst="1116" ws="2.7" wd="287" />
+   <dataSet lst="1117" ws="2.3" wd="250" />
+   <dataSet lst="1118" ws="2.8" wd="252" />
+   <dataSet lst="1119" ws="3.9" wd="257" />
+   <dataSet lst="1120" ws="3.6" wd="254" />
+   <dataSet lst="1121" ws="2.7" wd="237" />
+   <dataSet lst="1122" ws="3.5" wd="252" />
+   <dataSet lst="1123" ws="3.7" wd="218" />
+   <dataSet lst="1200" ws="4.1" wd="219" />
+   <dataSet lst="1201" ws="4.5" wd="220" />
+   <dataSet lst="1202" ws="4.5" wd="214" />
+   <dataSet lst="1203" ws="4.9" wd="208" />
+   <dataSet lst="1204" ws="5.5" wd="202" />
+   <dataSet lst="1205" ws="5.5" wd="200" />
+   <dataSet lst="1206" ws="5.5" wd="199" />
+   <dataSet lst="1207" ws="5.2" wd="198" />
+   <dataSet lst="1208" ws="5.1" wd="196" />
+   <dataSet lst="1209" ws="5.2" wd="196" />
+  </stn>
+  <stn stnName="알파인대회전-중간2" stnNo="2579">
+   <dataSet lst="1110" ws="0.6" wd="211" />
+   <dataSet lst="1111" ws="1.7" wd="327" />
+   <dataSet lst="1112" ws="2.0" wd="315" />
+   <dataSet lst="1113" ws="1.7" wd="298" />
+   <dataSet lst="1114" ws="2.4" wd="298" />
+   <dataSet lst="1115" ws="2.3" wd="290" />
+   <dataSet lst="1116" ws="2.6" wd="298" />
+   <dataSet lst="1117" ws="2.2" wd="267" />
+   <dataSet lst="1118" ws="2.9" wd="266" />
+   <dataSet lst="1119" ws="3.6" wd="268" />
+   <dataSet lst="1120" ws="3.2" wd="268" />
+   <dataSet lst="1121" ws="2.5" wd="263" />
+   <dataSet lst="1122" ws="3.0" wd="272" />
+   <dataSet lst="1123" ws="2.6" wd="209" />
+   <dataSet lst="1200" ws="2.9" wd="221" />
+   <dataSet lst="1201" ws="4.2" wd="222" />
+   <dataSet lst="1202" ws="3.9" wd="211" />
+   <dataSet lst="1203" ws="3.9" wd="199" />
+   <dataSet lst="1204" ws="4.7" wd="190" />
+   <dataSet lst="1205" ws="4.7" wd="187" />
+   <dataSet lst="1206" ws="4.8" wd="185" />
+   <dataSet lst="1207" ws="4.5" wd="185" />
+   <dataSet lst="1208" ws="4.4" wd="184" />
+   <dataSet lst="1209" ws="4.4" wd="185" />
+  </stn>
+  <stn stnName="알파인대회전-도착" stnNo="2561">
+   <dataSet lst="1110" ws="1.4" wd="45" />
+   <dataSet lst="1111" ws="1.5" wd="360" />
+   <dataSet lst="1112" ws="1.8" wd="322" />
+   <dataSet lst="1113" ws="1.2" wd="305" />
+   <dataSet lst="1114" ws="1.9" wd="286" />
+   <dataSet lst="1115" ws="2.5" wd="277" />
+   <dataSet lst="1116" ws="2.7" wd="287" />
+   <dataSet lst="1117" ws="2.3" wd="250" />
+   <dataSet lst="1118" ws="2.8" wd="252" />
+   <dataSet lst="1119" ws="3.9" wd="257" />
+   <dataSet lst="1120" ws="3.6" wd="254" />
+   <dataSet lst="1121" ws="2.7" wd="237" />
+   <dataSet lst="1122" ws="3.5" wd="252" />
+   <dataSet lst="1123" ws="3.7" wd="218" />
+   <dataSet lst="1200" ws="4.1" wd="219" />
+   <dataSet lst="1201" ws="4.5" wd="220" />
+   <dataSet lst="1202" ws="4.5" wd="214" />
+   <dataSet lst="1203" ws="4.9" wd="208" />
+   <dataSet lst="1204" ws="5.5" wd="202" />
+   <dataSet lst="1205" ws="5.5" wd="200" />
+   <dataSet lst="1206" ws="5.5" wd="199" />
+   <dataSet lst="1207" ws="5.2" wd="198" />
+   <dataSet lst="1208" ws="5.1" wd="196" />
+   <dataSet lst="1209" ws="5.2" wd="196" />
+  </stn>
+  <stn stnName="용평" stnNo="318">
+   <dataSet lst="1110" />
+   <dataSet lst="1111" />
+   <dataSet lst="1112" />
+   <dataSet lst="1113" />
+   <dataSet lst="1114" />
+   <dataSet lst="1115" />
+   <dataSet lst="1116" />
+   <dataSet lst="1117" />
+   <dataSet lst="1118" />
+   <dataSet lst="1119" />
+   <dataSet lst="1120" />
+   <dataSet lst="1121" />
+   <dataSet lst="1122" />
+   <dataSet lst="1123" />
+   <dataSet lst="1200" />
+   <dataSet lst="1201" />
+   <dataSet lst="1202" />
+   <dataSet lst="1203" />
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9904" grName="보광">
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="1110" ws="3.4" wd="17" />
+   <dataSet lst="1111" ws="3.1" wd="19" />
+   <dataSet lst="1112" ws="2.3" wd="18" />
+   <dataSet lst="1113" ws="0.5" wd="22" />
+   <dataSet lst="1114" ws="0.5" wd="191" />
+   <dataSet lst="1115" ws="2.0" wd="333" />
+   <dataSet lst="1116" ws="3.0" wd="327" />
+   <dataSet lst="1117" ws="3.1" wd="301" />
+   <dataSet lst="1118" ws="2.5" wd="236" />
+   <dataSet lst="1119" ws="3.4" wd="302" />
+   <dataSet lst="1120" ws="3.2" wd="296" />
+   <dataSet lst="1121" ws="3.1" wd="279" />
+   <dataSet lst="1122" ws="3.3" wd="282" />
+   <dataSet lst="1123" ws="3.4" wd="289" />
+   <dataSet lst="1200" ws="3.6" wd="280" />
+   <dataSet lst="1201" ws="4.6" wd="244" />
+   <dataSet lst="1202" ws="4.5" wd="231" />
+   <dataSet lst="1203" ws="4.5" wd="217" />
+   <dataSet lst="1204" ws="4.5" wd="209" />
+   <dataSet lst="1205" ws="4.3" wd="211" />
+   <dataSet lst="1206" ws="4.2" wd="211" />
+   <dataSet lst="1207" ws="4.0" wd="207" />
+   <dataSet lst="1208" ws="4.0" wd="213" />
+   <dataSet lst="1209" ws="3.9" wd="204" />
+  </stn>
+  <stn stnName="크로스-도착" stnNo="2581">
+   <dataSet lst="1110" ws="2.1" wd="19" />
+   <dataSet lst="1111" ws="1.7" wd="25" />
+   <dataSet lst="1112" ws="1.2" wd="35" />
+   <dataSet lst="1113" ws="0.7" wd="27" />
+   <dataSet lst="1114" ws="0.5" wd="323" />
+   <dataSet lst="1115" ws="1.5" wd="337" />
+   <dataSet lst="1116" ws="2.1" wd="315" />
+   <dataSet lst="1117" ws="1.8" wd="264" />
+   <dataSet lst="1118" ws="2.9" wd="241" />
+   <dataSet lst="1119" ws="2.4" wd="277" />
+   <dataSet lst="1120" ws="2.8" wd="90" />
+   <dataSet lst="1121" ws="2.5" wd="277" />
+   <dataSet lst="1122" ws="2.6" wd="279" />
+   <dataSet lst="1123" ws="2.1" wd="298" />
+   <dataSet lst="1200" ws="2.4" wd="292" />
+   <dataSet lst="1201" ws="3.6" wd="256" />
+   <dataSet lst="1202" ws="4.4" wd="239" />
+   <dataSet lst="1203" ws="4.2" wd="225" />
+   <dataSet lst="1204" ws="3.8" wd="220" />
+   <dataSet lst="1205" ws="4.0" wd="219" />
+   <dataSet lst="1206" ws="3.4" wd="225" />
+   <dataSet lst="1207" ws="3.0" wd="221" />
+   <dataSet lst="1208" ws="3.3" wd="220" />
+   <dataSet lst="1209" ws="3.7" wd="214" />
+  </stn>
+  <stn stnName="슬로프스타일-출발" stnNo="2588">
+   <dataSet lst="1110" ws="2.5" wd="26" />
+   <dataSet lst="1111" ws="2.4" wd="33" />
+   <dataSet lst="1112" ws="1.8" wd="43" />
+   <dataSet lst="1113" ws="0.7" wd="34" />
+   <dataSet lst="1114" ws="0.6" wd="219" />
+   <dataSet lst="1115" ws="1.6" wd="345" />
+   <dataSet lst="1116" ws="2.2" wd="324" />
+   <dataSet lst="1117" ws="1.2" wd="305" />
+   <dataSet lst="1118" ws="2.8" wd="221" />
+   <dataSet lst="1119" ws="2.2" wd="297" />
+   <dataSet lst="1120" ws="2.7" wd="290" />
+   <dataSet lst="1121" ws="2.3" wd="304" />
+   <dataSet lst="1122" ws="2.6" wd="301" />
+   <dataSet lst="1123" ws="2.2" wd="330" />
+   <dataSet lst="1200" ws="2.2" wd="326" />
+   <dataSet lst="1201" ws="3.3" wd="258" />
+   <dataSet lst="1202" ws="4.5" wd="235" />
+   <dataSet lst="1203" ws="4.2" wd="224" />
+   <dataSet lst="1204" ws="4.1" wd="216" />
+   <dataSet lst="1205" ws="3.9" wd="218" />
+   <dataSet lst="1206" ws="3.6" wd="224" />
+   <dataSet lst="1207" ws="3.2" wd="224" />
+   <dataSet lst="1208" ws="3.8" wd="217" />
+   <dataSet lst="1209" ws="3.6" wd="212" />
+  </stn>
+  <stn stnName="슬로프스타일-도착" stnNo="2583">
+   <dataSet lst="1110" ws="2.1" wd="19" />
+   <dataSet lst="1111" ws="1.7" wd="25" />
+   <dataSet lst="1112" ws="1.2" wd="35" />
+   <dataSet lst="1113" ws="0.7" wd="27" />
+   <dataSet lst="1114" ws="0.5" wd="323" />
+   <dataSet lst="1115" ws="1.5" wd="337" />
+   <dataSet lst="1116" ws="2.1" wd="315" />
+   <dataSet lst="1117" ws="1.8" wd="264" />
+   <dataSet lst="1118" ws="2.9" wd="241" />
+   <dataSet lst="1119" ws="2.4" wd="277" />
+   <dataSet lst="1120" ws="2.8" wd="90" />
+   <dataSet lst="1121" ws="2.5" wd="277" />
+   <dataSet lst="1122" ws="2.6" wd="279" />
+   <dataSet lst="1123" ws="2.1" wd="298" />
+   <dataSet lst="1200" ws="2.4" wd="292" />
+   <dataSet lst="1201" ws="3.6" wd="256" />
+   <dataSet lst="1202" ws="4.4" wd="239" />
+   <dataSet lst="1203" ws="4.2" wd="225" />
+   <dataSet lst="1204" ws="3.8" wd="220" />
+   <dataSet lst="1205" ws="4.0" wd="219" />
+   <dataSet lst="1206" ws="3.4" wd="225" />
+   <dataSet lst="1207" ws="3.0" wd="221" />
+   <dataSet lst="1208" ws="3.3" wd="220" />
+   <dataSet lst="1209" ws="3.7" wd="214" />
+  </stn>
+  <stn stnName="모글-출발" stnNo="2582">
+   <dataSet lst="1110" ws="2.1" wd="19" />
+   <dataSet lst="1111" ws="1.7" wd="25" />
+   <dataSet lst="1112" ws="1.2" wd="35" />
+   <dataSet lst="1113" ws="0.7" wd="27" />
+   <dataSet lst="1114" ws="0.5" wd="323" />
+   <dataSet lst="1115" ws="1.5" wd="337" />
+   <dataSet lst="1116" ws="2.1" wd="315" />
+   <dataSet lst="1117" ws="1.8" wd="264" />
+   <dataSet lst="1118" ws="2.9" wd="241" />
+   <dataSet lst="1119" ws="2.4" wd="277" />
+   <dataSet lst="1120" ws="2.8" wd="90" />
+   <dataSet lst="1121" ws="2.5" wd="277" />
+   <dataSet lst="1122" ws="2.6" wd="279" />
+   <dataSet lst="1123" ws="2.1" wd="298" />
+   <dataSet lst="1200" ws="2.4" wd="292" />
+   <dataSet lst="1201" ws="3.6" wd="256" />
+   <dataSet lst="1202" ws="4.4" wd="239" />
+   <dataSet lst="1203" ws="4.2" wd="225" />
+   <dataSet lst="1204" ws="3.8" wd="220" />
+   <dataSet lst="1205" ws="4.0" wd="219" />
+   <dataSet lst="1206" ws="3.4" wd="225" />
+   <dataSet lst="1207" ws="3.0" wd="221" />
+   <dataSet lst="1208" ws="3.3" wd="220" />
+   <dataSet lst="1209" ws="3.7" wd="214" />
+  </stn>
+  <stn stnName="면온" stnNo="660">
+   <dataSet lst="1110" />
+   <dataSet lst="1111" />
+   <dataSet lst="1112" />
+   <dataSet lst="1113" />
+   <dataSet lst="1114" />
+   <dataSet lst="1115" />
+   <dataSet lst="1116" />
+   <dataSet lst="1117" />
+   <dataSet lst="1118" />
+   <dataSet lst="1119" />
+   <dataSet lst="1120" />
+   <dataSet lst="1121" />
+   <dataSet lst="1122" />
+   <dataSet lst="1123" />
+   <dataSet lst="1200" />
+   <dataSet lst="1201" />
+   <dataSet lst="1202" />
+   <dataSet lst="1203" />
+   <dataSet lst="1204" />
+   <dataSet lst="1205" />
+   <dataSet lst="1206" />
+   <dataSet lst="1207" />
+   <dataSet lst="1208" />
+   <dataSet lst="1209" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9905" grName="정선">
+  <stn stnName="알파인활강-출발" stnNo="2584">
+   <dataSet lst="1110" ws="1.8" wd="45" />
+   <dataSet lst="1111" ws="1.6" wd="18" />
+   <dataSet lst="1112" ws="1.5" wd="349" />
+   <dataSet lst="1113" ws="1.5" wd="307" />
+   <dataSet lst="1114" ws="1.7" wd="270" />
+   <dataSet lst="1115" ws="3.2" wd="266" />
+   <dataSet lst="1116" ws="4.2" wd="260" />
+   <dataSet lst="1117" ws="4.9" wd="258" />
+   <dataSet lst="1118" ws="4.9" wd="250" />
+   <dataSet lst="1119" ws="5.4" wd="248" />
+   <dataSet lst="1120" ws="4.7" wd="243" />
+   <dataSet lst="1121" ws="5.4" wd="245" />
+   <dataSet lst="1122" ws="5.8" wd="241" />
+   <dataSet lst="1123" ws="6.2" wd="237" />
+   <dataSet lst="1200" ws="6.1" wd="229" />
+   <dataSet lst="1201" ws="6.3" wd="229" />
+   <dataSet lst="1202" ws="7.4" wd="223" />
+   <dataSet lst="1203" ws="7.8" wd="218" />
+   <dataSet lst="1204" ws="7.7" wd="213" />
+   <dataSet lst="1205" ws="7.5" wd="212" />
+   <dataSet lst="1206" ws="6.6" wd="211" />
+   <dataSet lst="1207" ws="6.5" wd="207" />
+   <dataSet lst="1208" ws="6.9" wd="211" />
+   <dataSet lst="1209" ws="7.0" wd="213" />
+  </stn>
+  <stn stnName="알파인활강-중간" stnNo="2586">
+   <dataSet lst="1110" ws="1.8" wd="45" />
+   <dataSet lst="1111" ws="1.6" wd="18" />
+   <dataSet lst="1112" ws="1.5" wd="349" />
+   <dataSet lst="1113" ws="1.5" wd="307" />
+   <dataSet lst="1114" ws="1.7" wd="270" />
+   <dataSet lst="1115" ws="3.2" wd="266" />
+   <dataSet lst="1116" ws="4.2" wd="260" />
+   <dataSet lst="1117" ws="4.9" wd="258" />
+   <dataSet lst="1118" ws="4.9" wd="250" />
+   <dataSet lst="1119" ws="5.4" wd="248" />
+   <dataSet lst="1120" ws="4.7" wd="243" />
+   <dataSet lst="1121" ws="5.4" wd="245" />
+   <dataSet lst="1122" ws="5.8" wd="241" />
+   <dataSet lst="1123" ws="6.2" wd="237" />
+   <dataSet lst="1200" ws="6.1" wd="229" />
+   <dataSet lst="1201" ws="6.3" wd="229" />
+   <dataSet lst="1202" ws="7.4" wd="223" />
+   <dataSet lst="1203" ws="7.8" wd="218" />
+   <dataSet lst="1204" ws="7.7" wd="213" />
+   <dataSet lst="1205" ws="7.5" wd="212" />
+   <dataSet lst="1206" ws="6.6" wd="211" />
+   <dataSet lst="1207" ws="6.5" wd="207" />
+   <dataSet lst="1208" ws="6.9" wd="211" />
+   <dataSet lst="1209" ws="7.0" wd="213" />
+  </stn>
+  <stn stnName="알파인활강-도착" stnNo="2587">
+   <dataSet lst="1110" ws="1.3" wd="77" />
+   <dataSet lst="1111" ws="1.1" wd="15" />
+   <dataSet lst="1112" ws="1.8" wd="341" />
+   <dataSet lst="1113" ws="1.9" wd="332" />
+   <dataSet lst="1114" ws="1.3" wd="342" />
+   <dataSet lst="1115" ws="2.4" wd="277" />
+   <dataSet lst="1116" ws="3.3" wd="254" />
+   <dataSet lst="1117" ws="2.3" wd="239" />
+   <dataSet lst="1118" ws="1.7" wd="211" />
+   <dataSet lst="1119" ws="0.8" wd="293" />
+   <dataSet lst="1120" ws="0.6" wd="342" />
+   <dataSet lst="1121" ws="0.5" wd="307" />
+   <dataSet lst="1122" ws="2.2" wd="210" />
+   <dataSet lst="1123" ws="0.8" wd="230" />
+   <dataSet lst="1200" ws="0.5" wd="292" />
+   <dataSet lst="1201" ws="3.0" wd="197" />
+   <dataSet lst="1202" ws="3.5" wd="202" />
+   <dataSet lst="1203" ws="3.6" wd="218" />
+   <dataSet lst="1204" ws="5.8" wd="214" />
+   <dataSet lst="1205" ws="5.1" wd="211" />
+   <dataSet lst="1206" ws="3.4" wd="204" />
+   <dataSet lst="1207" ws="1.4" wd="214" />
+   <dataSet lst="1208" ws="1.9" wd="215" />
+   <dataSet lst="1209" ws="2.5" wd="203" />
+  </stn>
+  <stn stnName="알파인슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="1110" ws="1.8" wd="45" />
+   <dataSet lst="1111" ws="1.6" wd="18" />
+   <dataSet lst="1112" ws="1.5" wd="349" />
+   <dataSet lst="1113" ws="1.5" wd="307" />
+   <dataSet lst="1114" ws="1.7" wd="270" />
+   <dataSet lst="1115" ws="3.2" wd="266" />
+   <dataSet lst="1116" ws="4.2" wd="260" />
+   <dataSet lst="1117" ws="4.9" wd="258" />
+   <dataSet lst="1118" ws="4.9" wd="250" />
+   <dataSet lst="1119" ws="5.4" wd="248" />
+   <dataSet lst="1120" ws="4.7" wd="243" />
+   <dataSet lst="1121" ws="5.4" wd="245" />
+   <dataSet lst="1122" ws="5.8" wd="241" />
+   <dataSet lst="1123" ws="6.2" wd="237" />
+   <dataSet lst="1200" ws="6.1" wd="229" />
+   <dataSet lst="1201" ws="6.3" wd="229" />
+   <dataSet lst="1202" ws="7.4" wd="223" />
+   <dataSet lst="1203" ws="7.8" wd="218" />
+   <dataSet lst="1204" ws="7.7" wd="213" />
+   <dataSet lst="1205" ws="7.5" wd="212" />
+   <dataSet lst="1206" ws="6.6" wd="211" />
+   <dataSet lst="1207" ws="6.5" wd="207" />
+   <dataSet lst="1208" ws="6.9" wd="211" />
+   <dataSet lst="1209" ws="7.0" wd="213" />
+  </stn>
+  <stn stnName="정선경기장하부" stnNo="2571">
+   <dataSet lst="1110" ws="2.2" wd="150" />
+   <dataSet lst="1111" ws="0.6" wd="171" />
+   <dataSet lst="1112" ws="1.2" wd="279" />
+   <dataSet lst="1113" ws="1.9" wd="295" />
+   <dataSet lst="1114" ws="2.1" wd="309" />
+   <dataSet lst="1115" ws="2.6" wd="307" />
+   <dataSet lst="1116" ws="2.9" wd="311" />
+   <dataSet lst="1117" ws="2.8" wd="337" />
+   <dataSet lst="1118" ws="2.7" wd="347" />
+   <dataSet lst="1119" ws="2.0" wd="24" />
+   <dataSet lst="1120" ws="1.8" wd="41" />
+   <dataSet lst="1121" ws="1.6" wd="360" />
+   <dataSet lst="1122" ws="2.3" wd="335" />
+   <dataSet lst="1123" ws="1.8" wd="344" />
+   <dataSet lst="1200" ws="2.3" wd="350" />
+   <dataSet lst="1201" ws="1.5" wd="349" />
+   <dataSet lst="1202" ws="2.2" wd="10" />
+   <dataSet lst="1203" ws="2.8" wd="94" />
+   <dataSet lst="1204" ws="2.6" wd="137" />
+   <dataSet lst="1205" ws="2.8" wd="136" />
+   <dataSet lst="1206" ws="3.1" wd="122" />
+   <dataSet lst="1207" ws="3.2" wd="120" />
+   <dataSet lst="1208" ws="2.9" wd="117" />
+   <dataSet lst="1209" ws="2.3" wd="108" />
+  </stn>
+ </regionGroup>
+</WSD>
+

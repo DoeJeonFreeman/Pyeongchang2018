@@ -1,0 +1,592 @@
+/* CSS file */
+
+
+
+
+/*   src:url("embeddedFont/BareunDotum3.ttf"); */
+ @font-face{
+   src:url("embeddedFont/KoPubDotumBold.ttf");
+   fontFamily: "rixGothicSemiBold";
+   unicodeRange:U+0020-U+0020,U+0041-U+005A,U+0061-U+007A,       
+   					  U+0020-U+007E,U+1100-U+11F9,U+3000-U+303F,U+3131-U+318E,U+327F-U+327F,U+AC00-U+D7A3,U+FF01-U+FF60, 
+   					  U+0030-U+0039,U+002E-U+002E, 
+   					  U+6b,U+6d,U+b2,    
+   					  U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E; 
+  }
+/*
+   unicodeRange:U+0020-U+0020,U+0041-U+005A,U+0061-U+007A,       영어
+   					  U+0020-U+007E,U+1100-U+11F9,U+3000-U+303F,U+3131-U+318E,U+327F-U+327F,U+AC00-U+D7A3,U+FF01-U+FF60, 한글
+   					  U+0030-U+0039,U+002E-U+002E,  숫자
+   					  U+33a2,  ㎢ 
+   					  U+6b,U+6d,U+b2,    km²
+   					  U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E; 라틴
+
+*/
+
+
+
+/*
+ @font-face{
+   src:url("embeddedFont/nGothic.ttf");
+   fontFamily: nGothic;
+   advancedAntiAliasing: true;
+   unicodeRange:U+0020-U+0020,U+0041-U+005A,U+0061-U+007A,
+   					  U+0020-U+007E,U+1100-U+11F9,U+3000-U+303F,U+3131-U+318E,U+327F-U+327F,U+AC00-U+D7A3,U+FF01-U+FF60, 
+   					  U+0030-U+0039,U+002E-U+002E,
+   					  U+0020-U+002F,U+0030-U+0039,U+003A-U+0040,U+0041-U+005A,U+005B-U+0060,U+0061-U+007A,U+007B-U+007E;
+  }
+	*/
+
+  	.dgNotice{
+		vertical-grid-lines:false;
+		border-style:none;
+/*		alternating-item-colors:'#F0F1ED','#F0F1ED'; */
+		font-family:rixGothicSemiBold;
+		alternating-item-colors:'#e8e8e8','#e8e8e8';
+
+	}
+	
+	
+
+  .rixGothic{
+  		fontFamily: rixGothicSemiBold;
+  }
+
+  	.signinBtn{
+		corner-radius:7;
+		fill-alphas:1,1,1,1;
+		fill-colors: #368be8,#368be8,#368be8,#368be8;
+		
+		color: #FFFFFF;
+		textRollOverColor: #000000;
+		fontFamily: "rixGothicSemiBold";
+		fontWeight: normal;
+		fontSize: 12;
+			
+		}
+  
+  	.signin{
+		fontFamily: "rixGothicSemiBold";
+		}
+  
+ /* 
+ 	.sangSang{}
+*/
+
+
+  
+  .refSiteTitle{
+  		fontFamily: rixGothicSemiBold;
+  		font-size:17;
+  	
+  }
+  
+  .refSiteSub{
+  		fontFamily: rixGothicSemiBold;
+  		color:#333333;
+  		font-size:15;
+  }
+  
+  .refSiteLink{
+  		fontFamily: rixGothicSemiBold;
+  		color:#666666;
+  		font-size:13;
+  		
+  	/*	font-size:15;*/
+  }
+  
+  
+  
+  
+  
+  
+  
+    
+ .symbolButtonSetTip{
+ 		 /*       symbolTip.setStyle("fontSize",13);
+		        symbolTip.setStyle("fontWeight",'normal');
+		        symbolTip.setStyle("styleName",rixGothic);
+		        
+    fontFamily:"rixGothicSemiBold"; */
+    fontFamily: rixGothicSemiBold;
+	fontSize: 15;
+	font-weight:normal;
+ 	textAlign: center;
+ 	border-color:#0b4f8c;
+ 	border-alpha:0.7;
+ 	color:#FFFFFF;
+ } 
+  
+
+  
+  
+  /*
+  .emRG1{
+  		fontFamily: rg1;
+  		font-size:15;
+  }
+  .emRG2{
+  		fontFamily: rg2;
+  		font-size:15;
+  }
+  .emRG3{
+  		fontFamily: rg3;
+  		font-size:15;
+  }
+  
+  .emRG5{
+  		fontFamily: rg5;
+  		font-size:15;
+  }
+*/
+
+
+
+
+
+.copyRight{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 10;
+	font-weight:normal;
+ 	color: #FFFFFF;
+}
+
+
+
+/*최근해빙변화 리젠드아이템 레이블*/
+.labelStyleSEAICELineTextB {
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 15;
+ 	color: #000000;
+}
+
+
+/*지역별분포 리젠드아이템 레이블*/
+.labelStyleSEAICELineTextBb {
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 14;
+ 	color: #000000;
+}
+
+
+
+		.vRule{
+			stroke-color:#999999;
+			shadow-color:#888888;		
+		}
+		
+		
+		.sitemapContentBox{
+			horizontal-align:left;
+			vertical-align:top;
+			vertical-gap:3;
+			padding-top:15;
+			padding-left:80;
+			fontFamily:"rixGothicSemiBold";
+			color:#333333;
+		}
+
+/*최근해빙분포 상단 타이틀 SSMIS 해빙면적 n 거칠기*/
+.labelStyleSEAICETitle
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 25;
+ 	color: #000000;
+}
+
+.labelStyleSEAICETitleTrend
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 27;
+ 	color: #000000;
+}
+
+/*최근해빙분포 데이트 레이블*/
+.labelStyleSEAICETitle3
+{
+	fontFamily:"rixGothicSemiBold";
+ 	color: #000000;
+ 	font-size:21;
+}
+
+/*최근해빙분포 하단 면적  레이블*/
+.labelStyleSEAICETitle4
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 22;
+ 	color: #000000;
+}
+
+
+/*장기해빙변화 차트 타이틀*/
+.labelStyleSEAICETitle2
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 22;
+ 	color: #000000;
+}
+
+
+/*지역별 분포  타이틀*/
+.labelStyleSEAICEPlaceTitle
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 21;
+ 	color: #000000;
+}
+
+/*지역별 분포  이미지 우상단 데이트 레이블*/
+.labelStyleSEAICEPlaceTitle2
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 15;
+ 	color: #000000;
+}
+
+/*지역별 분포  차트 타임 엑시스  레이블
+	해빙 면적의 연 변화 해빙 표면거칠기의 연 변화 상단 차트 데이트타임 엑시스 레이블
+*/
+.labelStyleSEAICEWeeklyGraphMonth
+{
+	/*
+	fontFamily:"rixGothicSemiBold";
+	*/
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 15;
+ 	color: #000000;
+}
+
+
+
+/*현재시간이랑 date Mamipulator 전부*/
+.labelStyleTitleNomal
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 13;
+ 	textAlign: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/*현업 메인화면 메일주소 연락처 이런거 */
+.labelStyleAdminText1
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 12;
+	fontWeight: bold;
+}
+
+/*현업 메인화면 공지사항 텍스트박스  레이블 */
+.labelStyleAdminTextGodDemn
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 14;
+	fontWeight: normal;
+}
+
+.labelStyleAdminText2
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 12;
+	fontWeight: bold;
+	fontStyle: italic;
+}
+
+.labelStyleTitleNomalori
+{
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 13;
+ 	textAlign: center;
+}
+
+
+/*AxisCSS.css*/
+/*AxisCSS.css*/
+/*AxisCSS.css*/
+/*AxisCSS.css*/
+.AxisRendererStyleStandard {
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 15;
+ 	color: #000000;
+}
+
+.AxisRendererStyleStandardModified {
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 14;
+ 	color: #000000;
+}
+
+.AxisRendererStyleTrand {
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 19;
+ 	color: #000000;
+}
+
+/*ButtonCSS.css*/
+/*ButtonCSS.css*/
+/*ButtonCSS.css*/
+/*ButtonCSS.css*/
+/*ButtonCSS.css*/
+/*ButtonCSS.css*/
+.ButtonMORE {
+	cornerRadius: 0;
+	fontSize: 19;
+	textAlign: center;
+	color: #000000;
+	fillAlphas: 1.0, 0.0, 1.0, 1.0;
+	fillColors: #FFFFFF, #85C3DA;
+	borderColor: #BCB7B8;
+	textRollOverColor: #009DFF;
+	fontFamily: "rixGothicSemiBold";
+ }
+
+.ButtonUMStationT1 {
+	cornerRadius: 0;
+	fontSize: 11;
+	fontWeight: bold;
+	textAlign: center;
+	color: #4F4879;
+	fillAlphas: 1.0, 0.0, 1.0, 1.0;
+	fillColors: #FFFFFF, #85C3DA;
+}
+
+
+.ButtonANALPDF
+{
+	fontSize: 13; 
+ 	textAlign: center;
+	fontFamily:"rixGothicSemiBold";
+	cornerRadius: 0;
+	fontWeight: normal;
+}
+
+.ButtonMovieStandard {
+	cornerRadius: 0;
+	borderColor: #5F5E61;
+	fillAlphas: 1.0, 1.0;
+	fillColors: #9C9EA0, #9C9EA0;
+}
+
+.ButtonMovieChangeColor {
+	cornerRadius: 0;
+	borderColor: #5F5E61;
+	fillAlphas: 1.0, 1.0;
+	fillColors: #FFFFFF, #FFFFFF;
+}
+
+.ButtonIntervalNOW
+{
+	textIndent: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingBottom: 0;
+	fillColors: #ffffff, #ffffff, #ffffff, #eeeeee;
+	fontSize: 12; 
+ 	textAlign: center;
+	fontFamily: Arial;
+	fontWeight: bold;
+}
+
+.ButtonInterval
+{
+	textIndent: 0;
+	paddingLeft: 0;
+	paddingRight: 0;
+	paddingTop: -2;
+	paddingBottom: 0;
+	fillColors: #ffffff, #ffffff, #ffffff, #eeeeee;
+	fontFamily:"rixGothicSemiBold";
+	fontSize: 15;
+ 	textAlign: center;
+}
+
+
+.ButtonMovieButtonExistIMG
+{
+	cornerRadius: 0;
+	borderColor: #5F5E61;
+	fillAlphas: 0.5, 0.5, 0.5, 0.5;
+	fillColors: #00AEFF, #00AEFF;
+}
+
+.ButtonMovieButtonNOTExistIMG
+{
+	cornerRadius: 0;
+	borderColor: #5F5E61;
+	fillAlphas: 0.5, 0.5, 0.5, 0.5;
+	fillColors: #FF6F6F, #FF6F6F;
+}
+
+
+
+/*TextAreaCSS.css*/
+/*TextAreaCSS.css*/
+/*TextAreaCSS.css*/
+/*TextAreaCSS.css*/
+/*TextAreaCSS.css*/
+/*TextAreaCSS.css*/
+
+/*  서브메뉴의 서브메뉴*/
+.TextAreaStyleTitleSUBMenu2
+{
+	backgroundColor: #555555;
+	backgroundDisabledColor: #555555;
+}
+
+/* 타이틀 검은 목록*/
+.TextAreaStyleTitleNO
+{
+	backgroundColor: #000000;
+	backgroundDisabledColor: #000000;
+}
+
+/* 시간선택*/
+.TextAreaStyleTitleSelect
+{
+	backgroundColor: #EEEEEE;
+	backgroundDisabledColor: #EEEEEE;
+	borderColor: #FFFFFF;
+}
+
+.TextAreaStyleTitleSUBMenu
+{
+	backgroundColor: #303030;
+	backgroundDisabledColor: #303030;
+}
+
+
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+/*ComboBoxCSS*/
+
+ComboBox
+{
+    fillColors: #ffffff, #ffffff, #ffffff, #ffffff;
+	fontSize: 11;
+	fontWeight: normal;
+    cornerRadius: 0;
+    borderColor: #FFFFFF;
+    fillAlphas: 1, 1, 1, 1;
+  	fontFamily: Arial;
+}
+
+.ComboBoxNormal
+{
+    fillColors: #ffffff, #ffffff, #ffffff, #ffffff;
+	fontSize: 11;
+	fontWeight: normal;
+    cornerRadius: 0;
+    borderColor: #0099ff;
+    fillAlphas: 1, 1, 1, 1;
+  	fontFamily: Arial;
+}
+
+
+
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+/*ToolTipCSS.css*/
+ToolTip 
+{
+    fontSize: 13;
+ 	fontWeight: bold;
+}
+
+
+
+/*CanvasCSS.css*/
+/*CanvasCSS.css*/
+/*CanvasCSS.css*/
+/*CanvasCSS.css*/
+/*CanvasCSS.css*/
+.CanvasIMG
+{
+	borderStyle: solid;
+	borderColor: #000000;
+	borderThickness: 1;
+}
+
+.CanvasStyleSOILLegend
+{
+	borderStyle: solid;
+	borderColor: #565454;
+	borderThickness: 2;
+	backgroundAlpha: 1.0;
+	backgroundColor: #FFFFFF;
+}
+
+.AMVNumberChartLegend
+{
+	borderStyle: none;
+	backgroundAlpha: 0.0;
+	backgroundColor: #FFFFFF;
+}
+
+.CanvasStyleBorderOFF
+{
+	borderStyle: none;
+	borderColor: #000000;
+	borderThickness: 1;
+}
+
+.CanvasStyleBorderON
+{
+	borderStyle: solid;
+	borderColor: #000000;
+	borderThickness: 1;
+}
+
+
+
+/*LegendItemCSS.css*/
+/*LegendItemCSS.css*/
+/*LegendItemCSS.css*/
+/*LegendItemCSS.css*/
+/*LegendItemCSS.css*/
+/*LegendItemCSS.css*/
+
+.LegendItemStyleTrend
+{
+	font-family:rixGothicSemiBold;
+	fontSize: 16;
+}
+
+.LegendItemStyleStandard
+{
+	fontSize: 13;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DataTip{
+	font-size:12;
+}

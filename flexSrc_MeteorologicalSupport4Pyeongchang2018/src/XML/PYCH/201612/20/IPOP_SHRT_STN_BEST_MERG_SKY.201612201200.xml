@@ -1,0 +1,1128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SKY issuedAt="12UTC 20 Dec 2016" basedOn=" ">
+ <regionGroup grCode="8318" grName="주요지점">
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.5" />
+   <dataSet lst="2309" val="1.9" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.1" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.8" />
+   <dataSet lst="2309" val="2.1" />
+   <dataSet lst="2312" val="2.1" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="알파인-슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.1" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9901" grName="알펜시아 센터(스키점프)">
+  <stn stnName="스키점프" stnNo="879">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="스키점프-K125-출발" stnNo="2572">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="스키점프-K125-점프" stnNo="2555">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="스키점프-K98-출발" stnNo="2573">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="스키점프-K98점프" stnNo="2574">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="스키점프-착지" stnNo="2575">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.6" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9902" grName="알펜시아 센터(종합)">
+  <stn stnName="바이애슬론-출발" stnNo="2557">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.5" />
+   <dataSet lst="2309" val="1.9" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.1" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="바이애슬론-중간" stnNo="2558">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.4" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="크로스컨트리-출발" stnNo="2577">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.5" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="크로스컨트리-중간" stnNo="2559">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.5" />
+   <dataSet lst="2309" val="1.9" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.1" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="슬라이딩-출발" stnNo="2553">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.8" />
+   <dataSet lst="2309" val="2.1" />
+   <dataSet lst="2312" val="2.1" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="슬라이딩-중간" stnNo="2576">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.8" />
+   <dataSet lst="2309" val="2.1" />
+   <dataSet lst="2312" val="2.1" />
+   <dataSet lst="2315" val="2.1" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="슬라이딩-도착" stnNo="2554">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="2.7" />
+   <dataSet lst="2309" val="2.0" />
+   <dataSet lst="2312" val="2.0" />
+   <dataSet lst="2315" val="2.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9903" grName="용평 알파인 경기장">
+  <stn stnName="발왕산" stnNo="2552">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="3.1" />
+   <dataSet lst="2309" val="2.7" />
+   <dataSet lst="2312" val="2.7" />
+   <dataSet lst="2315" val="2.8" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="3.4" />
+   <dataSet lst="2400" val="3.4" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.6" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="알파인-대회전-출발" stnNo="2560">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="3.1" />
+   <dataSet lst="2309" val="2.7" />
+   <dataSet lst="2312" val="2.7" />
+   <dataSet lst="2315" val="2.7" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="3.5" />
+   <dataSet lst="2400" val="3.5" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.5" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="알파인-대회전-중간1" stnNo="2578">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="3.1" />
+   <dataSet lst="2309" val="2.6" />
+   <dataSet lst="2312" val="2.6" />
+   <dataSet lst="2315" val="2.7" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="3.5" />
+   <dataSet lst="2400" val="3.5" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.5" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="알파인-대회전-중간2" stnNo="2579">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="3.1" />
+   <dataSet lst="2309" val="2.6" />
+   <dataSet lst="2312" val="2.6" />
+   <dataSet lst="2315" val="2.7" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="3.6" />
+   <dataSet lst="2400" val="3.6" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.4" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+  <stn stnName="알파인-대회전-도착" stnNo="2561">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="3.1" />
+   <dataSet lst="2309" val="2.6" />
+   <dataSet lst="2312" val="2.6" />
+   <dataSet lst="2315" val="2.7" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="3.7" />
+   <dataSet lst="2400" val="3.7" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.3" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="4.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9904" grName="정선 알파인 경기장">
+  <stn stnName="가리왕산" stnNo="2900">
+   <dataSet lst="2103" />
+   <dataSet lst="2106" />
+   <dataSet lst="2109" />
+   <dataSet lst="2112" />
+   <dataSet lst="2115" />
+   <dataSet lst="2118" />
+   <dataSet lst="2121" />
+   <dataSet lst="2200" />
+   <dataSet lst="2203" />
+   <dataSet lst="2206" />
+   <dataSet lst="2209" />
+   <dataSet lst="2212" />
+   <dataSet lst="2215" />
+   <dataSet lst="2218" />
+   <dataSet lst="2221" />
+   <dataSet lst="2300" />
+   <dataSet lst="2303" />
+   <dataSet lst="2306" />
+   <dataSet lst="2309" />
+   <dataSet lst="2312" />
+   <dataSet lst="2315" />
+   <dataSet lst="2318" />
+   <dataSet lst="2321" />
+   <dataSet lst="2400" />
+   <dataSet lst="2403" />
+   <dataSet lst="2406" />
+   <dataSet lst="2409" />
+   <dataSet lst="2412" />
+  </stn>
+  <stn stnName="알파인-활강-출발" stnNo="2584">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="알파인-슈퍼대회전-출발" stnNo="2585">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="알파인-활강-중간" stnNo="2586">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="알파인-활강-도착" stnNo="2587">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.1" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.1" />
+  </stn>
+  <stn stnName="정선경기장-하부" stnNo="2571">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.3" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.3" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9905" grName="보광 스노 경기장">
+  <stn stnName="태기산" stnNo="2570">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.2" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="크로스-출발" stnNo="2580">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.1" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="크로스-도착" stnNo="2581">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="슬로프스타일-출발" stnNo="2588">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.1" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="모글-출발" stnNo="2582">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.1" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+  <stn stnName="슬로프스타일-도착" stnNo="2583">
+   <dataSet lst="2103" val="3.0" />
+   <dataSet lst="2106" val="4.0" />
+   <dataSet lst="2109" val="4.0" />
+   <dataSet lst="2112" val="4.0" />
+   <dataSet lst="2115" val="4.0" />
+   <dataSet lst="2118" val="4.0" />
+   <dataSet lst="2121" val="4.0" />
+   <dataSet lst="2200" val="4.0" />
+   <dataSet lst="2203" val="4.0" />
+   <dataSet lst="2206" val="4.0" />
+   <dataSet lst="2209" val="4.0" />
+   <dataSet lst="2212" val="4.0" />
+   <dataSet lst="2215" val="4.0" />
+   <dataSet lst="2218" val="4.0" />
+   <dataSet lst="2221" val="4.0" />
+   <dataSet lst="2300" val="4.0" />
+   <dataSet lst="2303" val="4.0" />
+   <dataSet lst="2306" val="4.0" />
+   <dataSet lst="2309" val="4.0" />
+   <dataSet lst="2312" val="4.0" />
+   <dataSet lst="2315" val="4.0" />
+   <dataSet lst="2318" val="4.0" />
+   <dataSet lst="2321" val="4.0" />
+   <dataSet lst="2400" val="4.0" />
+   <dataSet lst="2403" val="4.0" />
+   <dataSet lst="2406" val="3.0" />
+   <dataSet lst="2409" val="3.0" />
+   <dataSet lst="2412" val="3.0" />
+  </stn>
+ </regionGroup>
+ <regionGroup grCode="9906" grName="평창 올림픽 스타디움">
+  <stn stnName="평창-올림픽-스타디움" stnNo="100">
+   <dataSet lst="2103" />
+   <dataSet lst="2106" />
+   <dataSet lst="2109" />
+   <dataSet lst="2112" />
+   <dataSet lst="2115" />
+   <dataSet lst="2118" />
+   <dataSet lst="2121" />
+   <dataSet lst="2200" />
+   <dataSet lst="2203" />
+   <dataSet lst="2206" />
+   <dataSet lst="2209" />
+   <dataSet lst="2212" />
+   <dataSet lst="2215" />
+   <dataSet lst="2218" />
+   <dataSet lst="2221" />
+   <dataSet lst="2300" />
+   <dataSet lst="2303" />
+   <dataSet lst="2306" />
+   <dataSet lst="2309" />
+   <dataSet lst="2312" />
+   <dataSet lst="2315" />
+   <dataSet lst="2318" />
+   <dataSet lst="2321" />
+   <dataSet lst="2400" />
+   <dataSet lst="2403" />
+   <dataSet lst="2406" />
+   <dataSet lst="2409" />
+   <dataSet lst="2412" />
+  </stn>
+  <stn stnName="강릉" stnNo="105">
+   <dataSet lst="2103" />
+   <dataSet lst="2106" />
+   <dataSet lst="2109" />
+   <dataSet lst="2112" />
+   <dataSet lst="2115" />
+   <dataSet lst="2118" />
+   <dataSet lst="2121" />
+   <dataSet lst="2200" />
+   <dataSet lst="2203" />
+   <dataSet lst="2206" />
+   <dataSet lst="2209" />
+   <dataSet lst="2212" />
+   <dataSet lst="2215" />
+   <dataSet lst="2218" />
+   <dataSet lst="2221" />
+   <dataSet lst="2300" />
+   <dataSet lst="2303" />
+   <dataSet lst="2306" />
+   <dataSet lst="2309" />
+   <dataSet lst="2312" />
+   <dataSet lst="2315" />
+   <dataSet lst="2318" />
+   <dataSet lst="2321" />
+   <dataSet lst="2400" />
+   <dataSet lst="2403" />
+   <dataSet lst="2406" />
+   <dataSet lst="2409" />
+   <dataSet lst="2412" />
+  </stn>
+ </regionGroup>
+</SKY>
+

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<stationInfo>
+
+<!-- 
+	<regionGroup grCode="8318" grName="주요지점"/>
+	<regionGroup grCode="555" grName="관심지점"/>
+ -->
+	
+	<regionGroup grCode="9901" grName="알펜시아 센터(스키점프)" mainStn="스키점프">
+		<station stnCode="879" stnName="스키점프" stn_edit="105" lon="127.68" lat="37.66" gx="88.97" gy="129.42" alti="852"/>
+		<station stnCode="2572" stnName="스키점프K125-출발" stn_edit="105" lon="128.68" lat="37.66" gx="88.96" gy="129.43" alti="884"/>
+		<station stnCode="2555" stnName="스키점프K125-점프" stn_edit="105" lon="128.69" lat="37.67" gx="89.11" gy="129.61" alti="859"/>
+		<station stnCode="2573" stnName="스키점프K98-출발" stn_edit="105" lon="128.68" lat="37.66" gx="88.97" gy="129.43" alti="866"/>
+		<station stnCode="2574" stnName="스키점프K98-점프" stn_edit="105" lon="128.68" lat="37.66" gx="88.98" gy="129.44" alti="831"/>
+		<station stnCode="2575" stnName="스키점프-착지" stn_edit="105" lon="128.68" lat="37.66" gx="88.99" gy="129.45" alti="793"/>
+	</regionGroup>
+	
+	<regionGroup grCode="9902" grName="알펜시아 센터(종합)" mainStn="바이애슬론출발">
+		<station stnCode="2557" stnName="바이애슬론-출발" stn_edit="105" lon="128.69" lat="37.67" gx="89.14" gy="129.73" alti="756"/>
+		<station stnCode="2558" stnName="바이애슬론-중간" stn_edit="105" lon="128.69" lat="37.67" gx="89.07" gy="129.53" alti="776"/>
+		<station stnCode="2577" stnName="크로스컨트리-출발" stn_edit="105" lon="128.68" lat="37.66" gx="89.06" gy="129.49" alti="768"/>
+		<station stnCode="2559" stnName="크로스컨트리-중간" stn_edit="105" lon="128.69" lat="37.66" gx="89.13" gy="129.41" alti="782"/>
+		<station stnCode="2553" stnName="슬라이딩-출발" stn_edit="105" lon="128.67" lat="37.65" gx="88.86" gy="129.19" alti="959"/>
+		<station stnCode="2576" stnName="슬라이딩-중간" stn_edit="105" lon="128.68" lat="37.65" gx="88.92" gy="129.24" alti="875"/>
+		<station stnCode="2554" stnName="슬라이딩-도착" stn_edit="105" lon="128.67" lat="37.65" gx="88.91" gy="129.31" alti="784"/>
+	</regionGroup>
+	
+	<regionGroup grCode="9903" grName="용평 알파인 경기장" mainStn="발왕산">
+		<station stnCode="2552" stnName="발왕산" stn_edit="105" lon="128.68" lat="37.62" gx="89.00" gy="128.56" alti="1417"/> 
+		<station stnCode="2560" stnName="알파인대회전-출발" stn_edit="105" lon="128.68" lat="37.62" gx="89.00" gy="128.56" alti="1417"/> 
+		<station stnCode="2578" stnName="알파인대회전-중간1" stn_edit="105" lon="128.67" lat="37.62" gx="88.82" gy="128.44" alti="1302"/> 
+		<station stnCode="2579" stnName="알파인대회전-중간2" stn_edit="105" lon="128.67" lat="37.60" gx="88.84" gy="128.13" alti="1185"/> 
+		<station stnCode="2561" stnName="알파인대회전-도착" stn_edit="105" lon="128.66" lat="37.62" gx="88.75" gy="128.56" alti="976"/> 
+	</regionGroup>
+	
+	<regionGroup grCode="9904" grName="정선 알파인 경기장" mainStn="가리왕산">
+		<station stnCode="2900" stnName="가리왕산" stn_edit="105" lon="128.60" lat="37.45" gx="87.75" gy="124.71" alti="1370"/>
+		<station stnCode="2584" stnName="알파인활강-출발" stn_edit="105" lon="128.60" lat="37.46" gx="87.79" gy="124.97" alti="927"/>
+		<station stnCode="2585" stnName="알파인슈퍼대회전-출발" stn_edit="105" lon="128.60" lat="37.45" gx="87.80" gy="125.12" alti="1220"/>
+		<station stnCode="2586" stnName="알파인활강-중간" stn_edit="105" lon="128.60" lat="37.46" gx="87.79" gy="124.97" alti="927"/>
+		<station stnCode="2587" stnName="알파인활강-도착" stn_edit="105" lon="128.60" lat="37.46" gx="87.80" gy="125.12" alti="665"/>
+		<station stnCode="2571" stnName="정선경기장-하부" stn_edit="105" lon="128.61" lat="37.47" gx="87.99" gy="125.32" alti="373"/>		
+	</regionGroup>
+	
+	<regionGroup grCode="9905" grName="보광 스노 경기장" mainStn="태기산">
+		<station stnCode="2570" stnName="태기산" stn_edit="105" lon="128.31" lat="37.58" gx="82.73" gy="127.42" alti="903"/> 
+		<station stnCode="2580" stnName="크로스-출발" stn_edit="105" lon="128.31" lat="37.58" gx="82.73" gy="127.42" alti="903"/> 
+		<station stnCode="2581" stnName="크로스-도착" stn_edit="105" lon="128.32" lat="37.58" gx="82.89" gy="127.57" alti="653"/> 
+		<station stnCode="2588" stnName="슬로프스타일-출발" stn_edit="105" lon="128.32" lat="37.58" gx="82.92" gy="127.35" alti="867"/>
+		<station stnCode="2582" stnName="모글-출발" stn_edit="105" lon="128.32" lat="37.58" gx="82.92" gy="127.44" alti="791"/>
+		<station stnCode="2583" stnName="슬로프스타일-도착" stn_edit="105" lon="128.33" lat="37.58" gx="82.95" gy="127.47" alti="704"/>
+	</regionGroup>
+	
+	<regionGroup grCode="9906" grName="평창 올림픽 스타디움" mainStn="평창올림픽스타디움">
+		<station stnCode="100" stnName="평창올림픽-스타디움" stn_edit="105" lon="128.31" lat="37.58" gx="82.73" gy="127.42" alti="903"/> 
+		<station stnCode="105" stnName="강릉" stn_edit="105" lon="128.33" lat="37.58" gx="82.95" gy="127.47" alti="704"/>
+	</regionGroup>
+	
+	
+
+</stationInfo>

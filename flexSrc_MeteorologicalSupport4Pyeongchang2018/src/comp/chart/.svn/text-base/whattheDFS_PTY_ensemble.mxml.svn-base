@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:ColumnChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="50" 
+	gutterLeft="35" gutterRight="35"
+	creationComplete="setCloudAmount();" dataProvider="{pseudoData_PTY}"
+	>
+	
+	<mx:Script>
+		<![CDATA[
+			import comp.chart.graphic.PrecipitationType_ensemble;
+			import comp.chart.graphic.CloudAmount_ensemble;
+			import mx.controls.Image;
+			import mx.messaging.SubscriptionInfo;
+			import mx.containers.Grid;
+			import asset.DFS.timeSeries.meteogram.itmRenerer.GridlineGDPS;
+			import mx.graphics.SolidColor;
+			import mx.graphics.Stroke;
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import comp.chart.graphic.CloudAmount;
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.charts.chartClasses.CartesianDataCanvas;
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			import mx.controls.Label;
+			
+			import mx.charts.GridLines;
+
+			[Bindable]private var pseudoData_cloudAmount:Array=[
+{lst:"061700", clear:0, scattered:0, broken:45.83333333333333, overcast:54.166666666666664},
+{lst:"061712", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"061800", clear:0, scattered:0, broken:12.5, overcast:87.5},
+{lst:"061812", clear:41.66666666666667, scattered:25, broken:12.5, overcast:20.833333333333336},
+{lst:"061900", clear:37.5, scattered:58.333333333333336, broken:4.166666666666666, overcast:0},
+{lst:"061912", clear:37.5, scattered:45.83333333333333, broken:16.666666666666664, overcast:0},
+{lst:"062000", clear:4.166666666666666, scattered:25, broken:62.5, overcast:8.333333333333332},
+{lst:"062012", clear:0, scattered:8.333333333333332, broken:29.166666666666668, overcast:62.5},
+{lst:"062100", clear:0, scattered:0, broken:12.5, overcast:87.5},
+{lst:"062112", clear:0, scattered:0, broken:4.166666666666666, overcast:95.83333333333334},
+{lst:"062200", clear:0, scattered:4.166666666666666, broken:4.166666666666666, overcast:91.66666666666666},
+{lst:"062212", clear:8.333333333333332, scattered:16.666666666666664, broken:16.666666666666664, overcast:58.333333333333336},
+{lst:"062300", clear:83.33333333333334, scattered:8.333333333333332, broken:8.333333333333332, overcast:0},
+{lst:"062312", clear:100, scattered:0, broken:0, overcast:0},
+{lst:"062400", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062412", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062500", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062512", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062600", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062612", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062700", clear:4.166666666666666, scattered:0, broken:0, overcast:95.83333333333334},
+{lst:"062712", clear:0, scattered:0, broken:0, overcast:100},
+{lst:"062800", clear:8.333333333333332, scattered:0, broken:0, overcast:91.66666666666666},
+			];
+							
+							
+			[Bindable]private var pseudoData_PTY:Array=[
+{lst:"061700", rain:0, sleet:0, snow:0},
+{lst:"061712", rain:0, sleet:0, snow:0},
+{lst:"061800", rain:0, sleet:0, snow:0},
+{lst:"061812", rain:0, sleet:0, snow:0},
+{lst:"061900", rain:0, sleet:0, snow:0},
+{lst:"061912", rain:0, sleet:0, snow:0},
+{lst:"062000", rain:0, sleet:0, snow:0},
+{lst:"062012", rain:0, sleet:0, snow:0},
+{lst:"062100", rain:0, sleet:0, snow:0},
+{lst:"062112", rain:0, sleet:100, snow:0},
+{lst:"062200", rain:0, sleet:0, snow:0},
+{lst:"062212", rain:0, sleet:0, snow:0},
+{lst:"062300", rain:0, sleet:0, snow:0},
+{lst:"062312", rain:0, sleet:0, snow:0},
+{lst:"062400", rain:0, sleet:0, snow:0},
+{lst:"062412", rain:0, sleet:0, snow:0},
+{lst:"062500", rain:0, sleet:0, snow:0},
+{lst:"062512", rain:0, sleet:0, snow:0},
+{lst:"062600", rain:0, sleet:0, snow:0},
+{lst:"062612", rain:0, sleet:0, snow:0},
+{lst:"062700", rain:0, sleet:0, snow:0},
+{lst:"062712", rain:0, sleet:0, snow:0},
+{lst:"062800", rain:0, sleet:0, snow:0}];				
+							
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_00UTC_odd.png')] private var bg_00UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_00UTC_even.png')] private var bg_00UTC_even_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_12UTC_odd.png')] private var bg_12UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/t3h/SHRT_12UTC_even.png')] private var bg_12UTC_even_KWRF:Class;
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_odd_KWRF();						
+						}else{
+							return new bg_00UTC_odd();						
+						}
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_odd_KWRF();						
+						}else{
+							return new bg_12UTC_odd();						
+						}	
+					}
+				}else{
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_even_KWRF();						
+						}else{
+							return new bg_00UTC_even();						
+						}	
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_even_KWRF();						
+						}else{
+							return new bg_12UTC_even();						
+						}
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isKWARF);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalTickAligned",false);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_v);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			[Embed (source = "/asset/DFS/timeSeries/meteogram/style/12UTC_Multi.png")] 
+			public var UTC00_bg:Class;
+			
+			[Embed (source = "/asset/DFS/timeSeries/meteogram/style/12UTC_Multi_even.png")] 
+			public var UTC00_bg_even:Class;
+			
+			[Embed (source = "/asset/DFS/timeSeries/meteogram/style/KMA_DFS_GDPS279Hrs_gridLines.png")] 
+			public var UTC00_bg_279hrs:Class;
+			
+			[Embed (source = "/asset/DFS/timeSeries/meteogram/style/KMA_DFS_GDPS279Hrs_gridLines_even.png")] 
+			public var UTC00_bg_279hrs_even:Class;
+			
+			//기존 그래픽에서 이미지로 대체 Jan 2014
+			[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc1.png')] private var clearSkies:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc2.png')] private var scatteredClouds:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc3.png')] private var brokenClouds:Class;
+     		[Embed(source='asset/DFS/timeSeries/meteogram/symbol/cloudCover/cc4.png')] private var overcast:Class;
+			
+			
+			
+			private function setCloudAmount():void{
+				//PTY
+				moveAxisRenderer(parentApplication.isMEDM);
+			   	if(this.dataProvider != null){
+					for each(var item:Object in this.dataProvider){
+						var str_kst:String = item.lst;
+						var ptyRenderer:PrecipitationType_ensemble = new PrecipitationType_ensemble(item);
+						var uic:UIComponent = new UIComponent();
+						uic.addChild(ptyRenderer);
+						canvas.addDataChild(uic, str_kst, new CartesianCanvasValue(4,0))
+					}
+				}
+				
+				//CLD
+//				moveAxisRenderer(parentApplication.isMEDM);
+//			   	if(this.dataProvider != null){
+//					for each(var item:Object in this.dataProvider){
+//						var str_kst:String = item.lst;
+//						//cloudAmountSymbol object..
+//						var ca:CloudAmount_ensemble = new CloudAmount_ensemble(item);
+//						var uic:UIComponent = new UIComponent();
+//						uic.addChild(ca);
+//						canvas.addDataChild(uic, str_kst, new CartesianCanvasValue(2.5,0))
+//					}
+//				}
+        	}
+			
+			
+			
+			
+	  		public function set00UTC_gridLines(isOddNum:Boolean,is279hrs:Boolean=false):void{
+				if(isOddNum){
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs_even() : new UTC00_bg_even() ;
+				}else{
+					var bgImg:Object = (is279hrs)? new UTC00_bg_279hrs() : new UTC00_bg() ;
+				}
+				bgImg.alpha = .9;	
+				gridLine.setStyle("direction","horizontal");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+  			
+  			
+  			public function set12UTC_gridLines(isOddNum:Boolean = false):void{
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_h);
+  				var sc_white:SolidColor = new SolidColor(0xFFFFFF,0.6);
+				var sc_gray:SolidColor = new SolidColor(0xe4e4e4,0.6);
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalFill",(isOddNum)? sc_white:sc_gray);
+				gridLine.setStyle("verticalAlternateFill",(isOddNum)? sc_gray:sc_white);
+				gridLine.setStyle("verticalChangeCount",2);
+				gridLine.setStyle("verticalTickAligned",true);
+				gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v2); 
+				this.backgroundElements=[gridLine];
+			}
+			
+			
+			
+			public function defineLabel(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+				var itm:Object = this.dataProvider[this.dataProvider.length-1];
+				if(cat.toString().length > 4){
+					if(itm.lst==cat){
+//						Alert.show(cat.toString());
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"/"+cat.toString().substring(2,4);
+					}
+			    }else{
+			    	if(Number(cat.toString().substring(2,4))%6 !=0){
+						return '';
+					}
+			    }
+			    // Return the customized categoryField value:
+			    return cat+"";
+			}
+			
+			
+			public function defineLabel_00UTC(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+					var itm:Object = this.dataProvider[this.dataProvider.length-1]; //00UTC일 경우 젤 마지막 레이블 튀어나와서 걍 짤랐심ㅠ 꼼수여
+					if(itm.lst==cat){
+						return null;
+					}else if(cat.toString().substring(4)=="00"){
+						return null;
+					}else{
+						return cat.toString().substring(0,2)+"/"+cat.toString().substring(2,4);
+					}
+			}
+				
+					
+			private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+	  				var str:String;
+       				if(cat == "1.0"){
+       					str = "clr";
+       				}else if(cat == "2.0"){
+       					str = "sct";
+      		 		}else if(cat == "3.0"){
+ 		      			str = "brk";
+ 		      		}else if(cat == "4.0"){
+    		   			str = "ovc";
+  		     		}
+	 	 		return str;
+  			}
+  			
+  			
+  			public function moveAxisRenderer(isMEDM:Boolean):void{
+				if(isMEDM){
+					moveAxisLabel();
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}else{
+					trace('DFS_SKY isMEDM moveAxisLabel:: '+isMEDM.toString())
+				}
+			} 
+			
+			
+  			public function moveAxisLabel():void{
+				trace('calllater:: moveAxisLabel')
+				topAxisRenderer.move(topAxisRenderer.x-10,topAxisRenderer.y);
+				topAxisRenderer.setStyle("labelAlign","right");
+				bottomAxisRenderer.move(bottomAxisRenderer.x-10,bottomAxisRenderer.y);
+				bottomAxisRenderer.setStyle("labelAlign","right");
+			}
+			
+			
+		]]>
+	</mx:Script>
+		
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true" />
+		</mx:annotationElements>
+		
+		
+		<!--
+		<mx:Array id="bgArr">
+			<mx:Image id="utc12" source="/asset/DFS/timeSeries/meteogram/style/12UTC_SKY.gif" width="100%" height="100%" /> 
+		</mx:Array>
+        -->    	
+		
+		<!-- GridLines.verticalTickAligned = false  
+        -->
+         <mx:backgroundElements>
+            <mx:GridLines  id="gridLine" 
+            	/>
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer
+				placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}" 
+				fontSize="12" 
+			/> 
+			<mx:AxisRenderer 
+				placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				axis="{axis_ver}"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+				fontSize="12" 
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+	           	axis="{axis_hor}"/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}"
+           		axis="{axis_hor}"/>
+		-->
+           	<mx:AxisRenderer id="topAxisRenderer" 
+				showLabels="false" 
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+            	fontSize="17"  fontWeight="bold"
+				axisStroke="{ChartStyleAssets.invisibleAxis}"  
+	           	axis="{axis_hor}" 
+	           	/>
+			<mx:AxisRenderer id="topAxisRenderer2"
+				showLabels="false" 
+           		placement="top" 
+            	tickPlacement="none" 
+            	minorTickPlacement="none"   
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"  
+	           	axis="{axis_hor}"
+	           	/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.invisibleAxis}"
+           		axis="{axis_hor}"
+           		/>
+			<mx:AxisRenderer id="bottomAxisRenderer2"
+				showLabels="false"
+           		placement="bottom"  
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold" 
+				axisStroke="{ChartStyleAssets.axisStroke}" labelGap="-10"
+           		axis="{axis_hor}"
+           		/>	
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="lst"  labelFunction="defineLabel"/>
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" 
+				interval="5" minimum="0.1"  maximum="4.9"
+				labelFunction="defineVerticalLabel"/>
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:ColumnSeries id="colSeries" 
+				xField="lst" yField="val" visible="false" />
+		</mx:series>
+		
+</mx:ColumnChart>

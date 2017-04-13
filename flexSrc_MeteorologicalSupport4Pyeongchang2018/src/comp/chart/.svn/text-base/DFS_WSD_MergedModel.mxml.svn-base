@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CartesianChart xmlns:mx="http://www.adobe.com/2006/mxml" 
+	width="100%" height="180" 
+	gutterLeft="66"  gutterRight="66"
+	>
+<!--
+	initialize="init()"
+-->
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.chartClasses.CartesianCanvasValue;
+			import mx.controls.Label;
+			import mx.core.UIComponent;
+			import mx.formatters.NumberFormatter;
+			
+			import asset.DFS.timeSeries.meteogram.style.ChartStyleAssets;
+			
+			import comp.chart.graphic.WindSymbol_small;
+
+
+
+
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_odd.png')] private var bg_00UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_00UTC_even.png')] private var bg_00UTC_even:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_odd.png')] private var bg_12UTC_odd:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/SHRT_12UTC_even.png')] private var bg_12UTC_even:Class;
+			
+			
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_00UTC_odd.png')] private var bg_00UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_00UTC_even.png')] private var bg_00UTC_even_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_12UTC_odd.png')] private var bg_12UTC_odd_KWRF:Class;
+			[Embed(source='asset/DFS/timeSeries/meteogram/gridLines/KWARF/SHRT_12UTC_even.png')] private var bg_12UTC_even_KWRF:Class;
+			
+			
+			private function getProperBG(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):Object{
+				if(isOdd){
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_odd_KWRF();						
+						}else{
+							return new bg_00UTC_odd();						
+						}
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_odd_KWRF();						
+						}else{
+							return new bg_12UTC_odd();						
+						}	
+					}
+				}else{
+					if(is00UTC){
+						if(isKWARF){
+							return new bg_00UTC_even_KWRF();						
+						}else{
+							return new bg_00UTC_even();						
+						}	
+					}else{
+						if(isKWARF){
+							return new bg_12UTC_even_KWRF();						
+						}else{
+							return new bg_12UTC_even();						
+						}
+					}
+				}	
+			}
+			
+			public function setAlternateFill(is00UTC:Boolean, isOdd:Boolean, isKWARF:Boolean=false):void{
+				var bgImg:Object = getProperBG(is00UTC, isOdd, isKWARF);
+				bgImg.alpha = 1.0
+				var gridLine:GridLines = new GridLines();
+				gridLine.setStyle("direction","both");
+				gridLine.setStyle("verticalTickAligned",true);
+      			gridLine.setStyle("verticalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalStroke",ChartStyleAssets.glStroke_v);
+      			gridLine.setStyle("horizontalChangeCount",2);
+				this.backgroundElements=[bgImg,gridLine];
+			}
+
+
+			private function init():void{
+				callLater(drawWindSymbol);
+			}
+		
+		
+        	public function drawWindSymbol():void{
+//        		axis_ver.minimum=3.001; 
+//        		axis_ver.maximum=9.99;
+//        		axis_ver.interval=5;
+				var drawVGap:uint = 7;
+				var count:uint = 0;
+        		if(this.dataProvider != null){
+        			for each(var ls:LineSeries in this.series){
+//        				if(! CommonUtil.getInstance().isFileExist(parentApplication.mDictionary,ls.displayName)){
+//							continue;
+//						}
+						for each(var item:XML in ls.dataProvider){
+							if(!item.hasOwnProperty("@ws") || !item.hasOwnProperty("@wd")){
+								continue;
+							}
+							var ws:Number =  item.@ws; 
+							var wd:Number =  item.@wd - 90;
+							var lst:String = item.@lst;
+							
+							var ui:UIComponent = new UIComponent();
+//							var windGraphic:WindSymbol = new WindSymbol(ws,  wd);
+//							var windGraphic:WindSymbol2_arrow = new WindSymbol2_arrow(ws,  wd);
+							var windGraphic:WindSymbol_small = new WindSymbol_small(ws,  wd);
+							ui.addChild(windGraphic);
+						
+							var currFormat:Object = new NumberFormatter();
+							currFormat.precision = 1;
+							currFormat.rounding = "nearest";
+						
+							var lbl_speed:Label = new Label();
+							lbl_speed.width = 40;
+							lbl_speed.truncateToFit = true;
+							lbl_speed.setStyle("fontSize",12);
+	//						lbl_speed.setStyle("color",0x555555);
+//							lbl_speed.setStyle("fontWeight","bold");
+							lbl_speed.setStyle("textAlign","center");
+							lbl_speed.text = currFormat.format(ws)+"";
+						
+//							var lbl_d16:Label = new Label();
+//							lbl_d16.text = getWindDirectionStr(item.@wd);
+//							lbl_d16.setStyle("fontSize",11);
+//							lbl_d16.setStyle("color",0x444444);
+////							lbl_d16.setStyle("fontWeight","bold");
+//							lbl_d16.setStyle("textAlign","center");
+//	   	   		           	lbl_d16.width = 40;
+//							lbl_d16.truncateToFit = true;
+							if(ws==0){
+								lbl_speed.text = "Calm";
+								canvas.addDataChild(lbl_speed, new CartesianCanvasValue(lst,-(lbl_speed.width / 2)) , new CartesianCanvasValue(2.5 +drawVGap*count,0));
+//								canvas.addDataChild(lbl_d16,  new CartesianCanvasValue(lst,-(lbl_d16.width / 2)) , new CartesianCanvasValue(4.5+drawVGap*count,0));
+								continue;
+							}
+	
+							canvas.addDataChild(ui, lst, new CartesianCanvasValue(4+drawVGap*count,0)); //graphics
+	//						canvas.addDataChild(lbl_speed, lst , new CartesianCanvasValue(6,0)); //speed label
+							canvas.addDataChild(lbl_speed, new CartesianCanvasValue(lst,-(lbl_speed.width / 2)) , new CartesianCanvasValue(2.5+drawVGap*count,0));
+//							canvas.addDataChild(lbl_d16,  new CartesianCanvasValue(lst,-(lbl_d16.width / 2)) , new CartesianCanvasValue(2.5+drawVGap*count,0)); //16 windDirection label
+						}
+						count++;
+        			}
+				}
+        	}
+        	
+        	
+         private function getWindDirectionStr(wd:int):String{
+      	 	var wdStr:String;
+      	 	
+       		if(11.25 <= wd && wd < 33.75){
+				wdStr = "NNE";	
+			}else if(33.75 <= wd && wd < 56.25){
+				wdStr = "NE";
+			}else if(56.25 <= wd && wd < 78.75){
+				wdStr = "ENE";
+			}else if(78.75 <= wd && wd < 101.25){
+				wdStr = "E";
+			}else if(101.25 <= wd && wd < 123.75){
+				wdStr = "ESE";
+			}else if(123.75 <= wd && wd < 146.25){
+				wdStr = "SE";
+			}else if(146.25 <= wd && wd < 168.75){
+				wdStr = "SSE";
+			}else if(168.75 <= wd && wd < 191.25){
+				wdStr = "S";
+			}else if(191.25 <= wd && wd < 213.75){
+				wdStr = "SSW";
+			}else if(213.75 <= wd && wd < 236.25){
+				wdStr = "SW";
+			}else if(236.25 <= wd && wd < 258.75){
+				wdStr = "WSW";
+			}else if(258.75 <= wd && wd < 281.25){
+				wdStr = "W";
+			}else if(281.25 <= wd && wd < 303.75){
+				wdStr = "WNW";
+			}else if(303.75 <= wd && wd < 326.25){
+				wdStr = "NW";
+			}else if(326.25 <= wd && wd < 348.75){
+				wdStr = "NNW";
+			}else if((348.75 <= wd && wd <= 360) || (0 <= wd && wd < 11.25)){
+				wdStr = "N";
+			}
+	     	
+	     	return wdStr; 
+       } 		
+        	
+       private function getwindSpeedUnitLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+	 	 		return "m/s";
+  			} 	
+     
+     
+  		private function horLabelFunc(cat:Object, pcat:Object, ax:CategoryAxis, labelItem:Object):String {
+			// Return the customized categoryField value:
+			var lbl_LST:String = cat.toString();
+			if(cat.toString().length == 4){
+				if(Number(cat.toString().substring(2,4))%6 !=0){
+					lbl_LST= '';
+				}
+			} 
+			return lbl_LST;
+		}
+		
+		private function getModelSequence(seriesID:String):uint{
+			var seq:uint;
+			switch(seriesID){
+				case "series_best" : seq = 4; break;
+				case "series_pmos" : seq = 3; break;
+				case "series_rdps" : seq = 2; break;
+//				case "series_kwrf" : seq = 2; break;
+				case "series_ecmw" : seq = 1; break;
+			}
+			return seq;
+		}
+		
+		private function defineVerticalLabel(cat:Object, pcat:Object,ax:LinearAxis):String {
+  			var str:String;
+   			if(cat == "3.5"){
+   				str = "ECMW";
+  	 		}else if(cat == "10.5"){
+       			str = "RDPS";
+       		}else if(cat == "17.5"){
+//	   			str = "PMOS";
+	   			str = "RDPS MOS";
+       		}else if(cat == "24.5"){
+	   			str = "BEST";
+       		}
+//   			if(cat == "3.5"){
+//   				str = "ECMW";
+//   			}else if(cat == "10.5"){
+//   				str = "KWRF";
+//  	 		}else if(cat == "17.5"){
+//       			str = "RDPS";
+//       		}else if(cat == "24.5"){
+//	   			str = "PMOS";
+//       		}
+ 	 		return str;
+  		}
+		
+]]>
+	</mx:Script>
+	
+	
+
+		<!-- cartesianDataCanvas -->
+		<mx:annotationElements>
+			<mx:CartesianDataCanvas id="canvas" includeInRanges="true"/>
+		</mx:annotationElements>
+		
+		<!-- GridLines.verticalTickAligned = false  -->
+		<mx:backgroundElements>
+            <mx:GridLines 
+            	direction="both" 
+            	verticalTickAligned="true" 
+            	verticalStroke="{ChartStyleAssets.glStroke_v}" 
+            	horizontalStroke="{ChartStyleAssets.glStroke_h}" 
+            	/>
+            	
+        </mx:backgroundElements>
+        
+        <!-- axis renderering -->
+		<!--verticalAxisTitleAlignment="flippedVertical"-->
+		<mx:verticalAxisRenderers>
+			<mx:AxisRenderer placement="left" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				showLabels="true"
+				fontSize="11"
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+			/>
+			<mx:AxisRenderer placement="right" 
+				minorTickPlacement="none"  
+				tickPlacement="none" 
+				showLabels="true"
+				fontSize="11"
+				axis="{axis_ver}"   
+				axisStroke="{ChartStyleAssets.axisStroke}"
+			/>
+		</mx:verticalAxisRenderers>
+		<mx:horizontalAxisRenderers>
+		<!--color="0x555555"-->
+			<mx:AxisRenderer id="topAxisRenderer"
+				showLabels="false"
+           		placement="top" 
+               	canDropLabels="true"
+            	tickPlacement="none"    
+            	minorTickPlacement="none"   
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+	           	axis="{axis_hor}"/>
+			<mx:AxisRenderer id="bottomAxisRenderer"
+				showLabels="false"
+           		placement="bottom" 
+                canDropLabels="true"
+                tickPlacement="none" 
+            	minorTickPlacement="none"  
+            	fontSize="17" fontWeight="bold"  
+				axisStroke="{ChartStyleAssets.axisStroke}"
+           		axis="{axis_hor}"/>
+		</mx:horizontalAxisRenderers>
+		
+		<mx:horizontalAxis>
+			<mx:CategoryAxis id="axis_hor" categoryField="@lst"  labelFunction="horLabelFunc" />
+		</mx:horizontalAxis> 
+		<mx:verticalAxis>
+			<mx:LinearAxis id="axis_ver" 
+				minimum="0.01" maximum="28" interval="3.5"
+				labelFunction="defineVerticalLabel"
+				/>
+			   <!-- minimum="0.01" maximum="21" interval="3.5"-->
+		<!--	labelFunction="getwindSpeedUnitLabel" -->
+		</mx:verticalAxis>
+		
+		<mx:series>
+			<mx:LineSeries id="series_ecmw"  displayName="ECMWF"
+				xField="@lst" yField="@ws" visible="false" />
+			<!--
+			<mx:LineSeries id="series_kwrf"  displayName="KWRF"
+				xField="@lst" yField="@ws" visible="false" />
+			-->
+			<mx:LineSeries id="series_rdps"  displayName="RDPS"
+				xField="@lst" yField="@ws" visible="false" />
+			<mx:LineSeries id="series_pmos"  displayName="PMOS"
+				xField="@lst" yField="@ws" visible="false" />
+			<mx:LineSeries id="series_best"  displayName="BEST"
+				xField="@lst" yField="@ws" visible="false" />
+		</mx:series>
+</mx:CartesianChart>	    	
+	    	
